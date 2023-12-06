@@ -21,6 +21,7 @@ setup(
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
     url="https://github.com/molinfo-vienna/nerdd-module.git",
+    description="Base package to create NERDD modules",
     long_description=open("README.md").read(),
     install_requires=rdkit_requirement
     + [
