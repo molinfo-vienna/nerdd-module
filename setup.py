@@ -16,13 +16,14 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit else []
 
 setup(
     name="nerdd-module",
-    version="0.1.6",
+    version="0.1.7",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
     url="https://github.com/molinfo-vienna/nerdd-module.git",
     description="Base package to create NERDD modules",
     long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     install_requires=rdkit_requirement
     + [
         "pandas>=1.2.1",

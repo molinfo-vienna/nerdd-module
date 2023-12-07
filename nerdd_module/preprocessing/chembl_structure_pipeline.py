@@ -10,7 +10,16 @@ from .remove_stereochemistry import RemoveStereochemistry
 from .step import Step
 
 try:
+    from rdkit import RDLogger
+
+    # disable rdkit logging messages
+    # importing chembl_structure_pipeline already logs messages
+    logger = RDLogger.logger()
+    logger.setLevel(RDLogger.ERROR)
+
     from chembl_structure_pipeline import get_parent_mol, standardize_mol
+
+    logger.setLevel(RDLogger.WARNING)
 
     import_error = None
 except ImportError as e:
