@@ -8,6 +8,8 @@ from .configuration import Configuration
 from .dict_configuration import DictConfiguration
 from .yaml_configuration import YamlConfiguration
 
+__all__ = ["PackageConfiguration"]
+
 
 class PackageConfiguration(Configuration):
     def __init__(self, package):

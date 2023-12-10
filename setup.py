@@ -31,6 +31,7 @@ setup(
         "filetype~=1.2.0",
         "rich-click>=1.7.1",
         "stringcase>=1.2.0",
+        "decorator>=5.1.1",
         # install importlib-resources for old Python versions
         "importlib-resources>=6.1.1; python_version<'3.10'",
         # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi,
