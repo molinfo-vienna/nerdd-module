@@ -5,7 +5,7 @@ NERDD ecosystem.
 
 ## Installation
 
-```pip install nerdd-module```
+```pip install -U nerdd-module```
 
 
 ## Implement your own module

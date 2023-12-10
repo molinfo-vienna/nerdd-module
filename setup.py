@@ -16,7 +16,7 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit else []
 
 setup(
     name="nerdd-module",
-    version="0.1.7",
+    version="0.1.8",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
@@ -31,6 +31,8 @@ setup(
         "filetype~=1.2.0",
         "rich-click>=1.7.1",
         "stringcase>=1.2.0",
+        # install importlib-resources for old Python versions
+        "importlib-resources>=6.1.1",
         # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi,
         # but it could potentially be installed from github
         "chembl_structure_pipeline>=1.0.0",

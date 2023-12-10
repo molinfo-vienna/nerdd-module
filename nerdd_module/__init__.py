@@ -1,6 +1,7 @@
 import pkg_resources
 
 from .abstract_model import *
+from .cli import *
 from .config import *
 from .version import *
 

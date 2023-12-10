@@ -4,7 +4,6 @@ import sys
 
 import rich_click as click
 from decorator import decorator
-
 from nerdd_module.io import WriterRegistry
 
 __all__ = ["auto_cli"]
@@ -105,7 +104,7 @@ def auto_cli(f, *args, **kwargs):
     #
     # Add job parameters
     #
-    for param in config["job_parameters"]:
+    for param in config.get("job_parameters", []):
         main = click.option(
             f"--{param['name']}",
             default=param.get("default", None),
