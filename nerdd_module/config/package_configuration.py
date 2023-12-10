@@ -1,4 +1,8 @@
-from importlib_resources import files
+try:
+    # works in python 3.9+
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 from .configuration import Configuration
 from .dict_configuration import DictConfiguration

@@ -3,20 +3,20 @@ from setuptools import find_packages, setup
 # some RDKit versions are not recognized by setuptools
 # -> check if RDKit is installed by attempting to import it
 # -> if RDKit can be imported, do not add it to install_requires
-rdkit = False
+rdkit_installed = False
 try:
-    from rdkit import Chem
+    import rdkit
 
-    rdkit = True
-except ImportError:
+    rdkit_installed = True
+except ModuleNotFoundError:
     pass
 
 # rdkit 2022.3.3 is the oldest (reasonable) version
-rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit else []
+rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.1.8",
+    version="0.1.9",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
@@ -32,7 +32,7 @@ setup(
         "rich-click>=1.7.1",
         "stringcase>=1.2.0",
         # install importlib-resources for old Python versions
-        "importlib-resources>=6.1.1",
+        "importlib-resources>=6.1.1; python_version<'3.10'",
         # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi,
         # but it could potentially be installed from github
         "chembl_structure_pipeline>=1.0.0",
