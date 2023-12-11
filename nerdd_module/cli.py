@@ -90,14 +90,16 @@ def auto_cli(f, *args, **kwargs):
 
         df_result = model.predict(input, **kwargs)
 
-        if output.lower() == "stdout":
-            output_handle = sys.stdout
-        else:
-            output_handle = click.open_file(output, "wb")
-
         # write results
         assert format in WriterRegistry().supported_formats
         writer = WriterRegistry().get_writer(format)
+
+        if output.lower() == "stdout":
+            assert not writer.writes_bytes, "stdout does not support binary output"
+            output_handle = sys.stdout
+        else:
+            mode = "wb" if writer.writes_bytes else "w"
+            output_handle = click.open_file(output, mode)
 
         entries = (tup._asdict() for tup in df_result.itertuples(index=False))
         writer.write(output_handle, entries)
@@ -128,7 +130,7 @@ def auto_cli(f, *args, **kwargs):
     main = click.option(
         "--format",
         default="csv",
-        type=click.Choice(["csv", "sdf"], case_sensitive=False),
+        type=click.Choice(WriterRegistry().supported_formats, case_sensitive=False),
         help="The output format.",
     )(main)
 

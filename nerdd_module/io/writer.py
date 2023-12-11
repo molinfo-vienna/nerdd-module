@@ -11,6 +11,9 @@ __all__ = ["Writer"]
 class Writer(ABC):
     """Abstract class for writers."""
 
+    def __init__(self, writes_bytes: bool = False):
+        self._writes_bytes = writes_bytes
+
     @property
     def output_type(self) -> str:
         """The output type of the writer."""
@@ -21,16 +24,22 @@ class Writer(ABC):
         """The output type of the writer."""
         pass
 
-    def write(self, output: Union[BinaryIO, TextIO, str], entries: Iterable[Dict]):
+    def write(self, output, entries: Iterable[Dict]):
         """Write entries to output."""
         if isinstance(output, str):
-            with open(output, "wb") as f:
+            mode = "wb" if self._writes_bytes else "w"
+            with open(output, mode) as f:
                 self._write(f, entries)
         else:
             self._write(output, entries)
             output.flush()
 
     @abstractmethod
-    def _write(self, output: Union[BinaryIO, TextIO], entries: Iterable[Dict]):
+    def _write(self, output, entries: Iterable[Dict]):
         """Write entries to output."""
         pass
+
+    @property
+    def writes_bytes(self) -> bool:
+        """Whether the writer writes bytes."""
+        return self._writes_bytes

@@ -1,11 +1,13 @@
-# Nerdd Module
+# NERDD Module
 
 This package provides the basis to implement molecular prediction modules in the
 NERDD ecosystem.
 
 ## Installation
 
-```pip install -U nerdd-module```
+```bash
+pip install -U nerdd-module
+```
 
 
 ## Implement your own module
@@ -54,8 +56,3 @@ class MyModel(AbstractModel):
 1. Fork and clone the code
 2. Install test dependencies with ```pip install -e .[test]```
 3. Run tests via ```pytest``` or ```pytest-watch``` (short: ```ptw```)
-
-
-## Contributors
-
-* Steffen Hirte

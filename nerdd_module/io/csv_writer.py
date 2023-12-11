@@ -10,26 +10,17 @@ from .writer import Writer
 
 class CsvWriter(Writer):
     def __init__(self):
-        super().__init__()
+        super().__init__(writes_bytes=False)
 
     def _output_type(self) -> str:
         return "csv"
 
-    def _write(self, output: Union[TextIO, BinaryIO], entries: Iterable[Dict]):
-        # CSV writer cannot handle BinaryIO and requires a string stream (~TextIO)
-        # --> convert if necessary
-        if isinstance(output, BinaryIO):
-            encoded_output: TextIO = TextIOWrapper(
-                output, encoding="utf-8", write_through=True
-            )
-        else:
-            encoded_output = output
-
+    def _write(self, output, entries: Iterable[Dict]):
         entry_iter = iter(entries)
 
         # get the first entry to extract the fieldnames
         first_entry = next(entry_iter)
-        writer = csv.DictWriter(encoded_output, fieldnames=first_entry.keys())
+        writer = csv.DictWriter(output, fieldnames=first_entry.keys())
 
         # write header, first entry, and remaining entries
         writer.writeheader()
