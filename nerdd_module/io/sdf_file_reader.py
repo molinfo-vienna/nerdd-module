@@ -21,7 +21,8 @@ class SdfFileReader(FileReader):
             # collect lines to parse as a mol block
             mol_block = ""
             num_lines = 0
-            while line := reader.readline():
+            line = reader.readline()
+            while line:
                 mol_block += line
                 if line.strip() == "$$$$":
                     break
@@ -29,6 +30,9 @@ class SdfFileReader(FileReader):
                 num_lines += 1
                 if num_lines > self.max_num_lines_mol_block:
                     break
+
+                # read next line
+                line = reader.readline()
 
             if mol_block.strip() != "":
                 yield mol_block
