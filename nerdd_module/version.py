@@ -1,10 +1,10 @@
-try:
-    # Try to use the standard library version first (Python 3.8+).
-    from importlib.metadata import version
-except ImportError:
-    # If that fails, use the backport for Python 3.7.
+import sys
+
+if sys.version_info < (3, 10):
     from importlib_metadata import version
+else:
+    from importlib.metadata import version
 
 __all__ = ["__version__"]
 
-__version__ = version("nerdd-module")
+__version__ = version(__package__)

@@ -22,6 +22,7 @@ setup(
     packages=find_packages(),
     url="https://github.com/molinfo-vienna/nerdd-module.git",
     description="Base package to create NERDD modules",
+    license="BSD 3-Clause License",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     install_requires=rdkit_requirement
@@ -32,8 +33,9 @@ setup(
         "rich-click>=1.7.1",
         "stringcase>=1.2.0",
         "decorator>=5.1.1",
-        # install importlib-resources for old Python versions
+        # install importlib-resources and importlib-metadata for old Python versions
         "importlib-resources>=5; python_version<'3.10'",
+        "importlib-metadata>=4.6; python_version<'3.10'",
         # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi,
         # but it could potentially be installed from github
         "chembl_structure_pipeline>=1.0.0",
@@ -42,6 +44,7 @@ setup(
         "dev": [],
         "test": [
             "pytest",
+            "pytest-sugar",
             "pytest-cov",
             "pytest-asyncio",
             "pytest-bdd",
@@ -51,4 +54,22 @@ setup(
             "hypothesis-rdkit",
         ],
     },
+    classifiers=[
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Programming Language :: C",
+        "Programming Language :: Python",
+        "Topic :: Software Development",
+        "Topic :: Scientific/Engineering",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: POSIX",
+        "Operating System :: Unix",
+        "Operating System :: MacOS",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+    ],
 )
