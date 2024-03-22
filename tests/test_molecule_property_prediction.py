@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from pytest_bdd import parsers, scenario, then, when
 from rdkit.Chem.Descriptors import MolWt
 
@@ -27,13 +26,6 @@ def check_result_columns(predictions, column_names):
         assert (
             c in predictions.columns
         ), f"Column {c} not in predictions {predictions.columns.tolist()}"
-
-
-@then(parsers.parse("the input type column should be '{input_type}'"))
-def check_input_type_column(predictions, input_type):
-    assert (
-        predictions.input_type == input_type
-    ).all(), f"Not all predictions have the input_type {input_type}"
 
 
 @then("the name column should contain valid names")

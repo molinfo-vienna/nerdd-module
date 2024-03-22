@@ -1,35 +1,59 @@
-from typing import Iterable, Optional, Tuple
+from codecs import getreader
+from typing import Generator
 
-from rdkit import RDLogger
-from rdkit.Chem import Mol, MolFromInchi
+from rdkit.Chem import MolFromInchi
+from rdkit.rdBase import BlockLogs
 
-from .elementary_reader import ElementaryReader
+from ..problem import Problem
+from .reader import MoleculeEntry, Reader
+from .reader_registry import register_reader
 
 __all__ = ["InchiReader"]
 
+StreamReader = getreader("utf-8")
 
-class InchiReader(ElementaryReader):
+
+@register_reader
+class InchiReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def _read(self, input) -> Tuple[Optional[Mol], Iterable[str]]:
-        if not isinstance(input, str):
-            raise TypeError("input must be a string")
+    def read(self, input_stream, explore) -> Generator[MoleculeEntry, None, None]:
+        if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
+            raise TypeError("input must be a stream-like object")
+
+        input_stream.seek(0)
+
+        reader = StreamReader(input_stream)
 
         # suppress RDKit warnings
-        lg = RDLogger.logger()
-        lg.setLevel(RDLogger.CRITICAL)
+        with BlockLogs():
+            for line in reader:
+                # skip empty lines
+                if line.strip() == "":
+                    continue
 
-        mol = MolFromInchi(input)
+                # skip comments
+                if line.strip().startswith("#"):
+                    continue
 
-        if mol is None:
-            errors = ["!1"]
-        else:
-            errors = []
+                try:
+                    mol = MolFromInchi(line, sanitize=False)
+                except:
+                    mol = None
 
-        lg.setLevel(RDLogger.WARNING)
+                if mol is None:
+                    errors = [Problem("invalid_inchi", "Invalid InChI")]
+                else:
+                    errors = []
 
-        return mol, errors
+                yield MoleculeEntry(
+                    raw_input=line,
+                    input_type="inchi",
+                    source=tuple(["raw_input"]),
+                    mol=mol,
+                    errors=errors,
+                )
 
-    def _input_type(self) -> str:
-        return "inchi"
+    def __repr__(self) -> str:
+        return "InchiReader()"

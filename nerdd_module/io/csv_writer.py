@@ -1,7 +1,6 @@
 import csv
-from io import TextIOWrapper
 from itertools import chain
-from typing import BinaryIO, Dict, Iterable, TextIO, Union
+from typing import Dict, Iterable
 
 from rdkit.Chem import Mol, MolToSmiles
 

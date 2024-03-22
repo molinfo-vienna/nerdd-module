@@ -5,18 +5,19 @@ import pandas as pd
 from rdkit.Chem import Mol, MolToSmiles
 
 from .config import AutoConfiguration, Configuration
-from .io import MoleculeEntry, guess_and_read
+from .io import DepthFirstExplorer, MoleculeEntry
 from .preprocessing import Pipeline, Step, registry
+from .problem import Problem
 
 __all__ = ["AbstractModel"]
 
 
 class CustomPreprocessingStep(Step):
-    def __init__(self, fn: Callable[[Mol], Tuple[Mol, List[str]]]):
+    def __init__(self, fn: Callable[[Mol], Tuple[Mol, List[Problem]]]):
         super().__init__()
         self.fn = fn
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         return self.fn(mol)
 
 
@@ -69,7 +70,7 @@ class AbstractModel(ABC):
         #
         self.num_processes = num_processes
 
-    def _preprocess_single_mol(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def _preprocess_single_mol(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         # if this method is called, the preprocessing_pipeline was set to "custom"
         # and this method has to be overwritten
         raise NotImplementedError()
@@ -116,13 +117,6 @@ class AbstractModel(ABC):
             (mol.GetProp("_Name") if mol is not None and mol.HasProp("_Name") else "")
             for mol in df_preprocess.input_mol
         ]
-
-        # add smiles columns for web UI
-        def _to_smiles(mol):
-            try:
-                return MolToSmiles(mol)
-            except:
-                return None
 
         #
         # PREPARE PREDICTION OF MOLECULES
@@ -223,10 +217,8 @@ class AbstractModel(ABC):
         df_result.drop(columns=["missing", "preprocessing_errors"], inplace=True)
 
         # convert errors to string
-        if "errors" in df_result.columns:
-            df_result["errors"] = df_result.errors.map(lambda x: ", ".join(set(x)))
-        else:
-            df_result["errors"] = ""
+        if "errors" not in df_result.columns:
+            df_result["errors"] = []
 
         # delete mol column (not needed anymore)
         df_load.drop(columns=["mol"], inplace=True)
@@ -236,7 +228,7 @@ class AbstractModel(ABC):
 
         # merge errors from loading and prediction
         df_result["errors"] = [
-            ", ".join(set(load_errors + [prediction_errors]))
+            load_errors + prediction_errors
             for load_errors, prediction_errors in zip(
                 df_result.load_errors, df_result.errors
             )
@@ -266,7 +258,7 @@ class AbstractModel(ABC):
         input_type=None,
         **kwargs,
     ):
-        entries = guess_and_read(inputs)
+        entries = DepthFirstExplorer().explore(inputs)
 
         return self._predict_entries(entries, **kwargs)
 

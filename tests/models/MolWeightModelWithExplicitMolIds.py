@@ -6,7 +6,7 @@ __all__ = ["MolWeightModelWithExplicitMolIds"]
 
 
 class MolWeightModelWithExplicitMolIds(AbstractModel):
-    def __init__(self, preprocessing_pipeline="no_preprocessing", **kwargs):
+    def __init__(self, preprocessing_pipeline="chembl_structure_pipeline", **kwargs):
         super().__init__(preprocessing_pipeline, **kwargs)
 
     def _predict_mols(self, mols, multiplier):

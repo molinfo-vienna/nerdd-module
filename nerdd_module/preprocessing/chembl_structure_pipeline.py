@@ -1,7 +1,9 @@
 from typing import List, Tuple
 
 from rdkit.Chem import Mol
+from rdkit.rdBase import BlockLogs
 
+from ..problem import Problem
 from .check_valid_smiles import CheckValidSmiles
 from .filter_by_element import FilterByElement
 from .filter_by_weight import FilterByWeight
@@ -10,16 +12,10 @@ from .remove_stereochemistry import RemoveStereochemistry
 from .step import Step
 
 try:
-    from rdkit import RDLogger
-
-    # disable rdkit logging messages
     # importing chembl_structure_pipeline already logs messages
-    logger = RDLogger.logger()
-    logger.setLevel(RDLogger.ERROR)
-
-    from chembl_structure_pipeline import get_parent_mol, standardize_mol
-
-    logger.setLevel(RDLogger.WARNING)
+    # --> suppress them temporarily
+    with BlockLogs():
+        from chembl_structure_pipeline import get_parent_mol, standardize_mol
 
     import_error = None
 except ImportError as e:
@@ -37,7 +33,7 @@ class StandardizeWithCsp(Step):
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -48,7 +44,7 @@ class StandardizeWithCsp(Step):
         preprocessed_mol = standardize_mol(mol)
 
         if preprocessed_mol is None:
-            errors.append("CSP0")
+            errors.append(Problem("csp_error", "Cannot standardize molecule"))
             preprocessed_mol = mol
 
         return preprocessed_mol, errors
@@ -61,7 +57,7 @@ class GetParentMol(Step):
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -70,10 +66,9 @@ class GetParentMol(Step):
 
         # get parent molecule via chembl structure pipeline
         preprocessed_mol, exclude_flag = get_parent_mol(mol)
-        if exclude_flag:
-            errors.append("CSP0")
+        if exclude_flag or preprocessed_mol is None:
+            errors.append(Problem("csp_error", "Cannot remove small fragments"))
         if preprocessed_mol is None:
-            errors.append("CSP0")
             preprocessed_mol = mol
 
         return preprocessed_mol, errors
@@ -104,6 +99,7 @@ class ChemblStructurePipeline(Pipeline):
     ):
         super().__init__(
             steps=[
+                StandardizeWithCsp(),
                 FilterByWeight(
                     min_weight=min_weight,
                     max_weight=max_weight,
@@ -112,7 +108,6 @@ class ChemblStructurePipeline(Pipeline):
                 FilterByElement(
                     allowed_elements, remove_invalid_molecules=remove_invalid_molecules
                 ),
-                StandardizeWithCsp(),
                 GetParentMol(),
             ]
             + ([RemoveStereochemistry()] if remove_stereochemistry else [])

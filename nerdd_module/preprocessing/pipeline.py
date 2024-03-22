@@ -3,6 +3,7 @@ from typing import Iterable, List, Optional, Tuple
 from rdkit.Chem import Mol
 from stringcase import snakecase
 
+from ..problem import Problem
 from .step import Step
 
 __all__ = ["Pipeline", "make_pipeline"]
@@ -14,11 +15,11 @@ class Pipeline:
         self._steps = steps
         self._name = name
 
-    def run(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         errors = []
 
         if mol is None:
-            errors.append("!1")
+            errors.append(Problem("no_molecule", "No molecule to process"))
 
         for step in self._steps:
             if mol is None:
@@ -30,7 +31,7 @@ class Pipeline:
 
         return mol, errors
 
-    def __call__(self, mol: Mol) -> Tuple[Mol, List[str]]:
+    def __call__(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
         return self.run(mol)
 
     @property

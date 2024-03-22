@@ -1,17 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import BinaryIO, FrozenSet, Generator, List, NamedTuple, Optional
+from typing import Generator, List, NamedTuple, Optional, Tuple
 
 from rdkit.Chem import Mol
 
-__all__ = ["Reader", "MoleculeEntry"]
+from ..problem import Problem
+
+__all__ = ["MoleculeEntry", "Reader"]
 
 
 class MoleculeEntry(NamedTuple):
     raw_input: str
     input_type: str
-    source: str
+    source: Tuple[str, ...]
     mol: Optional[Mol]
-    errors: List[str]
+    errors: List[Problem]
 
 
 class Reader(ABC):
@@ -19,13 +21,5 @@ class Reader(ABC):
         super().__init__()
 
     @abstractmethod
-    def read(self, input) -> Generator[MoleculeEntry, None, None]:
-        pass
-
-    @property
-    def input_type(self) -> str:
-        return self._input_type()
-
-    @abstractmethod
-    def _input_type(self) -> str:
+    def read(self, input, explore) -> Generator[MoleculeEntry, None, None]:
         pass

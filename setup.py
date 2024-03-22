@@ -16,7 +16,7 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.1.12",
+    version="0.2.0",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
@@ -52,6 +52,11 @@ setup(
             "pytest-watch",
             "hypothesis",
             "hypothesis-rdkit",
+        ],
+        "docs": [
+            "mkdocs",
+            "mkdocs-material",
+            "mkdocstrings",
         ],
     },
     classifiers=[

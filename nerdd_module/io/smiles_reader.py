@@ -1,40 +1,66 @@
-from typing import Iterable, Optional, Tuple
+from codecs import getreader
+from typing import Generator
 
-from rdkit import RDLogger
-from rdkit.Chem import Mol, MolFromSmiles
+from rdkit.Chem import MolFromSmiles
+from rdkit.rdBase import BlockLogs
 
-from .elementary_reader import ElementaryReader
+from ..problem import Problem
+from .reader import MoleculeEntry, Reader
+from .reader_registry import register_reader
 
 __all__ = ["SmilesReader"]
 
+StreamReader = getreader("utf-8")
 
-class SmilesReader(ElementaryReader):
+
+@register_reader
+class SmilesReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def _read(self, input) -> Tuple[Optional[Mol], Iterable[str]]:
-        if not isinstance(input, str):
-            raise TypeError("input must be a string")
+    def read(self, input_stream, explore) -> Generator[MoleculeEntry, None, None]:
+        if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
+            raise TypeError("input must be a stream-like object")
+
+        input_stream.seek(0)
+
+        reader = StreamReader(input_stream)
 
         # suppress RDKit warnings
-        lg = RDLogger.logger()
-        lg.setLevel(RDLogger.CRITICAL)
+        with BlockLogs():
+            for line in reader:
+                # skip empty lines
+                if line.strip() == "":
+                    continue
 
-        mol = MolFromSmiles(input)
+                # skip comments
+                if line.strip().startswith("#"):
+                    continue
 
-        lg.setLevel(RDLogger.WARNING)
+                try:
+                    mol = MolFromSmiles(line, sanitize=False)
+                except:
+                    mol = None
 
-        if mol is None:
-            return None, ["!1"]
+                if mol is None:
+                    errors = [Problem("invalid_smiles", "Invalid SMILES")]
+                else:
+                    # old versions of RDKit do not parse the name
+                    # --> get name from smiles manually
+                    if not mol.HasProp("_Name"):
+                        parts = line.split(maxsplit=1)
+                        if len(parts) > 1:
+                            mol.SetProp("_Name", parts[1])
 
-        # old versions of RDKit do not parse the name
-        # --> get name from smiles manually
-        if not mol.HasProp("_Name"):
-            parts = input.split(maxsplit=1)
-            if len(parts) > 1:
-                mol.SetProp("_Name", parts[1])
+                    errors = []
 
-        return mol, []
+                yield MoleculeEntry(
+                    raw_input=line,
+                    input_type="smiles",
+                    source=tuple(["raw_input"]),
+                    mol=mol,
+                    errors=errors,
+                )
 
-    def _input_type(self) -> str:
-        return "smiles"
+    def __repr__(self) -> str:
+        return "SmilesReader()"

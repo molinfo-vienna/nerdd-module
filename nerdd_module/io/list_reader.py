@@ -1,22 +1,24 @@
-from typing import Generator, Iterable
+from io import BytesIO, StringIO
+from typing import BinaryIO, Generator, Iterable
 
 from .reader import MoleculeEntry, Reader
+from .reader_registry import register_reader
 
 __all__ = ["ListReader"]
 
 
+@register_reader
 class ListReader(Reader):
-    def __init__(self, inner_reader: Reader):
+    def __init__(self):
         super().__init__()
-        self._inner_reader = inner_reader
 
-    def read(self, input) -> Generator[MoleculeEntry, None, None]:
-        if not isinstance(input, Iterable) or isinstance(input, str):
-            raise TypeError("input must be iterable")
+    def read(self, input_iterable, explore) -> Generator[MoleculeEntry, None, None]:
+        assert isinstance(input_iterable, Iterable) and not isinstance(
+            input_iterable, (str, bytes, BytesIO, StringIO, BinaryIO)
+        ), f"input must be an iterable, but is {type(input_iterable)}"
 
-        for item in input:
-            for entry in self._inner_reader.read(item):
-                yield entry
+        for entry in input_iterable:
+            yield from explore(entry)
 
-    def _input_type(self) -> str:
-        return self._inner_reader.input_type
+    def __repr__(self) -> str:
+        return "ListReader()"

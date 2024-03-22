@@ -2,9 +2,10 @@ import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import settings
 from hypothesis import strategies as st
-from hypothesis_rdkit import smiles
+from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
 from rdkit.Chem import MolFromSmiles, MolToInchi, MolToMolBlock, MolToSmiles
+from rdkit.Chem.Descriptors import MolWt
 
 
 @given(
@@ -16,11 +17,12 @@ from rdkit.Chem import MolFromSmiles, MolToInchi, MolToMolBlock, MolToSmiles
 def molecules(num, num_none):
     result = None
 
-    @hgiven(st.lists(smiles(), min_size=num, max_size=num, unique=True))
+    @hgiven(st.lists(mols(), min_size=num, max_size=num, unique_by=MolToSmiles))
     @settings(max_examples=1, deadline=None)
-    def generate(smiles):
+    def generate(mols):
         nonlocal result
-        result = [MolFromSmiles(s) for s in smiles]
+        # ensure that all molecules are valid
+        result = mols
 
     generate()
 
