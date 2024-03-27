@@ -28,7 +28,7 @@ class FileReader(Reader):
         assert self.data_dir in path.parents, "input must be a relative path"
         assert path.exists(), "input must be a valid file"
 
-        with open(filename, "rb") as f:
+        with open(path, "rb") as f:
             for entry in explore(f):
                 if len(entry.source) == 1 and entry.source[0] == "raw_input":
                     source = tuple()
