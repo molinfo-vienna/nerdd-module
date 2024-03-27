@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import Generator
 
 from .reader import MoleculeEntry, Reader
@@ -9,12 +10,20 @@ __all__ = ["FileReader"]
 
 @register_reader
 class FileReader(Reader):
-    def __init__(self):
+    def __init__(self, data_dir="."):
         super().__init__()
+        self.data_dir = Path(data_dir)
 
     def read(self, filename, explore) -> Generator[MoleculeEntry, None, None]:
-        if not isinstance(filename, str) or not os.path.exists(filename):
-            raise TypeError("input must be a valid filename")
+        assert isinstance(filename, str), "input must be a string"
+
+        try:
+            path = Path(filename).absolute()
+        except:
+            raise ValueError("input must be a valid path")
+
+        assert path.is_relative_to(self.data_dir), "input must be a relative path"
+        assert path.exists(), "input must be a valid file"
 
         with open(filename, "rb") as f:
             for entry in explore(f):

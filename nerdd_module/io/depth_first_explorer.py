@@ -38,7 +38,7 @@ class DepthFirstExplorer(Explorer):
         if readers is None:
             self.reader_registry = ReaderRegistry()
         else:
-            self.reader_registry = None
+            self.reader_registry = readers
 
         self.num_test_entries = num_test_entries
         self.threshold = threshold

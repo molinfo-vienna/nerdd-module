@@ -62,7 +62,7 @@ def auto_cli(f, *args, **kwargs):
     if len(examples) > 0:
         footer = "Examples:\n"
         for example in examples:
-            footer += f"* {command_name} {example}\n"
+            footer += f'* {command_name} "{example}"\n'
     else:
         footer = ""
 

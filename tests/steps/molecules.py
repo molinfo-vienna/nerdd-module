@@ -4,8 +4,7 @@ from hypothesis import settings
 from hypothesis import strategies as st
 from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
-from rdkit.Chem import MolFromSmiles, MolToInchi, MolToMolBlock, MolToSmiles
-from rdkit.Chem.Descriptors import MolWt
+from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
 
 
 @given(
