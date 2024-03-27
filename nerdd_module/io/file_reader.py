@@ -18,11 +18,14 @@ class FileReader(Reader):
         assert isinstance(filename, str), "input must be a string"
 
         try:
-            path = Path(filename).absolute()
+            path = Path(filename)
+
+            if not path.is_absolute():
+                path = self.data_dir / path
         except:
             raise ValueError("input must be a valid path")
 
-        assert path.is_relative_to(self.data_dir), "input must be a relative path"
+        assert self.data_dir in path.parents, "input must be a relative path"
         assert path.exists(), "input must be a valid file"
 
         with open(filename, "rb") as f:
