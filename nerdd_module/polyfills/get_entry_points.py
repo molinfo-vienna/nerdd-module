@@ -6,7 +6,10 @@ try:
     from importlib.metadata import entry_points
 
     def get_entry_points(group):
-        return entry_points(group=group)
+        try:
+            return entry_points(group=group)
+        except TypeError:
+            return entry_points().get(group, [])
 
 except ImportError:
     import pkg_resources

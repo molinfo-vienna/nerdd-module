@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Tuple
 
 from rdkit.Chem import Mol
@@ -10,6 +11,13 @@ from .filter_by_weight import FilterByWeight
 from .pipeline import Pipeline
 from .remove_stereochemistry import RemoveStereochemistry
 from .step import Step
+
+# before importing chembl_structure_pipeline, we need to suppress RDKit warnings
+warnings.filterwarnings(
+    "ignore",
+    category=DeprecationWarning,
+    module="rdkit.Chem.MolStandardize",
+)
 
 try:
     # importing chembl_structure_pipeline already logs messages
