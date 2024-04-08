@@ -26,5 +26,5 @@ class CsvWriter(Writer):
         for entry in chain([first_entry], entry_iter):
             for key, value in entry.items():
                 if isinstance(value, Mol):
-                    entry[key] = MolToSmiles(value)
+                    entry[key] = MolToSmiles(value, canonical=False)
             writer.writerow(entry)

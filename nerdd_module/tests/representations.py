@@ -45,7 +45,7 @@ def representations_from_molecules(molecules, input_type):
     ),
     target_fixture="molecules",
 )
-def molecules(num, num_none, random_seed):
+def molecules(num, num_none, random_seed=0):
     result = None
 
     # pytest-bdd and hypothesis don't play well together (yet)

@@ -2,7 +2,8 @@ Feature: Atom prediction
 
   Scenario Outline: Predicting a property for each atom
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
-    And the representations of the molecules as <input_type>
+    And the input type is '<input_type>'
+    And the representations of the molecules
     And an example model predicting atomic masses, version <version>
     And a prediction parameter 'multiplier' set to <multiplier>
 

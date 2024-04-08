@@ -158,7 +158,7 @@ class AbstractModel(ABC):
             # check that mol_id contains only valid ids
             assert set(df_predictions.mol_id).issubset(
                 set(df_valid_subset.mol_id)
-            ), "The mol_id column must only contain valid ids!"
+            ), f"The mol_id column contains invalid ids: {set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
             # use mol_id as index
             df_predictions.set_index("mol_id", drop=True, inplace=True)
         elif "mol" in df_predictions.columns:
@@ -166,7 +166,7 @@ class AbstractModel(ABC):
             names = df_predictions.mol.apply(lambda mol: int(mol.GetProp("_Name")))
             assert set(names).issubset(
                 set(df_preprocess.mol_id)
-            ), "The molecule names must only contain valid ids!"
+            ), f"The mol_id column contains invalid ids: {set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
 
             # use mol_id as index
             df_predictions.set_index(

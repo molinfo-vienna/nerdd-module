@@ -1,4 +1,5 @@
 import json
+from ast import literal_eval
 
 import numpy as np
 import pandas as pd
@@ -39,14 +40,17 @@ def check_column_range(subset, column_name, low, high):
 
 
 @then(parsers.parse("the value in column '{column_name}' should be '{expected_value}'"))
-def check_column_value(predictions, column_name, expected_value):
-    value = predictions[column_name].iloc[0]
+def check_column_value(subset, column_name, expected_value):
+    if len(subset) == 0:
+        return
+
+    value = subset[column_name].iloc[0]
 
     # expected value is always provided as string
     # try to convert to float if possible
     try:
-        expected_value = float(expected_value)
-    except ValueError:
+        expected_value = literal_eval(expected_value)
+    except:
         pass
 
     if expected_value == "(none)":
@@ -132,3 +136,39 @@ def check_column_length(subset, column_name, length):
     assert (
         subset[column_name].map(lambda x: len(x) > length)
     ).all(), f"Column {column_name} has unexpected length"
+
+
+@then(parsers.parse("when '{condition_column_name}' is '{condition_value}' " 
+                    "the value in column '{column_name}' should be '{expected_value}'"))
+def check_conditional_column_value(subset, condition_column_name, condition_value, column_name, expected_value):
+    # expected value is always provided as string
+    # try to convert to float if possible
+    try:
+        expected_value = literal_eval(expected_value)
+    except:
+        pass
+
+    # same for condition value
+    try:
+        condition_value = literal_eval(condition_value)
+    except:
+        pass
+
+    # condition value can be (none) to indicate None
+    if condition_value == "(none)":
+        subset = subset[pd.isnull(subset[condition_column_name])]
+    else:
+        subset = subset[subset[condition_column_name] == condition_value]
+
+    value = subset[column_name]
+    assert len(value) > 0, f"No rows found for condition {condition_column_name} == {condition_value}"
+
+    # expected value can be (none) to indicate None
+    if expected_value == "(none)":
+        # if expected_value is the magic string "(none)", we expect None
+        assert pd.isnull(value).all(), f"Column {column_name} is assigned to {value} != None"
+    else:
+        # otherwise, we expect the value to be equal to the expected value
+        assert (
+            (value == expected_value).all()
+        ), f"Column {column_name} is assigned to {value} != {expected_value}"
