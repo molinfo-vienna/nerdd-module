@@ -1,5 +1,5 @@
 import warnings
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from rdkit.Chem import Mol
 from rdkit.rdBase import BlockLogs
@@ -41,7 +41,7 @@ class StandardizeWithCsp(Step):
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
+    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -65,7 +65,7 @@ class GetParentMol(Step):
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
+    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates

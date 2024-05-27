@@ -1,8 +1,8 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from rdkit.Chem import Mol, MolFromSmiles, MolToSmiles
 
-from ..problem import Problem
+from ..problem import InvalidSmiles, Problem
 from .step import Step
 
 __all__ = ["CheckValidSmiles"]
@@ -14,15 +14,13 @@ class CheckValidSmiles(Step):
     def __init__(self):
         super().__init__()
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
+    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
 
         smi = MolToSmiles(mol, True)
         check_mol = MolFromSmiles(smi)
         if check_mol is None:
-            errors.append(
-                Problem("invalid_smiles", "Cannot convert molecule to SMILES")
-            )
+            errors.append(InvalidSmiles())
             mol = None
 
         return mol, errors

@@ -1,4 +1,4 @@
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from rdkit.Chem import Mol
 
@@ -14,7 +14,7 @@ class FilterByElement(Step):
         self.allowed_elements = set(allowed_elements)
         self.remove_invalid_molecules = remove_invalid_molecules
 
-    def _run(self, mol: Mol) -> Tuple[Mol, List[Problem]]:
+    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
         result_mol = mol
 

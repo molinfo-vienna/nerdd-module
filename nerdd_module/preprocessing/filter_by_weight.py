@@ -3,7 +3,7 @@ from typing import List, Tuple
 from rdkit.Chem import Mol
 from rdkit.Chem.Descriptors import MolWt
 
-from ..problem import Problem
+from ..problem import InvalidWeightProblem, Problem
 from .step import Step
 
 
@@ -24,11 +24,7 @@ class FilterByWeight(Step):
             else:
                 result_mol = mol
             errors.append(
-                Problem(
-                    "invalid_weight",
-                    f"Molecular weight {weight:.2f} out of range "
-                    f"[{self.min_weight}, {self.max_weight}]",
-                )
+                InvalidWeightProblem(weight, self.min_weight, self.max_weight)
             )
         else:
             result_mol = mol
