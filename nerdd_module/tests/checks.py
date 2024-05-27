@@ -138,9 +138,15 @@ def check_column_length(subset, column_name, length):
     ).all(), f"Column {column_name} has unexpected length"
 
 
-@then(parsers.parse("when '{condition_column_name}' is '{condition_value}' " 
-                    "the value in column '{column_name}' should be '{expected_value}'"))
-def check_conditional_column_value(subset, condition_column_name, condition_value, column_name, expected_value):
+@then(
+    parsers.parse(
+        "when '{condition_column_name}' is '{condition_value}' "
+        "the value in column '{column_name}' should be '{expected_value}'"
+    )
+)
+def check_conditional_column_value(
+    subset, condition_column_name, condition_value, column_name, expected_value
+):
     # expected value is always provided as string
     # try to convert to float if possible
     try:
@@ -161,14 +167,18 @@ def check_conditional_column_value(subset, condition_column_name, condition_valu
         subset = subset[subset[condition_column_name] == condition_value]
 
     value = subset[column_name]
-    assert len(value) > 0, f"No rows found for condition {condition_column_name} == {condition_value}"
+    assert (
+        len(value) > 0
+    ), f"No rows found for condition {condition_column_name} == {condition_value}"
 
     # expected value can be (none) to indicate None
     if expected_value == "(none)":
         # if expected_value is the magic string "(none)", we expect None
-        assert pd.isnull(value).all(), f"Column {column_name} is assigned to {value} != None"
+        assert pd.isnull(
+            value
+        ).all(), f"Column {column_name} is assigned to {value} != None"
     else:
         # otherwise, we expect the value to be equal to the expected value
         assert (
-            (value == expected_value).all()
-        ), f"Column {column_name} is assigned to {value} != {expected_value}"
+            value == expected_value
+        ).all(), f"Column {column_name} is assigned to {value} != {expected_value}"
