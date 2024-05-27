@@ -1,6 +1,5 @@
-import os
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Tuple
 
 from .reader import MoleculeEntry, Reader
 from .reader_registry import register_reader
@@ -24,7 +23,7 @@ class FileReader(Reader):
             path = Path(filename)
         except:
             raise ValueError("input must be a valid path")
-        
+
         # convert to absolute path
         if not path.is_absolute():
             if self.data_dir is not None:
@@ -33,7 +32,9 @@ class FileReader(Reader):
                 path = Path(".") / path
 
         # check that the file is within the data_dir
-        assert self.data_dir is None or self.data_dir in path.parents, "input must be a relative path"
+        assert (
+            self.data_dir is None or self.data_dir in path.parents
+        ), "input must be a relative path"
 
         # check that the file exists
         assert path.exists(), "input must be a valid file"
@@ -41,7 +42,7 @@ class FileReader(Reader):
         with open(path, "rb") as f:
             for entry in explore(f):
                 if len(entry.source) == 1 and entry.source[0] == "raw_input":
-                    source = tuple()
+                    source: Tuple[str, ...] = tuple()
                 else:
                     source = entry.source
                 yield entry._replace(source=tuple([filename, *source]))

@@ -4,7 +4,7 @@ import sys
 
 import rich_click as click
 from decorator import decorator
-from nerdd_module.io import WriterRegistry
+from nerdd_module.output import WriterRegistry
 from stringcase import spinalcase
 
 __all__ = ["auto_cli"]
