@@ -9,6 +9,8 @@ class MergedConfiguration(Configuration):
 
         self.config = dict()
 
+        # merge all configurations starting from the first one
+        # --> last configuration has the highest priority
         for c in configs:
             self.config.update(c._get_dict())
 
