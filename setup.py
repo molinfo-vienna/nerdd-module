@@ -16,11 +16,11 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.2.5",
+    version="0.2.6",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
-    url="https://github.com/molinfo-vienna/nerdd-module.git",
+    url="https://github.com/molinfo-vienna/nerdd-module",
     description="Base package to create NERDD modules",
     license="BSD 3-Clause License",
     long_description=open("README.md").read(),
@@ -36,12 +36,19 @@ setup(
         # install importlib-resources and importlib-metadata for old Python versions
         "importlib-resources>=5; python_version<'3.10'",
         "importlib-metadata>=4.6; python_version<'3.10'",
-        # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi,
-        # but it could potentially be installed from github
-        "chembl_structure_pipeline>=1.0.0",
     ],
     extras_require={
-        "dev": [],
+        "dev": [
+            "black",
+            "isort",
+        ],
+        "csp": [
+            # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi
+            # BUT: maybe it was already installed in the current environment manually
+            # other note: chembl_structure_pipeline *always* installs a recent version
+            #   of rdkit
+            "chembl_structure_pipeline>=1.0.0"
+        ],
         "test": [
             "pytest",
             "pytest-sugar",
