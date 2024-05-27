@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Callable, Iterable, List, Tuple, Union
 
 import pandas as pd
-from rdkit.Chem import Mol, MolToSmiles
+from rdkit.Chem import Mol
 
 from .config import AutoConfiguration, Configuration
-from .io import DepthFirstExplorer, MoleculeEntry
+from .input import DepthFirstExplorer, MoleculeEntry
 from .preprocessing import Pipeline, Step, registry
-from .problem import Problem
+from .problem import Problem, UnknownProblem
 
 __all__ = ["AbstractModel"]
 
@@ -156,17 +156,20 @@ class AbstractModel(ABC):
         #    (and we assume that the order of the molecules is the same)
         if "mol_id" in df_predictions.columns:
             # check that mol_id contains only valid ids
-            assert set(df_predictions.mol_id).issubset(
-                set(df_valid_subset.mol_id)
-            ), f"The mol_id column contains invalid ids: {set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
+            assert set(df_predictions.mol_id).issubset(set(df_valid_subset.mol_id)), (
+                f"The mol_id column contains invalid ids: "
+                f"{set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
+            )
+
             # use mol_id as index
             df_predictions.set_index("mol_id", drop=True, inplace=True)
         elif "mol" in df_predictions.columns:
             # check that molecule names contain only valid ids
             names = df_predictions.mol.apply(lambda mol: int(mol.GetProp("_Name")))
-            assert set(names).issubset(
-                set(df_preprocess.mol_id)
-            ), f"The mol_id column contains invalid ids: {set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
+            assert set(names).issubset(set(df_preprocess.mol_id)), (
+                f"The mol_id column contains invalid ids: "
+                f"{set(df_predictions.mol_id).difference(set(df_valid_subset.mol_id))}."
+            )
 
             # use mol_id as index
             df_predictions.set_index(
@@ -183,6 +186,8 @@ class AbstractModel(ABC):
             df_predictions.set_index(
                 df_valid_subset.index.astype("int64"), inplace=True
             )
+
+        # TODO: check derivative_id or atom_id
 
         # add column that indicates whether a molecule was missing
         missing_mol_ids = set(df_preprocess.mol_id).difference(df_predictions.index)
@@ -212,7 +217,7 @@ class AbstractModel(ABC):
         else:
             df_result["errors"] = df_result.preprocessing_errors
         df_result["errors"] = df_result.errors + df_result.missing.map(
-            lambda x: ["!1"] if x else []
+            lambda x: [UnknownProblem()] if x else []
         )
         df_result.drop(columns=["missing", "preprocessing_errors"], inplace=True)
 
