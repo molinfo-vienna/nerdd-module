@@ -1,5 +1,8 @@
+from typing import Iterable
+
 import pandas as pd
-from pytest_bdd import parsers, scenario, then, when
+from nerdd_module import Problem
+from pytest_bdd import parsers, then
 
 
 @then("the result should be a pandas DataFrame")
@@ -43,3 +46,13 @@ def check_result_length_atom(molecules, predictions):
         num_expected_predictions += 1
 
     assert len(predictions) == num_expected_predictions
+
+
+@then("the errors column should be a list of problem instances")
+def check_error_column(predictions):
+    for error_list in predictions.errors:
+        assert isinstance(error_list, Iterable)
+        for e in error_list:
+            assert isinstance(
+                e, Problem
+            ), f"Expected Problem, got {e} of type {type(e)}"

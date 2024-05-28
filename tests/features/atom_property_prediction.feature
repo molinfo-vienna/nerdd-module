@@ -26,6 +26,7 @@ Feature: Atom prediction
     And the mass column should contain the (multiplied) atomic masses
     And the input column should contain the input representation
     And the number of unique atom ids should be the same as the number of atoms in the input
+    And the errors column should be a list of problem instances
 
     Examples:
     | input_type | version   | num_molecules | multiplier | num_none |

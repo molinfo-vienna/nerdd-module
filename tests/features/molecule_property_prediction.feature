@@ -24,6 +24,7 @@ Feature: Property prediction
     And the name column should contain valid names
     And the weight column should contain the (multiplied) molecule weights
     And the input column should contain the input representation
+    And the errors column should be a list of problem instances
 
     Examples:
     | input_type | version   | num_molecules | multiplier | num_none |
