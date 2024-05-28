@@ -1,12 +1,13 @@
 import pandas as pd
 from nerdd_module import AbstractModel
+from nerdd_module.preprocessing import Sanitize
 from rdkit.Chem.Descriptors import MolWt
 
 __all__ = ["MolWeightModelWithExplicitMolIds"]
 
 
 class MolWeightModelWithExplicitMolIds(AbstractModel):
-    def __init__(self, preprocessing_pipeline="chembl_structure_pipeline", **kwargs):
+    def __init__(self, preprocessing_pipeline=[Sanitize()], **kwargs):
         super().__init__(preprocessing_pipeline, **kwargs)
 
     def _predict_mols(self, mols, multiplier):

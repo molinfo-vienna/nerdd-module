@@ -4,6 +4,7 @@ from .empty_pipeline import *
 from .filter_by_element import *
 from .filter_by_weight import *
 from .pipeline import *
-from ..problem import *
 from .registry import *
+from .remove_stereochemistry import *
+from .sanitize import *
 from .step import *
