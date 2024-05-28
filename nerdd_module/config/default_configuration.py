@@ -1,3 +1,5 @@
+from stringcase import snakecase
+
 from ..polyfills import version
 from .configuration import Configuration
 
@@ -15,6 +17,10 @@ class DefaultConfiguration(Configuration):
             # e.g. SkinDoctorModel -> SkinDoctor
             class_name = class_name[: -len("Model")]
 
+        # convert the class name to snake case
+        # e.g. SkinDoctor -> skin_doctor
+        name = snakecase(class_name)
+
         # append version to the configuration
         try:
             module = nerdd_module.__module__
@@ -24,6 +30,7 @@ class DefaultConfiguration(Configuration):
             pass
 
         self.config = dict(
+            name=name,
             version=version_,
             task="molecular_property_prediction",
             job_parameters=[],
