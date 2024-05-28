@@ -27,7 +27,7 @@ class DefaultConfiguration(Configuration):
             root_module = module.split(".", 1)[0]
             version_ = version(root_module)
         except ModuleNotFoundError:
-            pass
+            version_ = "0.0.1"
 
         self.config = dict(
             name=name,
