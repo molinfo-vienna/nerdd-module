@@ -1,6 +1,6 @@
 from pytest_bdd import given, parsers, when
 
-from ..models import (
+from .models import (
     AtomicMassModel,
     MolWeightModel,
     MolWeightModelWithExplicitMolIds,

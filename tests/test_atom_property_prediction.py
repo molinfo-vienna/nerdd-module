@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from pytest_bdd import parsers, scenario, then, when
 
 
