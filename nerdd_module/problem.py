@@ -11,4 +11,3 @@ class Problem(NamedTuple):
 InvalidSmiles = lambda: Problem(type="invalid_smiles", message="Invalid SMILES string")
 
 UnknownProblem = lambda: Problem(type="unknown", message="Unknown error occurred")
-
