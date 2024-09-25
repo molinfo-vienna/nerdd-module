@@ -4,10 +4,9 @@ __all__ = ["DictConfiguration"]
 
 
 class DictConfiguration(Configuration):
-    def __init__(self, config):
+    def __init__(self, config: dict) -> None:
         super().__init__()
+        self._config = config
 
-        self.config = config
-
-    def _get_dict(self):
-        return self.config
+    def _get_dict(self) -> dict:
+        return self._config
