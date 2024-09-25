@@ -5,12 +5,7 @@ from rdkit.Chem import Mol
 from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
-from .check_valid_smiles import CheckValidSmiles
-from .filter_by_element import FilterByElement
-from .filter_by_weight import FilterByWeight
-from .pipeline import Pipeline
-from .remove_stereochemistry import RemoveStereochemistry
-from .step import Step
+from .preprocessing_step import PreprocessingStep
 
 # before importing chembl_structure_pipeline, we need to suppress RDKit warnings
 warnings.filterwarnings(
@@ -31,10 +26,10 @@ except ImportError as e:
     # --> this allows to use the rest of the package without chembl_structure_pipeline
     import_error = e
 
-__all__ = ["ChemblStructurePipeline", "GetParentMol", "StandardizeWithCsp"]
+__all__ = ["GetParentMol", "StandardizeWithCsp"]
 
 
-class StandardizeWithCsp(Step):
+class StandardizeWithCsp(PreprocessingStep):
     def __init__(self):
         super().__init__()
 
@@ -58,7 +53,7 @@ class StandardizeWithCsp(Step):
         return preprocessed_mol, errors
 
 
-class GetParentMol(Step):
+class GetParentMol(PreprocessingStep):
     def __init__(self):
         super().__init__()
 
@@ -82,43 +77,29 @@ class GetParentMol(Step):
         return preprocessed_mol, errors
 
 
-class ChemblStructurePipeline(Pipeline):
-    def __init__(
-        self,
-        min_weight=150,
-        max_weight=1500,
-        allowed_elements=[
-            "H",
-            "B",
-            "C",
-            "N",
-            "O",
-            "F",
-            "Si",
-            "P",
-            "S",
-            "Cl",
-            "Se",
-            "Br",
-            "I",
-        ],
-        remove_stereochemistry=False,
-        remove_invalid_molecules=False,
-    ):
-        super().__init__(
-            steps=[
-                StandardizeWithCsp(),
-                FilterByWeight(
-                    min_weight=min_weight,
-                    max_weight=max_weight,
-                    remove_invalid_molecules=remove_invalid_molecules,
-                ),
-                FilterByElement(
-                    allowed_elements, remove_invalid_molecules=remove_invalid_molecules
-                ),
-                GetParentMol(),
-            ]
-            + ([RemoveStereochemistry()] if remove_stereochemistry else [])
-            + [CheckValidSmiles()],
-            name="chembl_structure_pipeline",
-        )
+# class ChemblStructurePipeline(Pipeline):
+#     def __init__(
+#         self,
+#         min_weight=150,
+#         max_weight=1500,
+#         allowed_elements=,
+#         remove_stereochemistry=False,
+#         remove_invalid_molecules=False,
+#     ):
+#         super().__init__(
+#             steps=[
+#                 StandardizeWithCsp(),
+#                 FilterByWeight(
+#                     min_weight=min_weight,
+#                     max_weight=max_weight,
+#                     remove_invalid_molecules=remove_invalid_molecules,
+#                 ),
+#                 FilterByElement(
+#                     allowed_elements, remove_invalid_molecules=remove_invalid_molecules
+#                 ),
+#                 GetParentMol(),
+#             ]
+#             + ([RemoveStereochemistry()] if remove_stereochemistry else [])
+#             + [CheckValidSmiles()],
+#             name="chembl_structure_pipeline",
+#         )

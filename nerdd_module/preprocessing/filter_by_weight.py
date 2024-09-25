@@ -4,26 +4,25 @@ from rdkit.Chem import Mol
 from rdkit.Chem.Descriptors import MolWt
 
 from ..problem import Problem
-from .step import Step
+from .preprocessing_step import PreprocessingStep
 
 
-class FilterByWeight(Step):
+class FilterByWeight(PreprocessingStep):
     def __init__(self, min_weight, max_weight, remove_invalid_molecules=False):
         super().__init__()
         self.min_weight = min_weight
         self.max_weight = max_weight
         self.remove_invalid_molecules = remove_invalid_molecules
 
-    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        errors = []
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        problems = []
+        result_mol = mol
 
         weight = MolWt(mol)
         if weight < self.min_weight or weight > self.max_weight:
             if self.remove_invalid_molecules:
                 result_mol = None
-            else:
-                result_mol = mol
-            errors.append(
+            problems.append(
                 Problem(
                     type="invalid_weight",
                     message=(
@@ -32,7 +31,5 @@ class FilterByWeight(Step):
                     ),
                 )
             )
-        else:
-            result_mol = mol
 
-        return result_mol, errors
+        return result_mol, problems
