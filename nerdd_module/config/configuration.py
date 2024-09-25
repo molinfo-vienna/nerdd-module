@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List
+from functools import lru_cache
+from typing import List
 
 __all__ = ["Configuration"]
 
@@ -8,45 +9,53 @@ class Configuration(ABC):
     def __init__(self):
         pass
 
-    def get_dict(self) -> Dict:
-        config_dict = self._get_dict()
+    @lru_cache
+    def get_dict(self) -> dict:
+        config = self._get_dict()
 
-        return config_dict
+        # TODO: validate
+
+        return config
 
     @abstractmethod
-    def _get_dict(self) -> Dict:
+    def _get_dict(self) -> dict:
         pass
 
     def molecular_property_columns(self) -> List[str]:
         return [
             c["name"]
-            for c in self.get_dict().get("result_properties", [])
-            if "level" not in c or c["level"] == "molecule"
+            for c in self["result_properties"]
+            if c.get("level", "molecule") == "molecule"
         ]
 
     def atom_property_columns(self) -> List[str]:
         return [
-            c["name"]
-            for c in self.get_dict().get("result_properties", [])
-            if "level" in c and c["level"] == "atom"
+            c["name"] for c in self["result_properties"] if c.get("level") == "atom"
         ]
 
     def derivative_property_columns(self) -> List[str]:
         return [
             c["name"]
-            for c in self.get_dict().get("result_properties", [])
-            if "level" in c and c["level"] == "derivative"
+            for c in self["result_properties"]
+            if c.get("level") == "derivative"
         ]
 
-    def get_module_type(self) -> str:
+    def get_task(self) -> str:
+        num_atom_properties = len(self.atom_property_columns())
+        num_derivative_properties = len(self.derivative_property_columns())
         assert (
-            len(self.atom_property_columns()) == 0
-            or len(self.derivative_property_columns()) == 0
+            num_atom_properties == 0 or num_derivative_properties == 0
         ), "A module can only predict atom or derivative properties, not both."
 
-        if len(self.atom_property_columns()) > 0:
-            return "atom_property_predictor"
-        elif len(self.derivative_property_columns()) > 0:
-            return "derivative_property_predictor"
+        if num_atom_properties > 0:
+            return "atom_property_prediction"
+        elif num_derivative_properties > 0:
+            return "derivative_property_prediction"
         else:
-            return "molecule_property_predictor"
+            return "molecular_property_prediction"
+
+    def __getitem__(self, key):
+        return self.get_dict()[key]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self._get_dict()})"
