@@ -47,14 +47,10 @@ class AutoConfiguration(Configuration):
 
         if default_config_file is not None:
             configs.append(YamlConfiguration(default_config_file))
-
-        # 2.b search for nerdd.yml in the package (submodule package_name.data)
-        data_module = f"{root_module}.data"
-        configs.append(PackageConfiguration(data_module))
-
-        # 3. module can be configured via the method _get_config in the module
-        if hasattr(nerdd_module, "_get_config"):
-            configs.append(DictConfiguration(nerdd_module._get_config()))
+        else:
+            # 2.b search for nerdd.yml in the package (submodule package_name.data)
+            data_module = f"{root_module}.data"
+            configs.append(PackageConfiguration(data_module))
 
         self.delegate = MergedConfiguration(*configs)
 
