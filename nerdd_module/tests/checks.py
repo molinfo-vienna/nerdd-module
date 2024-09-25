@@ -1,4 +1,3 @@
-import json
 from ast import literal_eval
 
 import numpy as np
@@ -6,13 +5,12 @@ import pandas as pd
 from pytest_bdd import parsers, then
 
 
-@then(parsers.parse("The result should contain the columns:\n{column_names}"))
-def check_result_columns(predictions, column_names):
-    column_names = column_names.strip()
-    for c in column_names.split("\n"):
-        assert (
-            c in predictions.columns
-        ), f"Column {c} not in predictions {predictions.columns.tolist()}"
+@then(parsers.parse("The result should contain the columns:\n{expected_column_names}"))
+def check_result_columns(predictions, expected_column_names):
+    expected_column_names = expected_column_names.strip().split("\n")
+    for c in expected_column_names:
+        for record in predictions:
+            assert c in record, f"Column {c} not in record {list(record.keys())}"
 
 
 @then(
@@ -35,16 +33,23 @@ def check_column_range(subset, column_name, low, high):
     else:
         high = float(high)
 
-    assert (low <= subset[column_name]).all()
-    assert (subset[column_name] <= high).all()
+    values = [record[column_name] for record in subset]
+
+    assert all(
+        low <= v <= high for v in values
+    ), f"Column {column_name} is assigned to {values} not in [{low}, {high}]"
 
 
-@then(parsers.parse("the value in column '{column_name}' should be '{expected_value}'"))
-def check_column_value(subset, column_name, expected_value):
+@then(
+    parsers.parse(
+        "the value in column '{column_name}' should be equal to {expected_value}"
+    )
+)
+def check_column_value_equality(subset, column_name, expected_value):
     if len(subset) == 0:
         return
 
-    value = subset[column_name].iloc[0]
+    values = [record[column_name] for record in subset]
 
     # expected value is always provided as string
     # try to convert to float if possible
@@ -53,14 +58,46 @@ def check_column_value(subset, column_name, expected_value):
     except:
         pass
 
-    if expected_value == "(none)":
+    if expected_value == "(none)" or expected_value is None:
         # if expected_value is the magic string "(none)", we expect None
-        assert pd.isnull(value), f"Column {column_name} is assigned to {value} != None"
+        assert all(
+            v is None for v in values
+        ), f"Column {column_name} is assigned to {values} != None"
     else:
         # otherwise, we expect the value to be equal to the expected value
-        assert (
-            value == expected_value
-        ), f"Column {column_name} is assigned to {value} != {expected_value}"
+        assert all(
+            v == expected_value for v in values
+        ), f"Column {column_name} is assigned to {values} != {expected_value}"
+
+
+@then(
+    parsers.parse(
+        "the value in column '{column_name}' should not be equal to {forbidden_value}"
+    )
+)
+def check_column_value_inequality(subset, column_name, forbidden_value):
+    if len(subset) == 0:
+        return
+
+    values = [record[column_name] for record in subset]
+
+    # expected value is always provided as string
+    # try to convert to float if possible
+    try:
+        forbidden_value = literal_eval(forbidden_value)
+    except:
+        pass
+
+    if forbidden_value == "(none)" or forbidden_value is None:
+        # if expected_value is the magic string "(none)", we expect None
+        assert all(
+            v is not None for v in values
+        ), f"Column {column_name} is assigned to {values} == None"
+    else:
+        # otherwise, we expect the value to be equal to the expected value
+        assert all(
+            v != forbidden_value for v in values
+        ), f"Column {column_name} is assigned to {values} == {forbidden_value}"
 
 
 @then(
@@ -69,7 +106,7 @@ def check_column_value(subset, column_name, expected_value):
     )
 )
 def check_column_subset(subset, column_name, superset):
-    superset = set(json.loads(superset))
+    superset = set(literal_eval(superset))
 
     assert all(
         set(value).issubset(superset) for value in subset[column_name]
@@ -78,7 +115,7 @@ def check_column_subset(subset, column_name, superset):
 
 @then(parsers.parse("the value in column '{column_name}' should be one of {superset}"))
 def check_column_membership(subset, column_name, superset):
-    superset = json.loads(superset)
+    superset = literal_eval(superset)
 
     assert isinstance(
         superset, list
@@ -97,20 +134,6 @@ def check_png_image(subset, column_name):
     assert (
         subset[column_name].str.startswith('<img src="data:image/png;base64,')
     ).all(), f"Column {column_name} does not contain a PNG image"
-
-
-@then(
-    parsers.parse("the value in column '{column_name}' should contain only '{value}'")
-)
-def check_column_membership_single(predictions, column_name, value):
-    if value == "(none)":
-        assert all(
-            pd.isnull(predictions[column_name])
-        ), f"Column {column_name} must be none"
-    else:
-        assert all(
-            value in values for values in predictions[column_name]
-        ), f"Column {column_name} contains value {value}"
 
 
 @then(

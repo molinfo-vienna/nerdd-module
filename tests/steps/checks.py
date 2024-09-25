@@ -1,13 +1,9 @@
+from collections import defaultdict
 from typing import Iterable
 
-import pandas as pd
+from pytest_bdd import then
+
 from nerdd_module import Problem
-from pytest_bdd import parsers, then
-
-
-@then("the result should be a pandas DataFrame")
-def check_result_type(predictions):
-    assert isinstance(predictions, pd.DataFrame)
 
 
 @then("the result should contain the same number of rows as the input")
@@ -19,20 +15,24 @@ def check_result_length(representations, predictions):
         assert len(predictions) == len(representations)
 
 
-@then(parsers.parse("the result should contain the columns:\n{column_names}"))
-def check_result_columns(predictions, column_names):
-    column_names = column_names.strip()
-    for c in column_names.split("\n"):
-        assert (
-            c in predictions.columns
-        ), f"Column {c} not in predictions {predictions.columns.tolist()}"
+@then(
+    "the number of unique atom ids should be the same as the number of atoms in the "
+    "input"
+)
+def check_atom_ids(subset):
+    records_per_mol_id = defaultdict(list)
 
+    for record in subset:
+        records_per_mol_id[record["mol_id"]].append(record)
 
-@then(parsers.parse("the input type column should be '{input_type}'"))
-def check_input_type_column(subset, input_type):
-    assert (
-        subset.input_type == input_type
-    ).all(), f"Not all predictions have the input_type {input_type}"
+    for mol_id, records in records_per_mol_id.items():
+        mol = records[0]["preprocessed_mol"]
+        num_atom_ids = len(set([r["atom_id"] for r in records]))
+        num_atoms = mol.GetNumAtoms()
+        assert num_atom_ids == num_atoms, (
+            f"Number of atom ids ({num_atom_ids}) does not match number of atoms "
+            f"({num_atoms})"
+        )
 
 
 @then("the result should contain as many rows as atoms in the input molecules")
@@ -48,11 +48,12 @@ def check_result_length_atom(molecules, predictions):
     assert len(predictions) == num_expected_predictions
 
 
-@then("the errors column should be a list of problem instances")
-def check_error_column(predictions):
-    for error_list in predictions.errors:
-        assert isinstance(error_list, Iterable)
-        for e in error_list:
+@then("the problems column should be a list of problem instances")
+def check_problem_column(predictions):
+    for record in predictions:
+        problems_list = record["problems"]
+        assert isinstance(problems_list, Iterable)
+        for e in problems_list:
             assert isinstance(
                 e, Problem
             ), f"Expected Problem, got {e} of type {type(e)}"
