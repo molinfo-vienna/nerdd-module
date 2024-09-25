@@ -1,20 +1,21 @@
 import csv
 from itertools import chain
-from typing import Dict, Iterable
+from typing import IO, Any, Dict, Iterable
 
 from rdkit.Chem import Mol, MolToSmiles
 
-from .writer import Writer
+from .file_writer import FileLike, FileWriter
+from .writer_registry import register_writer
+
+__all__ = ["CsvWriter"]
 
 
-class CsvWriter(Writer):
-    def __init__(self):
-        super().__init__(writes_bytes=False)
+@register_writer("csv")
+class CsvWriter(FileWriter):
+    def __init__(self, output_file: FileLike):
+        super().__init__(output_file, writes_bytes=False)
 
-    def _output_type(self) -> str:
-        return "csv"
-
-    def _write(self, output, entries: Iterable[Dict]):
+    def _write(self, output: IO[Any], entries: Iterable[Dict]) -> None:
         entry_iter = iter(entries)
 
         # get the first entry to extract the fieldnames
@@ -24,7 +25,4 @@ class CsvWriter(Writer):
         # write header, first entry, and remaining entries
         writer.writeheader()
         for entry in chain([first_entry], entry_iter):
-            for key, value in entry.items():
-                if isinstance(value, Mol):
-                    entry[key] = MolToSmiles(value, canonical=False)
             writer.writerow(entry)
