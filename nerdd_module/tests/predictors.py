@@ -1,11 +1,6 @@
 from pytest_bdd import given, parsers, when
 
-from .models import (
-    AtomicMassModel,
-    MolWeightModel,
-    MolWeightModelWithExplicitMolIds,
-    MolWeightModelWithExplicitMols,
-)
+from .models import AtomicMassModel, MolWeightModel
 
 
 @given(
@@ -21,12 +16,12 @@ def multiplier(multiplier):
     target_fixture="predictor",
 )
 def molecule_property_predictor(version):
-    if version == "no_ids":
-        return MolWeightModel()
-    elif version == "with_ids":
-        return MolWeightModelWithExplicitMolIds()
-    elif version == "with_mols":
-        return MolWeightModelWithExplicitMols()
+    assert version in ["order_based", "mol_ids", "mols"], (
+        f"version must be one of 'order_based', 'mol_ids', or 'mols', "
+        f"but got {version}."
+    )
+
+    return MolWeightModel(version=version)
 
 
 @given(
@@ -34,19 +29,22 @@ def molecule_property_predictor(version):
     target_fixture="predictor",
 )
 def atom_property_predictor(version):
-    # if version == "no_ids":
-    return AtomicMassModel()
-    # elif version == "with_ids":
-    #     return MolWeightModelWithExplicitMolIds()
-    # elif version == "with_mols":
-    #     return MolWeightModelWithExplicitMols()
+    assert version in [
+        "mol_ids",
+        "mols",
+    ], f"version must be one of 'mol_ids', or 'mols', but got {version}."
+
+    return AtomicMassModel(version=version)
 
 
 @when(
-    parsers.parse("the model is used on the molecules given as {input_type}"),
+    parsers.parse("the model generates predictions for the molecule representations"),
     target_fixture="predictions",
 )
 def predictions(representations, predictor, input_type, multiplier):
     return predictor.predict(
-        representations, input_type=input_type, multiplier=multiplier
+        representations,
+        input_type=input_type,
+        multiplier=multiplier,
+        output_format="record_list",
     )

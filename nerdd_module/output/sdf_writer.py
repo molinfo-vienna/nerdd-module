@@ -1,18 +1,19 @@
-from typing import BinaryIO, Dict, Iterable, TextIO, Union
+from typing import IO, Any, Dict, Iterable
 
-from rdkit.Chem import Mol, MolToSmiles, SDWriter
+from rdkit.Chem import SDWriter
 
-from .writer import Writer
+from .file_writer import FileLike, FileWriter
+from .writer_registry import register_writer
+
+__all__ = ["SdfWriter"]
 
 
-class SdfWriter(Writer):
-    def __init__(self):
-        super().__init__(writes_bytes=False)
+@register_writer("sdf")
+class SdfWriter(FileWriter):
+    def __init__(self, output_file: FileLike) -> None:
+        super().__init__(output_file, writes_bytes=False)
 
-    def _output_type(self) -> str:
-        return "sdf"
-
-    def _write(self, output, entries: Iterable[Dict]):
+    def _write(self, output: IO[Any], entries: Iterable[Dict]) -> None:
         writer = SDWriter(output)
         try:
             for entry in entries:
@@ -21,13 +22,12 @@ class SdfWriter(Writer):
 
                 # write (almost) all properties to the mol object
                 for key, value in entry.items():
-                    if isinstance(value, Mol):
-                        value = MolToSmiles(value)
-                    elif isinstance(value, str) and "\n" in value:
+                    value_as_str = str(value)
+                    if "\n" in value_as_str:
                         # SDF can't write multi-line strings
                         continue
 
-                    mol.SetProp(key, str(value))
+                    mol.SetProp(key, value_as_str)
 
                 # write molecule
                 writer.write(mol)

@@ -3,24 +3,52 @@ from typing import Iterable, List, Optional, Tuple
 from rdkit.Chem import Mol
 
 from ..problem import Problem
-from .step import Step
+from .preprocessing_step import PreprocessingStep
+
+__all__ = ["FilterByElement", "ORGANIC_SUBSET"]
+
+ORGANIC_SUBSET = [
+    "H",
+    "B",
+    "C",
+    "N",
+    "O",
+    "F",
+    "Si",
+    "P",
+    "S",
+    "Cl",
+    "Se",
+    "Br",
+    "I",
+]
 
 
-class FilterByElement(Step):
+class FilterByElement(PreprocessingStep):
     def __init__(
         self, allowed_elements: Iterable[str], remove_invalid_molecules: bool = False
     ):
         super().__init__()
-        self.allowed_elements = set(allowed_elements)
+        self.allowed_elements = set(a.upper() for a in allowed_elements)
+        self.hydrogen_in_allowed_elements = "H" in self.allowed_elements
         self.remove_invalid_molecules = remove_invalid_molecules
 
-    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        errors = []
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        problems = []
         result_mol = mol
 
         elements = set(atom.GetSymbol() for atom in mol.GetAtoms())
         invalid_elements = elements - self.allowed_elements
-        if len(elements - self.allowed_elements) > 0:
+
+        # special case: hydrogens are not recognized by mol.GetAtoms()
+        if not self.hydrogen_in_allowed_elements:
+            # get the number of hydrogens in mol
+            for a in mol.GetAtoms():
+                if a.GetTotalNumHs() > 0:
+                    invalid_elements.add("H")
+                    break
+
+        if len(invalid_elements) > 0:
             if self.remove_invalid_molecules:
                 result_mol = None
 
@@ -29,11 +57,11 @@ class FilterByElement(Step):
             else:
                 invalid_elements_str = ", ".join(list(invalid_elements))
 
-            errors.append(
+            problems.append(
                 Problem(
                     "invalid_elements",
                     f"Molecule contains invalid elements {invalid_elements_str}",
                 )
             )
 
-        return result_mol, errors
+        return result_mol, problems

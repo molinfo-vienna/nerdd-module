@@ -3,24 +3,24 @@ from typing import List, Optional, Tuple
 from rdkit.Chem import Mol, MolFromSmiles, MolToSmiles
 
 from ..problem import InvalidSmiles, Problem
-from .step import Step
+from .preprocessing_step import PreprocessingStep
 
 __all__ = ["CheckValidSmiles"]
 
 
-class CheckValidSmiles(Step):
+class CheckValidSmiles(PreprocessingStep):
     """Checks if the molecule can be converted to SMILES and back."""
 
     def __init__(self):
         super().__init__()
 
-    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        errors = []
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        problems = []
 
         smi = MolToSmiles(mol, True)
         check_mol = MolFromSmiles(smi)
         if check_mol is None:
-            errors.append(InvalidSmiles())
+            problems.append(InvalidSmiles())
             mol = None
 
-        return mol, errors
+        return mol, problems

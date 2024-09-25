@@ -1,5 +1,5 @@
 from codecs import getreader
-from typing import Generator
+from typing import Iterator
 
 from rdkit.Chem import MolFromMolBlock
 from rdkit.rdBase import BlockLogs
@@ -19,7 +19,7 @@ class SdfReader(Reader):
         super().__init__()
         self.max_num_lines_mol_block = max_num_lines_mol_block
 
-    def read(self, input_stream, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, input_stream, explore) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 

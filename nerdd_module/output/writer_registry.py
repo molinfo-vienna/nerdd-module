@@ -1,40 +1,50 @@
-from functools import lru_cache
+from functools import lru_cache, partial
+from typing import Callable, Dict, Type
 
-from .csv_writer import CsvWriter
-from .sdf_writer import SdfWriter
+from ..util import call_with_mappings, class_decorator
 from .writer import Writer
 
-__all__ = ["WriterRegistry"]
+__all__ = [
+    "WriterRegistry",
+    "register_writer",
+]
+
+
+WriterFactory = Callable[[dict], Writer]
 
 
 # lru_cache makes the registry a singleton
 @lru_cache(maxsize=1)
 class WriterRegistry:
-    def __init__(self):
-        self._writers = []
+    def __init__(self) -> None:
+        self._factories: Dict[str, WriterFactory] = {}
 
-    def register(self, writer: Writer):
-        self._writers.append(writer)
+    def register(
+        self,
+        output_format: str,
+        WriterClass: Type[Writer],
+        *args: str,
+        **kwargs: str,
+    ):
+        assert issubclass(WriterClass, Writer)
+        assert all([isinstance(arg, str) for arg in args])
+        assert all(
+            [isinstance(k, str) and isinstance(v, str) for k, v in kwargs.items()]
+        )
 
-    def get_writer(self, output_type: str) -> Writer:
-        for writer in self._writers:
-            if writer.output_type == output_type:
-                return writer
+        self._factories[output_format] = partial(
+            call_with_mappings, WriterClass, args_mapping=args, kwargs_mapping=kwargs
+        )
 
-        raise ValueError(f"Unsupported output type: {output_type}")
+    def get_writer(self, output_format: str, **kwargs) -> Writer:
+        if output_format not in self._factories:
+            raise ValueError(f"Unknown output format: {output_format}")
+        return self._factories[output_format](kwargs)
 
-    @property
-    def supported_formats(self) -> frozenset:
-        return frozenset([writer.output_type for writer in self._writers])
-
-    @property
-    def writers(self):
-        return frozenset(self._writers)
-
-    def __iter__(self):
-        return iter(self._writers)
+    def get_output_formats(self) -> frozenset:
+        return frozenset(self._factories.keys())
 
 
-registry = WriterRegistry()
-registry.register(CsvWriter())
-registry.register(SdfWriter())
+@class_decorator
+def register_writer(cls: Type[Writer], output_format: str, *args, **kwargs):
+    WriterRegistry().register(output_format, cls, *args, **kwargs)

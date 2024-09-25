@@ -2,9 +2,9 @@ import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import seed, settings
 from hypothesis import strategies as st
-from hypothesis_rdkit import mols, smiles
+from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
-from rdkit.Chem import MolFromSmiles, MolToMolBlock, MolToSmiles
+from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
 
 
 @given(parsers.parse("a random seed set to {seed:d}"), target_fixture="random_seed")
@@ -29,6 +29,8 @@ def representations_from_molecules(molecules, input_type):
         converter = MolToSmiles
     elif input_type == "mol_block":
         converter = MolToMolBlock
+    elif input_type == "inchi":
+        converter = MolToInchi
     elif input_type == "rdkit_mol":
         converter = lambda mol: mol
     else:

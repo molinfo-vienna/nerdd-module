@@ -1,15 +1,15 @@
 from rdkit.Chem import SanitizeMol
 
-from .step import Step
+from .preprocessing_step import PreprocessingStep
 
 __all__ = ["Sanitize"]
 
 
-class Sanitize(Step):
+class Sanitize(PreprocessingStep):
     def __init__(self):
         super().__init__()
 
-    def _run(self, mol):
+    def _preprocess(self, mol):
         errors = []
 
         # sanitize molecule

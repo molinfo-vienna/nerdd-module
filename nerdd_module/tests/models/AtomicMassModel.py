@@ -1,21 +1,40 @@
-import pandas as pd
-from nerdd_module import AbstractModel
+from nerdd_module import SimpleModel
+from nerdd_module.preprocessing import Sanitize
 
 __all__ = ["AtomicMassModel"]
 
 
-class AtomicMassModel(AbstractModel):
-    def __init__(self, preprocessing_pipeline="no_preprocessing", **kwargs):
-        super().__init__(preprocessing_pipeline, **kwargs)
+class AtomicMassModel(SimpleModel):
+    def __init__(self, preprocessing_steps=[Sanitize()], version="mol_ids", **kwargs):
+        assert version in [
+            "mol_ids",
+            "mols",
+        ], f"version must be one of 'mol_ids', or 'mols', but got {version}."
+
+        super().__init__(preprocessing_steps, **kwargs)
+        self._version = version
 
     def _predict_mols(self, mols, multiplier):
-        return pd.DataFrame(
-            {
-                "mol": [m for m in mols for _ in m.GetAtoms()],
-                "atom_id": [a.GetIdx() for m in mols for a in m.GetAtoms()],
-                "mass": [a.GetMass() * multiplier for m in mols for a in m.GetAtoms()],
-            }
-        )
+        if self._version == "mol_ids":
+            return [
+                {
+                    "mol_id": i,
+                    "atom_id": a.GetIdx(),
+                    "mass": a.GetMass() * multiplier,
+                }
+                for i, m in enumerate(mols)
+                for a in m.GetAtoms()
+            ]
+        elif self._version == "mols":
+            return [
+                {
+                    "mol": m,
+                    "atom_id": a.GetIdx(),
+                    "mass": a.GetMass() * multiplier,
+                }
+                for m in mols
+                for a in m.GetAtoms()
+            ]
 
     def _get_config(self):
         return {

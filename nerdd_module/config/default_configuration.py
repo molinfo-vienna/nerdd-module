@@ -1,15 +1,13 @@
 from stringcase import snakecase
 
 from ..polyfills import version
-from .configuration import Configuration
+from .dict_configuration import DictConfiguration
 
 __all__ = ["DefaultConfiguration"]
 
 
-class DefaultConfiguration(Configuration):
+class DefaultConfiguration(DictConfiguration):
     def __init__(self, nerdd_module):
-        super().__init__()
-
         # generate a name from the module name
         class_name = nerdd_module.__class__.__name__
         if class_name.endswith("Model"):
@@ -25,17 +23,15 @@ class DefaultConfiguration(Configuration):
         try:
             module = nerdd_module.__module__
             root_module = module.split(".", 1)[0]
-            version_ = version(root_module)
+            package_version = version(root_module)
         except ModuleNotFoundError:
-            version_ = "0.0.1"
+            package_version = "0.0.1"
 
-        self.config = dict(
+        config = dict(
             name=name,
-            version=version_,
-            task="molecular_property_prediction",
+            version=package_version,
             job_parameters=[],
             result_properties=[],
         )
 
-    def _get_dict(self):
-        return self.config
+        super().__init__(config)
