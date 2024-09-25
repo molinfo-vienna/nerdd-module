@@ -1,5 +1,5 @@
 from codecs import getreader
-from typing import Generator
+from typing import Iterator
 
 from rdkit.Chem import MolFromSmiles
 from rdkit.rdBase import BlockLogs
@@ -18,7 +18,7 @@ class SmilesReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def read(self, input_stream, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, input_stream, explore) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 
@@ -43,7 +43,12 @@ class SmilesReader(Reader):
                     mol = None
 
                 if mol is None:
-                    errors = [Problem("invalid_smiles", "Invalid SMILES")]
+                    display_line = line
+                    if len(display_line) > 100:
+                        display_line = display_line[:100] + "..."
+                    errors = [
+                        Problem("invalid_smiles", f"Invalid SMILES {display_line}")
+                    ]
                 else:
                     # old versions of RDKit do not parse the name
                     # --> get name from smiles manually

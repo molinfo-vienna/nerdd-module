@@ -1,4 +1,5 @@
 from .depth_first_explorer import *
+from .explorer import *
 from .file_reader import *
 from .gzip_reader import *
 from .inchi_reader import *

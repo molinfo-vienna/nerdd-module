@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Iterator
 
 from rdkit.Chem import Mol
 
@@ -11,7 +11,7 @@ class MolReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def read(self, mol, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, mol, explore) -> Iterator[MoleculeEntry]:
         assert isinstance(mol, Mol)
         yield MoleculeEntry(
             raw_input=mol,

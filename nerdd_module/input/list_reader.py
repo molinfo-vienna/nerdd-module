@@ -1,5 +1,5 @@
 from io import BytesIO, StringIO
-from typing import BinaryIO, Generator, Iterable
+from typing import BinaryIO, Iterable, Iterator
 
 from .reader import MoleculeEntry, Reader
 from .reader_registry import register_reader
@@ -12,7 +12,7 @@ class ListReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def read(self, input_iterable, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, input_iterable, explore) -> Iterator[MoleculeEntry]:
         assert isinstance(input_iterable, Iterable) and not isinstance(
             input_iterable, (str, bytes, BytesIO, StringIO, BinaryIO)
         ), f"input must be an iterable, but is {type(input_iterable)}"

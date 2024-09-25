@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generator, List, NamedTuple, Optional, Tuple
+from typing import Iterator, List, NamedTuple, Optional, Tuple
 
 from rdkit.Chem import Mol
 
@@ -21,5 +21,5 @@ class Reader(ABC):
         super().__init__()
 
     @abstractmethod
-    def read(self, input, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, input, explore) -> Iterator[MoleculeEntry]:
         pass

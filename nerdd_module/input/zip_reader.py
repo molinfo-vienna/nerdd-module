@@ -1,5 +1,5 @@
 import zipfile
-from typing import Generator
+from typing import Iterator
 
 from .reader import MoleculeEntry, Reader
 from .reader_registry import register_reader
@@ -12,7 +12,7 @@ class ZipReader(Reader):
     def __init__(self):
         super().__init__()
 
-    def read(self, input_stream, explore) -> Generator[MoleculeEntry, None, None]:
+    def read(self, input_stream, explore) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 
