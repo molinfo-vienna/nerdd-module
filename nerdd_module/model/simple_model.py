@@ -17,6 +17,7 @@ from ..preprocessing import PreprocessingStep
 from ..problem import Problem
 from ..steps import Step
 from ..util import get_file_path_to_instance
+from .add_smiles import AddSmiles
 from .assign_mol_id import AssignMolId
 from .assign_name import AssignName
 from .enforce_schema import EnforceSchema
@@ -49,6 +50,8 @@ class SimpleModel(Model):
         output_format = output_format or "pandas"
 
         return [
+            AddSmiles("input_mol", "input_smiles"),
+            AddSmiles("preprocessed_mol", "preprocessed_smiles"),
             EnforceSchema(self.get_config()),
             WriteOutput(output_format, **kwargs),
         ]

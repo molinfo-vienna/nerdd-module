@@ -1,3 +1,4 @@
+from .add_smiles import *
 from .assign_mol_id import *
 from .assign_name import *
 from .model import *
