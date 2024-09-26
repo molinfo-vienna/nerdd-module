@@ -1,13 +1,28 @@
+import logging
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from typing import Any, Iterator, List, Optional
 
 from rdkit.Chem import Mol
 
-from ..problem import UnknownProblem
+from ..problem import Problem
 from ..steps import Step
 from ..util import call_with_mappings
 from .write_output import WriteOutput
+
+logger = logging.getLogger(__name__)
+
+# an unknown prediction problem indicates that the model raised an exception during
+# prediction
+UnknownPredictionProblem = lambda: Problem(
+    "unknown_prediction_error", "An unknown error occured during prediction."
+)
+
+# an incomplete prediction problem indicates that the model successfully returns
+# predictions, but part of the input molecules are missing in the results
+IncompletePredictionProblem = lambda: Problem(
+    "incomplete_prediction_error", "The model couldn't process the molecule."
+)
 
 
 class Model(ABC):
@@ -97,10 +112,22 @@ class PredictionStep(Step):
             mol.SetProp("_TempId", str(id))
 
         # do the actual prediction
-        predictions = call_with_mappings(
-            self.model._predict_mols,
-            {**self.kwargs, "mols": mols},
-        )
+        try:
+            predictions = call_with_mappings(
+                self.model._predict_mols,
+                {**self.kwargs, "mols": mols},
+            )
+        except Exception as e:
+            logger.error(e, exc_info=True)
+
+            # if an error occurs, we want to catch it and yield the error message
+            predictions = [
+                {
+                    "mol_id": i,
+                    "problems": [UnknownPredictionProblem()],
+                }
+                for i, _ in enumerate(batch)
+            ]
 
         # During prediction, molecules might have been removed / reordered.
         # There are three ways to connect the predictions to the original molecules:
@@ -144,7 +171,7 @@ class PredictionStep(Step):
         for mol_id, record in zip(temporary_mol_ids, batch):
             if mol_id not in mol_id_to_record:
                 # notify the user that the molecule could not be predicted
-                record["problems"].append(UnknownProblem())
+                record["problems"].append(IncompletePredictionProblem())
 
                 # add the record to the mapping
                 mol_id_to_record[mol_id].append(record)

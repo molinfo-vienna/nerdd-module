@@ -1,3 +1,5 @@
+from ast import literal_eval
+
 from pytest_bdd import given, parsers, when
 
 from .models import AtomicMassModel, MolWeightModel
@@ -12,28 +14,18 @@ def multiplier(multiplier):
 
 
 @given(
-    parsers.parse("an example model predicting molecular weight, version {version}"),
+    parsers.parse("an example model predicting molecular weight, version '{version}'"),
     target_fixture="predictor",
 )
 def molecule_property_predictor(version):
-    assert version in ["order_based", "mol_ids", "mols"], (
-        f"version must be one of 'order_based', 'mol_ids', or 'mols', "
-        f"but got {version}."
-    )
-
     return MolWeightModel(version=version)
 
 
 @given(
-    parsers.parse("an example model predicting atomic masses, version {version}"),
+    parsers.parse("an example model predicting atomic masses, version '{version}'"),
     target_fixture="predictor",
 )
 def atom_property_predictor(version):
-    assert version in [
-        "mol_ids",
-        "mols",
-    ], f"version must be one of 'mol_ids', or 'mols', but got {version}."
-
     return AtomicMassModel(version=version)
 
 
