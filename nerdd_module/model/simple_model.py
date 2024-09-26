@@ -52,7 +52,7 @@ class SimpleModel(Model):
         return [
             AddSmiles("input_mol", "input_smiles"),
             AddSmiles("preprocessed_mol", "preprocessed_smiles"),
-            EnforceSchema(self.get_config()),
+            EnforceSchema(self._get_config()),
             WriteOutput(output_format, **kwargs),
         ]
 
@@ -63,12 +63,12 @@ class SimpleModel(Model):
     def _predict_mols(self, mols: List[Mol], **kwargs) -> List[dict]:
         pass
 
-    def _get_config(self) -> Union[Configuration, dict]:
+    def _get_base_config(self) -> Union[Configuration, dict]:
         return {}
 
-    def get_config(self) -> Configuration:
+    def _get_config(self) -> Configuration:
         # get base configuration specified in this class
-        base_config = self._get_config()
+        base_config = self._get_base_config()
         if isinstance(base_config, dict):
             base_config = DictConfiguration(base_config)
 
@@ -127,6 +127,9 @@ class SimpleModel(Model):
         ]
 
         return MergedConfiguration(*configs)
+
+    def get_config(self) -> dict:
+        return self._get_config().get_dict()
 
 
 class CustomPreprocessingStep(PreprocessingStep):
