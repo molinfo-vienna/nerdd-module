@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod
 from typing import Iterable, Iterator, List, Optional, Tuple, Union
 
@@ -7,6 +8,13 @@ from ..problem import Problem
 from ..steps import MapStep
 
 __all__ = ["PreprocessingStep"]
+
+
+logger = logging.getLogger(__name__)
+
+UnknownPreprocessingProblem = lambda: Problem(
+    "unknown_preprocessing_error", "An unknown error occurred during preprocessing."
+)
 
 
 class PreprocessingStep(MapStep):
@@ -26,7 +34,16 @@ class PreprocessingStep(MapStep):
         if mol is None:
             return record
 
-        mol, problems = self._preprocess(mol)
+        try:
+            # run the actual preprocessing step
+            mol, problems = self._preprocess(mol)
+        except Exception as e:
+            # if an exception occurs, log it and return an unknown error
+            logger.error(e, exc_info=True)
+
+            mol = None
+            problems = [UnknownPreprocessingProblem()]
+
         record["preprocessed_mol"] = mol
 
         if "problems" in record:

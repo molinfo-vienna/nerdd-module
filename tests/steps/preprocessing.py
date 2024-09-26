@@ -8,6 +8,23 @@ from nerdd_module.preprocessing import (
     Sanitize,
     StandardizeWithCsp,
 )
+from nerdd_module.tests.preprocessing import DummyPreprocessingStep
+
+
+#
+# DUMMY PREPROCESSING STEP
+#
+@when(
+    parsers.parse(
+        "the molecules are preprocessed by a dummy preprocessing step in mode '{mode}'"
+    ),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_dummy_preprocessing_step(representations, mode):
+    input_step = ReadInput(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    dummy_preprocessing_step = DummyPreprocessingStep(mode)
+    return list(dummy_preprocessing_step(sanitize(input_step())))
 
 
 #
