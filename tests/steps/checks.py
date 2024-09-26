@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Iterable
 
-from pytest_bdd import then
+from pytest_bdd import parsers, then
 
 from nerdd_module import Problem
 
@@ -57,3 +57,21 @@ def check_problem_column(predictions):
             assert isinstance(
                 e, Problem
             ), f"Expected Problem, got {e} of type {type(e)}"
+
+
+@then(parsers.parse("the subset should contain the problem '{problem}'"))
+def check_problem_in_list(subset, problem):
+    for record in subset:
+        problems = record.get("problems", [])
+        assert problem in [
+            p.type for p in problems
+        ], f"Problem list lacks problem {problem} in record {record}"
+
+
+@then(parsers.parse("the subset should not contain the problem '{problem}'"))
+def check_problem_not_in_list(subset, problem):
+    for record in subset:
+        problems = record.get("problems", [])
+        assert problem not in [
+            p.type for p in problems
+        ], f"Problem list contains problem {problem} in record {record}"

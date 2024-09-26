@@ -26,7 +26,7 @@ except ImportError as e:
     # --> this allows to use the rest of the package without chembl_structure_pipeline
     import_error = e
 
-__all__ = ["GetParentMol", "StandardizeWithCsp"]
+__all__ = ["GetParentMolWithCsp", "StandardizeWithCsp"]
 
 
 class StandardizeWithCsp(PreprocessingStep):
@@ -36,7 +36,7 @@ class StandardizeWithCsp(PreprocessingStep):
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -47,20 +47,20 @@ class StandardizeWithCsp(PreprocessingStep):
         preprocessed_mol = standardize_mol(mol)
 
         if preprocessed_mol is None:
-            errors.append(Problem("csp_error", "Cannot standardize molecule"))
+            errors.append(Problem("csp_error", "Could not standardize the molecule."))
             preprocessed_mol = mol
 
         return preprocessed_mol, errors
 
 
-class GetParentMol(PreprocessingStep):
+class GetParentMolWithCsp(PreprocessingStep):
     def __init__(self):
         super().__init__()
 
         if import_error is not None:
             raise import_error
 
-    def _run(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         errors = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -70,7 +70,7 @@ class GetParentMol(PreprocessingStep):
         # get parent molecule via chembl structure pipeline
         preprocessed_mol, exclude_flag = get_parent_mol(mol)
         if exclude_flag or preprocessed_mol is None:
-            errors.append(Problem("csp_error", "Cannot remove small fragments"))
+            errors.append(Problem("csp_error", "Could not remove small fragments."))
         if preprocessed_mol is None:
             preprocessed_mol = mol
 

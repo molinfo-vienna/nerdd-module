@@ -1,10 +1,18 @@
-from pytest_bdd import given, parsers, then, when
+from pytest_bdd import given, parsers, when
 
 from nerdd_module.input import DepthFirstExplorer
 from nerdd_module.model import ReadInput
-from nerdd_module.preprocessing import FilterByElement, Sanitize
+from nerdd_module.preprocessing import (
+    FilterByElement,
+    GetParentMolWithCsp,
+    Sanitize,
+    StandardizeWithCsp,
+)
 
 
+#
+# FILTER BY ELEMENT
+#
 @given(
     parsers.parse("the list of allowed elements is {l}"),
     target_fixture="allowed_elements",
@@ -36,19 +44,29 @@ def preprocessed_molecules_filter_by_element(
     return list(filter_by_element(sanitize(input_step())))
 
 
-@then(parsers.parse("the subset should contain the problem '{problem}'"))
-def check_problem_in_list(subset, problem):
-    for record in subset:
-        problems = record.get("problems", [])
-        assert problem in [
-            p.type for p in problems
-        ], f"Problem list lacks problem {problem} in record {record}"
+#
+# STANDARDIZE_WITH_CSP
+#
+@when(
+    parsers.parse("the molecules are standardized with CSP"),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_standardize_with_csp(representations):
+    input_step = ReadInput(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    standardize = StandardizeWithCsp()
+    return list(standardize(sanitize(input_step())))
 
 
-@then(parsers.parse("the subset should not contain the problem '{problem}'"))
-def check_problem_not_in_list(subset, problem):
-    for record in subset:
-        problems = record.get("problems", [])
-        assert problem not in [
-            p.type for p in problems
-        ], f"Problem list contains problem {problem} in record {record}"
+#
+# GET_PARENT_MOL_WITH_CSP
+#
+@when(
+    parsers.parse("small fragments are removed from the molecules with CSP"),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_get_parent_mol_with_csp(representations):
+    input_step = ReadInput(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    get_parent_mol = GetParentMolWithCsp()
+    return list(get_parent_mol(sanitize(input_step())))
