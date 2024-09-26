@@ -9,7 +9,8 @@ class AtomicMassModel(SimpleModel):
         assert version in [
             "mol_ids",
             "mols",
-        ], f"version must be one of 'mol_ids', or 'mols', but got {version}."
+            "error",
+        ], f"version must be one of 'mol_ids', 'mols', or 'error', but got {version}."
 
         super().__init__(preprocessing_steps, **kwargs)
         self._version = version
@@ -35,8 +36,10 @@ class AtomicMassModel(SimpleModel):
                 for m in mols
                 for a in m.GetAtoms()
             ]
+        elif self._version == "error":
+            raise ValueError("This is an error.")
 
-    def _get_config(self):
+    def _get_base_config(self):
         return {
             "name": "atomic_mass_model",
             "job_parameters": [

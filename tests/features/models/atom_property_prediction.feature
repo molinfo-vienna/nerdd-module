@@ -4,7 +4,7 @@ Feature: Atom property prediction
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
     And the input type is '<input_type>'
     And the representations of the molecules
-    And an example model predicting atomic masses, version <version>
+    And an example model predicting atomic masses, version '<version>'
     And a prediction parameter 'multiplier' set to <multiplier>
 
     When the model generates predictions for the molecule representations
@@ -46,3 +46,25 @@ Feature: Atom property prediction
     | rdkit_mol  | mols      | 0             | 3          | 0        |
     | smiles     | mols      | 0             | 3          | 0        |
     | mol_block  | mols      | 0             | 3          | 0        |
+
+
+Scenario: Predicting a property for each atom with an invalid model
+    Given a list of 10 random molecules, where 0 entries are None
+    And the input type is 'rdkit_mol'
+    And the representations of the molecules
+    And an example model predicting atomic masses, version 'error'
+    And a prediction parameter 'multiplier' set to 10
+
+    When the model generates predictions for the molecule representations
+
+    Then the result should contain the same number of rows as the input
+    And the result should contain the columns:
+          mol_id
+          name
+          input_mol
+          preprocessed_mol
+          input_type
+          problems
+          atom_id
+          mass
+    And the problems column should be a list of problem instances
