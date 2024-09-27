@@ -75,31 +75,3 @@ class GetParentMolWithCsp(PreprocessingStep):
             preprocessed_mol = mol
 
         return preprocessed_mol, errors
-
-
-# class ChemblStructurePipeline(Pipeline):
-#     def __init__(
-#         self,
-#         min_weight=150,
-#         max_weight=1500,
-#         allowed_elements=,
-#         remove_stereochemistry=False,
-#         remove_invalid_molecules=False,
-#     ):
-#         super().__init__(
-#             steps=[
-#                 StandardizeWithCsp(),
-#                 FilterByWeight(
-#                     min_weight=min_weight,
-#                     max_weight=max_weight,
-#                     remove_invalid_molecules=remove_invalid_molecules,
-#                 ),
-#                 FilterByElement(
-#                     allowed_elements, remove_invalid_molecules=remove_invalid_molecules
-#                 ),
-#                 GetParentMol(),
-#             ]
-#             + ([RemoveStereochemistry()] if remove_stereochemistry else [])
-#             + [CheckValidSmiles()],
-#             name="chembl_structure_pipeline",
-#         )
