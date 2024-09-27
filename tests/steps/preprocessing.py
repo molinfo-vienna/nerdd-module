@@ -4,6 +4,7 @@ from nerdd_module.input import DepthFirstExplorer
 from nerdd_module.model import ReadInput
 from nerdd_module.preprocessing import (
     FilterByElement,
+    FilterByWeight,
     GetParentMolWithCsp,
     Sanitize,
     StandardizeWithCsp,
@@ -59,6 +60,27 @@ def preprocessed_molecules_filter_by_element(
         allowed_elements, remove_invalid_molecules=remove_invalid_molecules
     )
     return list(filter_by_element(sanitize(input_step())))
+
+
+@when(
+    parsers.parse(
+        "the molecules are filtered by weight (range=[{min_weight:d}, {max_weight:d}], remove_invalid_molecules={remove_invalid_molecules})"
+    ),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_filter_by_weight(
+    representations, min_weight, max_weight, remove_invalid_molecules
+):
+    remove_invalid_molecules = eval(remove_invalid_molecules)
+
+    input_step = ReadInput(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    filter_by_weight = FilterByWeight(
+        min_weight=min_weight,
+        max_weight=max_weight,
+        remove_invalid_molecules=remove_invalid_molecules,
+    )
+    return list(filter_by_weight(sanitize(input_step())))
 
 
 #
