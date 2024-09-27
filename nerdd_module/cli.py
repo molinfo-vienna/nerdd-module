@@ -4,7 +4,6 @@ import sys
 
 import rich_click as click
 from decorator import decorator
-from nerdd_module.output import WriterRegistry
 from stringcase import spinalcase
 
 __all__ = ["auto_cli"]
@@ -14,7 +13,7 @@ input_description = """{description}
 INPUT molecules are provided as file paths or strings. The following formats are 
 supported:
 
-{format_list}
+{input_format_list}
 
 Note that input formats shouldn't be mixed.
 """
@@ -43,16 +42,18 @@ def auto_cli(f, *args, **kwargs):
     # get the model
     model = f()
 
-    config = model.get_config().get_dict()
+    config = model.get_config()
 
     # compose cli description
     description = config.get("description", "")
 
-    format_list = "\n".join([f"* {fmt}" for fmt in ["smiles", "sdf", "inchi"]])
+    input_format_list = "\n".join([f"* {fmt}" for fmt in ["smiles", "sdf", "inchi"]])
 
     help_text = input_description.format(
-        description=description, format_list=format_list
+        description=description, input_format_list=input_format_list
     )
+
+    output_format_list = ["sdf", "csv"]
 
     # compose footer with examples
     examples = []
@@ -88,21 +89,15 @@ def auto_cli(f, *args, **kwargs):
     ):
         logging.basicConfig(level=log_level.upper())
 
-        df_result = model.predict(input, **kwargs)
-
         # write results
-        assert format in WriterRegistry().supported_formats
-        writer = WriterRegistry().get_writer(format)
+        assert format in output_format_list, f"Unknown output format: {format}"
 
-        if output.lower() == "stdout":
-            assert not writer.writes_bytes, "stdout does not support binary output"
+        if str(output).lower() == "stdout":
             output_handle = sys.stdout
         else:
-            mode = "wb" if writer.writes_bytes else "w"
-            output_handle = click.open_file(output, mode)
+            output_handle = click.open_file(str(output), "wb")
 
-        entries = (tup._asdict() for tup in df_result.itertuples(index=False))
-        writer.write(output_handle, entries)
+        model.predict(input, output_format=format, output_file=output_handle, **kwargs)
 
     #
     # Add job parameters
@@ -130,7 +125,7 @@ def auto_cli(f, *args, **kwargs):
     main = click.option(
         "--format",
         default="csv",
-        type=click.Choice(WriterRegistry().supported_formats, case_sensitive=False),
+        type=click.Choice(output_format_list, case_sensitive=False),
         help="The output format.",
     )(main)
 
