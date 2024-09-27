@@ -16,7 +16,7 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.3.0",
+    version="0.3.1",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
@@ -42,10 +42,11 @@ setup(
             "black",
         ],
         "csp": [
-            # note: version 1.0.0 of chembl_structure_pipeline is not available on pypi
-            # BUT: maybe it was already installed in the current environment manually
-            # other note: chembl_structure_pipeline *always* installs a recent version
-            #   of rdkit
+            # Note 1: Version 1.0.0 of chembl_structure_pipeline is not available on
+            # pypi, but maybe it was already installed in the current environment
+            # manually. So it makes sense to use ">=1.0.0" here.
+            # Note 2: chembl_structure_pipeline *always* installs a recent version
+            # of rdkit.
             "chembl_structure_pipeline>=1.0.0"
         ],
         "test": [
