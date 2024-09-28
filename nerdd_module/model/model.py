@@ -97,7 +97,7 @@ class Model(ABC):
         steps = [
             *input_steps,
             *preprocessing_steps,
-            PredictionStep(self, batch_size=1, **kwargs),
+            PredictionStep(self, batch_size=self.batch_size, **kwargs),
             *postprocessing_steps,
             output_step,
         ]
@@ -109,6 +109,11 @@ class Model(ABC):
 
         # the last pipeline step holds the result
         return output_step.get_result()
+
+    def _get_batch_size(self) -> int:
+        return 1
+
+    batch_size = property(_get_batch_size)
 
 
 class PredictionStep(Step):
