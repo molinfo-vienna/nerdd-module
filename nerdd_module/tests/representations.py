@@ -5,6 +5,7 @@ from hypothesis import strategies as st
 from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
 from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
+from rdkit.rdBase import BlockLogs
 
 
 @given(parsers.parse("a random seed set to {seed:d}"), target_fixture="random_seed")
@@ -36,7 +37,8 @@ def representations_from_molecules(molecules, input_type):
     else:
         raise ValueError(f"Unknown input_type: {input_type}")
 
-    result = [converter(mol) if mol is not None else None for mol in molecules]
+    with BlockLogs():
+        result = [converter(mol) if mol is not None else None for mol in molecules]
 
     return result
 

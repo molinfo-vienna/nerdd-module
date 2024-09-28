@@ -1,4 +1,3 @@
-import sys
 from abc import abstractmethod
 from typing import Any, Iterable, List, Optional, Tuple, Union
 
@@ -15,7 +14,7 @@ from ..config import (
 from ..input import DepthFirstExplorer
 from ..preprocessing import PreprocessingStep
 from ..problem import Problem
-from ..steps import Step
+from ..steps import OutputStep, Step
 from ..util import get_file_path_to_instance
 from .add_smiles import AddSmiles
 from .assign_mol_id import AssignMolId
@@ -38,6 +37,12 @@ class SimpleModel(Model):
     ) -> List[Step]:
         return [
             ReadInput(DepthFirstExplorer(), input),
+        ]
+
+    def _get_preprocessing_steps(
+        self, input: Any, input_format: Optional[str], **kwargs
+    ) -> List[Step]:
+        return [
             AssignMolId(),
             AssignName(),
             *self._preprocessing_steps,
@@ -46,15 +51,18 @@ class SimpleModel(Model):
             CustomPreprocessingStep(self),
         ]
 
-    def _get_output_steps(self, output_format: Optional[str], **kwargs) -> List[Step]:
-        output_format = output_format or "pandas"
-
+    def _get_postprocessing_steps(
+        self, output_format: Optional[str], **kwargs
+    ) -> List[Step]:
         return [
             AddSmiles("input_mol", "input_smiles"),
             AddSmiles("preprocessed_mol", "preprocessed_smiles"),
             EnforceSchema(self._get_config()),
-            WriteOutput(output_format, **kwargs),
         ]
+
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
+        output_format = output_format or "pandas"
+        return WriteOutput(output_format, **kwargs)
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         return mol, []
@@ -130,6 +138,14 @@ class SimpleModel(Model):
 
     def get_config(self) -> dict:
         return self._get_config().get_dict()
+
+    def _get_batch_size(self) -> int:
+        default = super()._get_batch_size()
+        return self.get_config().get("batch_size", default)
+
+    def _get_name(self) -> str:
+        default = super()._get_name()
+        return self.get_config().get("name", default)
 
 
 class CustomPreprocessingStep(PreprocessingStep):

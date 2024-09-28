@@ -4,11 +4,11 @@ from collections import defaultdict
 from typing import Any, Iterator, List, Optional
 
 from rdkit.Chem import Mol
+from stringcase import snakecase
 
 from ..problem import Problem
-from ..steps import Step
+from ..steps import OutputStep, Step
 from ..util import call_with_mappings
-from .write_output import WriteOutput
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +40,46 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def _get_output_steps(self, output_format: Optional[str], **kwargs) -> List[Step]:
+    def _get_preprocessing_steps(
+        self, input: Any, input_format: Optional[str], **kwargs
+    ) -> List[Step]:
         pass
+
+    @abstractmethod
+    def _get_postprocessing_steps(
+        self, output_format: Optional[str], **kwargs
+    ) -> List[Step]:
+        pass
+
+    @abstractmethod
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
+        pass
+
+    def read(
+        self,
+        input: Any,
+        input_format: Optional[str] = None,
+        preprocess: bool = False,
+        output_format: Optional[str] = None,
+        **kwargs,
+    ) -> Any:
+        input_steps = self._get_input_steps(input, input_format, **kwargs)
+        preprocessing_steps = (
+            self._get_preprocessing_steps(input, input_format, **kwargs)
+            if preprocess
+            else []
+        )
+        output_step = self._get_output_step(output_format, **kwargs)
+
+        steps = [*input_steps, *preprocessing_steps, output_step]
+
+        # build the pipeline from the list of steps
+        pipeline = None
+        for t in steps:
+            pipeline = t(pipeline)
+
+        # run the pipeline
+        return output_step.get_result()
 
     def predict(
         self,
@@ -51,23 +89,37 @@ class Model(ABC):
         **kwargs,
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
-        output_steps = self._get_output_steps(output_format, **kwargs)
+        preprocessing_steps = self._get_preprocessing_steps(
+            input, input_format, **kwargs
+        )
+        postprocessing_steps = self._get_postprocessing_steps(output_format, **kwargs)
+        output_step = self._get_output_step(output_format, **kwargs)
 
         steps = [
             *input_steps,
-            PredictionStep(self, batch_size=1, **kwargs),
-            *output_steps,
+            *preprocessing_steps,
+            PredictionStep(self, batch_size=self.batch_size, **kwargs),
+            *postprocessing_steps,
+            output_step,
         ]
 
-        # build the pipeline from the list of transforms
+        # build the pipeline from the list of steps
         pipeline = None
         for t in steps:
             pipeline = t(pipeline)
 
         # the last pipeline step holds the result
-        last_step = steps[-1]
-        assert isinstance(last_step, WriteOutput)
-        return last_step.get_result()
+        return output_step.get_result()
+
+    def _get_batch_size(self) -> int:
+        return 1
+
+    batch_size = property(_get_batch_size)
+
+    def _get_name(self) -> str:
+        return snakecase(self.__class__.__name__)
+
+    name = property(_get_name)
 
 
 class PredictionStep(Step):

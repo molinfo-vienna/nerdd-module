@@ -16,7 +16,7 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.3.1",
+    version="0.3.2",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),

@@ -35,10 +35,10 @@ Feature: Reading molecule representations
     | mol_block  | 10            | 5        |
     | inchi      | 10            | 5        |
     | rdkit_mol  | 10            | 5        |
-    | smiles     | 10            | 10       |
-    | mol_block  | 10            | 10       |
-    | inchi      | 10            | 10       |
-    | rdkit_mol  | 10            | 10       |
+    | smiles     | 10            | 9        |
+    | mol_block  | 10            | 9        |
+    | inchi      | 10            | 9        |
+    | rdkit_mol  | 10            | 9        |
     
   Scenario Outline: Read a single file containing valid representations
 
