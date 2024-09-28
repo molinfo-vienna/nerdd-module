@@ -4,6 +4,7 @@ from collections import defaultdict
 from typing import Any, Iterator, List, Optional
 
 from rdkit.Chem import Mol
+from stringcase import snakecase
 
 from ..problem import Problem
 from ..steps import OutputStep, Step
@@ -114,6 +115,11 @@ class Model(ABC):
         return 1
 
     batch_size = property(_get_batch_size)
+
+    def _get_name(self) -> str:
+        return snakecase(self.__class__.__name__)
+
+    name = property(_get_name)
 
 
 class PredictionStep(Step):
