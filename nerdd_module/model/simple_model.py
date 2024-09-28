@@ -139,6 +139,14 @@ class SimpleModel(Model):
     def get_config(self) -> dict:
         return self._get_config().get_dict()
 
+    def _get_batch_size(self) -> int:
+        default = super()._get_batch_size()
+        return self.get_config().get("batch_size", default)
+
+    def _get_name(self) -> str:
+        default = super()._get_name()
+        return self.get_config().get("name", default)
+
 
 class CustomPreprocessingStep(PreprocessingStep):
     def __init__(self, model: SimpleModel):
