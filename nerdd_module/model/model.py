@@ -40,7 +40,19 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def _get_output_steps(self, output_format: Optional[str], **kwargs) -> List[Step]:
+    def _get_preprocessing_steps(
+        self, input: Any, input_format: Optional[str], **kwargs
+    ) -> List[Step]:
+        pass
+
+    @abstractmethod
+    def _get_postprocessing_steps(
+        self, output_format: Optional[str], **kwargs
+    ) -> List[Step]:
+        pass
+
+    @abstractmethod
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> Step:
         pass
 
     def predict(
@@ -51,12 +63,18 @@ class Model(ABC):
         **kwargs,
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
-        output_steps = self._get_output_steps(output_format, **kwargs)
+        preprocessing_steps = self._get_preprocessing_steps(
+            input, input_format, **kwargs
+        )
+        postprocessing_steps = self._get_postprocessing_steps(output_format, **kwargs)
+        output_step = self._get_output_step(output_format, **kwargs)
 
         steps = [
             *input_steps,
+            *preprocessing_steps,
             PredictionStep(self, batch_size=1, **kwargs),
-            *output_steps,
+            *postprocessing_steps,
+            output_step,
         ]
 
         # build the pipeline from the list of transforms
@@ -65,9 +83,7 @@ class Model(ABC):
             pipeline = t(pipeline)
 
         # the last pipeline step holds the result
-        last_step = steps[-1]
-        assert isinstance(last_step, WriteOutput)
-        return last_step.get_result()
+        return output_step.get_result()
 
 
 class PredictionStep(Step):

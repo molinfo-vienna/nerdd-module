@@ -38,6 +38,12 @@ class SimpleModel(Model):
     ) -> List[Step]:
         return [
             ReadInput(DepthFirstExplorer(), input),
+        ]
+
+    def _get_preprocessing_steps(
+        self, input: Any, input_format: Optional[str], **kwargs
+    ) -> List[Step]:
+        return [
             AssignMolId(),
             AssignName(),
             *self._preprocessing_steps,
@@ -46,15 +52,18 @@ class SimpleModel(Model):
             CustomPreprocessingStep(self),
         ]
 
-    def _get_output_steps(self, output_format: Optional[str], **kwargs) -> List[Step]:
-        output_format = output_format or "pandas"
-
+    def _get_postprocessing_steps(
+        self, output_format: Optional[str], **kwargs
+    ) -> List[Step]:
         return [
             AddSmiles("input_mol", "input_smiles"),
             AddSmiles("preprocessed_mol", "preprocessed_smiles"),
             EnforceSchema(self._get_config()),
-            WriteOutput(output_format, **kwargs),
         ]
+
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> Step:
+        output_format = output_format or "pandas"
+        return WriteOutput(output_format, **kwargs)
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         return mol, []
