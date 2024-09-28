@@ -1,4 +1,3 @@
-import sys
 from abc import abstractmethod
 from typing import Any, Iterable, List, Optional, Tuple, Union
 
@@ -15,7 +14,7 @@ from ..config import (
 from ..input import DepthFirstExplorer
 from ..preprocessing import PreprocessingStep
 from ..problem import Problem
-from ..steps import Step
+from ..steps import OutputStep, Step
 from ..util import get_file_path_to_instance
 from .add_smiles import AddSmiles
 from .assign_mol_id import AssignMolId
@@ -61,7 +60,7 @@ class SimpleModel(Model):
             EnforceSchema(self._get_config()),
         ]
 
-    def _get_output_step(self, output_format: Optional[str], **kwargs) -> Step:
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
         output_format = output_format or "pandas"
         return WriteOutput(output_format, **kwargs)
 

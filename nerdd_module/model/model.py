@@ -6,9 +6,8 @@ from typing import Any, Iterator, List, Optional
 from rdkit.Chem import Mol
 
 from ..problem import Problem
-from ..steps import Step
+from ..steps import OutputStep, Step
 from ..util import call_with_mappings
-from .write_output import WriteOutput
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,7 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def _get_output_step(self, output_format: Optional[str], **kwargs) -> Step:
+    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
         pass
 
     def predict(

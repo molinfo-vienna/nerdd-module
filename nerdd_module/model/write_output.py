@@ -1,31 +1,19 @@
-from typing import Iterator, Optional
+from typing import Any, Iterator
 
 from ..output import WriterRegistry
-from ..steps import Step
+from ..steps import OutputStep
 
 __all__ = ["WriteOutput"]
 
 
-class WriteOutput(Step):
+class WriteOutput(OutputStep):
     def __init__(self, output_format: str, **kwargs) -> None:
         super().__init__()
         self._output_format = output_format
         self._kawrgs = kwargs
-        self._source: Optional[Iterator[dict]] = None
 
-    def get_result(self):
-        assert (
-            self._source is not None
-        ), "No source data to write. You might need to run the pipeline first."
-
+    def _get_result(self, source: Iterator[dict]) -> Any:
         # get the correct output writer
         writer = WriterRegistry().get_writer(self._output_format, **self._kawrgs)
-        result = writer.write(self._source)
-
+        result = writer.write(source)
         return result
-
-    def _run(self, source: Iterator[dict]) -> Iterator[dict]:
-        self._source = source
-
-        # return an empty iterator to satisfy method return type
-        return iter([])
