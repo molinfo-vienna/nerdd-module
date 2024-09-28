@@ -69,7 +69,7 @@ class DepthFirstExplorer(Explorer):
         best_mode = None
         best_score = 0
         best_ratio = 0.0
-        best_num_results = 0
+        best_num_invalid_results = 0
         generator = None
         sample = []
         for reader, mode in readers_iter:
@@ -81,26 +81,26 @@ class DepthFirstExplorer(Explorer):
 
                 score = len(valid_entries)
                 ratio = len(valid_entries) / len(sample)
-                num_results = len(sample)
+                num_invalid_results = len(sample) - len(valid_entries)
 
                 if (
                     score > best_score
                     # if the score is the same, prefer the reader with higher ratio
                     # of valid entries
                     or (score == best_score and ratio > best_ratio)
-                    # if the ratio is the same, prefer the reader with more results
-                    # (e.g. list with 10 x None is better than one invalid entry)
+                    # if the ratio is the same, prefer the reader with less invalid
+                    # results
                     or (
                         score == best_score
                         and ratio == best_ratio
-                        and num_results > best_num_results
+                        and num_invalid_results < best_num_invalid_results
                     )
                 ):
                     best_reader = reader
                     best_mode = mode
                     best_score = score
                     best_ratio = ratio
-                    best_num_results = num_results
+                    best_num_invalid_results = num_invalid_results
 
                     if score == self._num_test_entries:
                         break
