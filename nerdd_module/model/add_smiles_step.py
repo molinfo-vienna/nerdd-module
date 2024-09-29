@@ -4,10 +4,10 @@ from rdkit.Chem import MolToSmiles
 
 from ..steps import MapStep
 
-__all__ = ["AddSmiles"]
+__all__ = ["AddSmilesStep"]
 
 
-class AddSmiles(MapStep):
+class AddSmilesStep(MapStep):
     def __init__(self, mol_column: str, smiles_column: str) -> None:
         super().__init__()
         self._mol_column = mol_column

@@ -35,7 +35,7 @@ class FilterByElement(PreprocessingStep):
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         problems = []
-        result_mol = mol
+        result_mol: Optional[Mol] = mol
 
         elements = set(atom.GetSymbol() for atom in mol.GetAtoms())
         invalid_elements = elements - self.allowed_elements

@@ -16,7 +16,7 @@ rdkit_requirement = ["rdkit>=2022.3.3"] if not rdkit_installed else []
 
 setup(
     name="nerdd-module",
-    version="0.3.2",
+    version="0.3.3",
     maintainer="Steffen Hirte",
     maintainer_email="steffen.hirte@univie.ac.at",
     packages=find_packages(),
@@ -40,6 +40,11 @@ setup(
     extras_require={
         "dev": [
             "black",
+            "mypy",
+            "pandas-stubs",
+            "types-PyYAML",
+            "types-decorator",
+            "types-setuptools",
         ],
         "csp": [
             # Note 1: Version 1.0.0 of chembl_structure_pipeline is not available on

@@ -16,13 +16,13 @@ from ..preprocessing import PreprocessingStep
 from ..problem import Problem
 from ..steps import OutputStep, Step
 from ..util import get_file_path_to_instance
-from .add_smiles import AddSmiles
-from .assign_mol_id import AssignMolId
-from .assign_name import AssignName
-from .enforce_schema import EnforceSchema
+from .add_smiles_step import AddSmilesStep
+from .assign_mol_id_step import AssignMolIdStep
+from .assign_name_step import AssignNameStep
+from .enforce_schema_step import EnforceSchemaStep
 from .model import Model
-from .read_input import ReadInput
-from .write_output import WriteOutput
+from .read_input_step import ReadInput
+from .write_output_step import WriteOutputStep
 
 __all__ = ["SimpleModel"]
 
@@ -43,8 +43,8 @@ class SimpleModel(Model):
         self, input: Any, input_format: Optional[str], **kwargs
     ) -> List[Step]:
         return [
-            AssignMolId(),
-            AssignName(),
+            AssignMolIdStep(),
+            AssignNameStep(),
             *self._preprocessing_steps,
             # the following step ensures that the column preprocessed_mol is created
             # (even is self._preprocessing_steps is empty)
@@ -55,14 +55,14 @@ class SimpleModel(Model):
         self, output_format: Optional[str], **kwargs
     ) -> List[Step]:
         return [
-            AddSmiles("input_mol", "input_smiles"),
-            AddSmiles("preprocessed_mol", "preprocessed_smiles"),
-            EnforceSchema(self._get_config()),
+            AddSmilesStep("input_mol", "input_smiles"),
+            AddSmilesStep("preprocessed_mol", "preprocessed_smiles"),
+            EnforceSchemaStep(self._get_config()),
         ]
 
     def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
         output_format = output_format or "pandas"
-        return WriteOutput(output_format, **kwargs)
+        return WriteOutputStep(output_format, **kwargs)
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         return mol, []

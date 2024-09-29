@@ -3,7 +3,7 @@ from typing import Iterator, Optional
 from ..steps import Step
 
 
-class EnforceSchema(Step):
+class EnforceSchemaStep(Step):
     def __init__(self, config):
         super().__init__()
         self._properties = [p["name"] for p in config["result_properties"]]

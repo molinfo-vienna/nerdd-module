@@ -4,7 +4,7 @@ import sys
 
 import rich_click as click
 from decorator import decorator
-from stringcase import spinalcase
+from stringcase import spinalcase  # type: ignore
 
 __all__ = ["auto_cli"]
 

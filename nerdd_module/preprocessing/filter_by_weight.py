@@ -1,7 +1,7 @@
 from typing import List, Optional, Tuple
 
 from rdkit.Chem import Mol
-from rdkit.Chem.Descriptors import MolWt
+from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
 from ..problem import Problem
 from .preprocessing_step import PreprocessingStep
@@ -16,9 +16,9 @@ class FilterByWeight(PreprocessingStep):
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         problems = []
-        result_mol = mol
+        result_mol: Optional[Mol] = mol
 
-        weight = MolWt(mol)
+        weight = CalcExactMolWt(mol)
         if weight < self.min_weight or weight > self.max_weight:
             if self.remove_invalid_molecules:
                 result_mol = None
