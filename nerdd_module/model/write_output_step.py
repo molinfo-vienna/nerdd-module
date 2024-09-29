@@ -3,10 +3,10 @@ from typing import Any, Iterator
 from ..output import WriterRegistry
 from ..steps import OutputStep
 
-__all__ = ["WriteOutput"]
+__all__ = ["WriteOutputStep"]
 
 
-class WriteOutput(OutputStep):
+class WriteOutputStep(OutputStep):
     def __init__(self, output_format: str, **kwargs) -> None:
         super().__init__()
         self._output_format = output_format

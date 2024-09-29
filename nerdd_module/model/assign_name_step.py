@@ -2,10 +2,10 @@ from typing import Iterable, Iterator, Union
 
 from ..steps import MapStep
 
-__all__ = ["AssignName"]
+__all__ = ["AssignNameStep"]
 
 
-class AssignName(MapStep):
+class AssignNameStep(MapStep):
     def __init__(self):
         super().__init__()
 

@@ -1,9 +1,9 @@
 from ..steps import Step
 
-__all__ = ["AssignMolId"]
+__all__ = ["AssignMolIdStep"]
 
 
-class AssignMolId(Step):
+class AssignMolIdStep(Step):
     def __init__(self):
         super().__init__()
 
