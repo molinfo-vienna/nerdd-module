@@ -44,6 +44,7 @@ setup(
             "pandas-stubs",
             "types-PyYAML",
             "types-decorator",
+            "types-setuptools",
         ],
         "csp": [
             # Note 1: Version 1.0.0 of chembl_structure_pipeline is not available on
