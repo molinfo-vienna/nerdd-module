@@ -3,5 +3,5 @@ channels:
 - conda-forge
 - defaults
 dependencies:
-- python=3.8.15
-- rdkit=2022.09.1
+- python
+- rdkit
