@@ -1,4 +1,4 @@
-from stringcase import snakecase # type: ignore
+from stringcase import snakecase  # type: ignore
 
 from ..polyfills import version
 from .dict_configuration import DictConfiguration
