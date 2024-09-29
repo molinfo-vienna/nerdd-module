@@ -18,7 +18,8 @@ try:
     # importing chembl_structure_pipeline already logs messages
     # --> suppress them temporarily
     with BlockLogs():
-        from chembl_structure_pipeline import get_parent_mol, standardize_mol
+        from chembl_structure_pipeline import get_parent_mol  # type: ignore
+        from chembl_structure_pipeline import standardize_mol  # type: ignore
 
     import_error = None
 except ImportError as e:

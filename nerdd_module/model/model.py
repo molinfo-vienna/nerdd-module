@@ -4,7 +4,7 @@ from collections import defaultdict
 from typing import Any, Iterator, List, Optional
 
 from rdkit.Chem import Mol
-from stringcase import snakecase
+from stringcase import snakecase  # type: ignore
 
 from ..problem import Problem
 from ..steps import OutputStep, Step

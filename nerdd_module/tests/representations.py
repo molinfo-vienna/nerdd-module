@@ -2,7 +2,9 @@ import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import seed, settings
 from hypothesis import strategies as st
-from hypothesis_rdkit import mols
+
+# TODO: remove "type: ignore" later
+from hypothesis_rdkit import mols  # type: ignore
 from pytest_bdd import given, parsers
 from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
 from rdkit.rdBase import BlockLogs

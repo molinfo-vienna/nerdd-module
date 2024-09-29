@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
 __all__ = ["Problem", "InvalidSmiles", "UnknownProblem"]
 
@@ -8,6 +8,10 @@ class Problem(NamedTuple):
     message: str
 
 
-InvalidSmiles = lambda: Problem(type="invalid_smiles", message="Invalid SMILES string")
+InvalidSmiles: Callable[..., Problem] = lambda: Problem(
+    type="invalid_smiles", message="Invalid SMILES string"
+)
 
-UnknownProblem = lambda: Problem(type="unknown", message="Unknown error occurred")
+UnknownProblem: Callable[..., Problem] = lambda: Problem(
+    type="unknown", message="Unknown error occurred"
+)

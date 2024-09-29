@@ -1,4 +1,4 @@
-from rdkit.Chem.Descriptors import MolWt
+from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
 from nerdd_module import SimpleModel
 from nerdd_module.preprocessing import Sanitize
@@ -20,14 +20,14 @@ class MolWeightModel(SimpleModel):
 
     def _predict_mols(self, mols, multiplier):
         if self._version == "order_based":
-            return [{"weight": MolWt(m) * multiplier} for m in mols]
+            return [{"weight": CalcExactMolWt(m) * multiplier} for m in mols]
         elif self._version == "mol_ids":
             return [
-                {"mol_id": i, "weight": MolWt(m) * multiplier}
+                {"mol_id": i, "weight": CalcExactMolWt(m) * multiplier}
                 for i, m in enumerate(mols)
             ]
         elif self._version == "mols":
-            return [{"mol": m, "weight": MolWt(m) * multiplier} for m in mols]
+            return [{"mol": m, "weight": CalcExactMolWt(m) * multiplier} for m in mols]
         elif self._version == "error":
             raise ValueError("This is an error")
 

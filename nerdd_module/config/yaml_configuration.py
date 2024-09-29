@@ -1,10 +1,10 @@
 import base64
 import os
 import pathlib
-from os import PathLike
-from typing import Optional
+from typing import Optional, Union
+from pathlib import Path
 
-import filetype
+import filetype  # type: ignore
 import yaml
 
 from .configuration import Configuration
@@ -28,7 +28,9 @@ def image_constructor(loader, node):
 
 
 class YamlConfiguration(Configuration):
-    def __init__(self, handle: PathLike, base_path: Optional[PathLike] = None) -> None:
+    def __init__(
+        self, handle: Union[str, Path], base_path: Optional[Union[str, Path]] = None
+    ) -> None:
         super().__init__()
 
         if base_path is None:
