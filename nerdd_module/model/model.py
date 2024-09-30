@@ -165,10 +165,21 @@ class PredictionStep(Step):
 
         # do the actual prediction
         try:
-            predictions = call_with_mappings(
-                self.model._predict_mols,
-                {**self.kwargs, "mols": mols},
-            )
+            if len(batch) > 0:
+                predictions = call_with_mappings(
+                    self.model._predict_mols,
+                    {**self.kwargs, "mols": mols},
+                )
+            else:
+                predictions = []
+
+            # check that the predictions are a list
+            assert isinstance(
+                predictions, list
+            ), "The predictions must be a list of dictionaries."
+            assert all(
+                isinstance(record, dict) for record in predictions
+            ), "The predictions must be a list of dictionaries."
         except Exception as e:
             logger.error(e, exc_info=True)
 

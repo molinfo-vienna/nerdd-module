@@ -2,7 +2,7 @@ Feature: Filter molecules by element
   
   Scenario Outline: Tag molecules with invalid elements
     Given an input molecule specified by '<input_smiles>'
-    And the list of allowed elements is ['C', 'H', 'O', 'N']
+    And the list of allowed elements is ['C', 'H', 'O', 'N', 'Cl']
     And the parameter remove_invalid_molecules is set to False
     When the molecules are filtered by element
     And the subset of the result where the input was not None is considered
@@ -14,7 +14,7 @@ Feature: Filter molecules by element
 
   Scenario Outline: Do not tag molecules having only allowed elements
     Given an input molecule specified by '<input_smiles>'
-    And the list of allowed elements is ['C', 'H', 'O', 'N']
+    And the list of allowed elements is ['C', 'H', 'O', 'N', 'Cl']
     And the parameter remove_invalid_molecules is set to False
     When the molecules are filtered by element
     And the subset of the result where the input was not None is considered
@@ -24,6 +24,7 @@ Feature: Filter molecules by element
     | input_smiles |
     | CCO          |
     | [H][H]       |
+    | CCl          |
 
 
   Scenario Outline: Filter molecules containing hydrogen
@@ -68,7 +69,7 @@ Feature: Filter molecules by element
 
   Scenario Outline: Using lowercase element symbols also works
     Given an input molecule specified by '<input_smiles>'
-    And the list of allowed elements is ['c', 'h', 'o', 'n']
+    And the list of allowed elements is ['c', 'h', 'o', 'n', 'cl']
     And the parameter remove_invalid_molecules is set to False
     When the molecules are filtered by element
     And the subset of the result where the input was not None is considered
@@ -78,3 +79,4 @@ Feature: Filter molecules by element
     | input_smiles |
     | CCO          |
     | [H][H]       |
+    | CCl          |

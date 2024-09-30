@@ -15,7 +15,7 @@ class CheckValidSmiles(PreprocessingStep):
         super().__init__()
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        problems: List[Problem] = []
+        problems = []
 
         smi = MolToSmiles(mol, True)
         check_mol = MolFromSmiles(smi)

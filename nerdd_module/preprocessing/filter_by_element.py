@@ -29,13 +29,13 @@ class FilterByElement(PreprocessingStep):
         self, allowed_elements: Iterable[str], remove_invalid_molecules: bool = False
     ):
         super().__init__()
-        self.allowed_elements = set(a.upper() for a in allowed_elements)
+        self.allowed_elements = set([a[0].upper() + a[1:] for a in allowed_elements])
         self.hydrogen_in_allowed_elements = "H" in self.allowed_elements
         self.remove_invalid_molecules = remove_invalid_molecules
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         problems = []
-        result_mol: Optional[Mol] = mol
+        result_mol = mol
 
         elements = set(atom.GetSymbol() for atom in mol.GetAtoms())
         invalid_elements = elements - self.allowed_elements

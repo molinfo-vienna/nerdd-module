@@ -58,7 +58,7 @@ def check_column_value_equality(subset, column_name, expected_value):
     except:
         pass
 
-    if expected_value == "(none)" or expected_value is None:
+    if expected_value is None:
         # if expected_value is the magic string "(none)", we expect None
         assert all(
             v is None for v in values
@@ -88,7 +88,7 @@ def check_column_value_inequality(subset, column_name, forbidden_value):
     except:
         pass
 
-    if forbidden_value == "(none)" or forbidden_value is None:
+    if forbidden_value is None:
         # if expected_value is the magic string "(none)", we expect None
         assert all(
             v is not None for v in values
@@ -108,8 +108,10 @@ def check_column_value_inequality(subset, column_name, forbidden_value):
 def check_column_subset(subset, column_name, superset):
     superset = set(literal_eval(superset))
 
+    values = [record[column_name] for record in subset]
+
     assert all(
-        set(value).issubset(superset) for value in subset[column_name]
+        set(value).issubset(superset) for value in values
     ), f"Column {column_name} contains value not in {superset}"
 
 
@@ -121,8 +123,10 @@ def check_column_membership(subset, column_name, superset):
         superset, list
     ), f"Expected a list for superset, got {type(superset)}"
 
-    assert (
-        subset[column_name].isin(superset).all()
+    values = [record[column_name] for record in subset]
+
+    assert all(
+        value in superset for value in values
     ), f"Column {column_name} contains value not in {superset}"
 
 
