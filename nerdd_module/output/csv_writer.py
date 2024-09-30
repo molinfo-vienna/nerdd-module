@@ -2,8 +2,6 @@ import csv
 from itertools import chain
 from typing import IO, Any, Dict, Iterable
 
-from rdkit.Chem import Mol, MolToSmiles
-
 from .file_writer import FileLike, FileWriter
 from .writer_registry import register_writer
 

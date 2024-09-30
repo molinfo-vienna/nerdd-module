@@ -1,4 +1,4 @@
-from pytest_bdd import parsers, then, when
+from pytest_bdd import when
 
 
 @when(
