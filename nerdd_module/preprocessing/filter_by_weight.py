@@ -16,7 +16,7 @@ class FilterByWeight(PreprocessingStep):
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         problems = []
-        result_mol: Optional[Mol] = mol
+        result_mol = mol
 
         weight = CalcExactMolWt(mol)
         if weight < self.min_weight or weight > self.max_weight:

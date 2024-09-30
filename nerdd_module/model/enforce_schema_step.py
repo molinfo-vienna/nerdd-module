@@ -1,10 +1,11 @@
-from typing import Iterator, Optional
+from typing import Iterator
+from ..config import Configuration
 
 from ..steps import Step
 
 
 class EnforceSchemaStep(Step):
-    def __init__(self, config):
+    def __init__(self, config: Configuration) -> None:
         super().__init__()
         self._properties = [p["name"] for p in config["result_properties"]]
 
