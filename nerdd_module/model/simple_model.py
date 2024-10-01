@@ -117,6 +117,7 @@ class SimpleModel(Model):
             *task_based_property,
             {"name": "raw_input", "type": "string"},
             {"name": "input_type", "type": "string"},
+            {"name": "source"},
             {"name": "name", "type": "string"},
             {"name": "input_mol", "type": "mol"},
             {"name": "input_smiles", "type": "string"},
