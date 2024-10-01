@@ -13,10 +13,14 @@ Feature: Molecular property prediction
     Then the result should contain the same number of rows as the input
     And the result should contain the columns:
           mol_id
+          raw_input
+          input_type
+          source
           name
           input_mol
+          input_smiles
           preprocessed_mol
-          input_type
+          preprocessed_smiles
           weight
           problems
     And the value in column 'input_type' should be equal to '<input_type>'
