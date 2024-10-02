@@ -30,6 +30,14 @@ __all__ = ["SimpleModel"]
 class SimpleModel(Model):
     def __init__(self, preprocessing_steps: Iterable[Step] = []):
         super().__init__()
+        assert isinstance(preprocessing_steps, Iterable), (
+            f"Expected Iterable for argument preprocessing_steps, "
+            f"got {type(preprocessing_steps)}"
+        )
+        assert all(isinstance(step, Step) for step in preprocessing_steps), (
+            f"Expected all elements of preprocessing_steps to be of type Step, "
+            f"got {[type(step) for step in preprocessing_steps if not isinstance(step, Step)]}"
+        )
         self._preprocessing_steps = preprocessing_steps
 
     def _get_input_steps(
