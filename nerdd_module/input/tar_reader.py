@@ -1,18 +1,18 @@
 import tarfile
-from typing import Iterator
+from typing import Any, Iterator
 
-from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
+from .reader import ExploreCallable, MoleculeEntry, Reader
 
 __all__ = ["TarReader"]
 
 
-@register_reader
 class TarReader(Reader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def read(self, input_stream, explore) -> Iterator[MoleculeEntry]:
+    def read(
+        self, input_stream: Any, explore: ExploreCallable
+    ) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 

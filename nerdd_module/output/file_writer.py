@@ -16,11 +16,11 @@ FileLike = Union[str, Path, TextIO, BinaryIO]
 class FileWriter(Writer):
     """Abstract class for writers."""
 
-    def __init__(self, output_file: FileLike, writes_bytes: bool = False):
+    def __init__(self, output_file: FileLike, writes_bytes: bool = False) -> None:
         self._output_file = output_file
         self._writes_bytes = writes_bytes
 
-    def write(self, entries: Iterable[dict]):
+    def write(self, entries: Iterable[dict]) -> None:
         """Write entries to output."""
         if isinstance(self._output_file, (str, Path)):
             mode = "wb" if self._writes_bytes else "w"

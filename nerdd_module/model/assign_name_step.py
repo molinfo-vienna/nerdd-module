@@ -6,7 +6,7 @@ __all__ = ["AssignNameStep"]
 
 
 class AssignNameStep(MapStep):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _process(self, record: dict) -> Union[dict, Iterable[dict], Iterator[dict]]:

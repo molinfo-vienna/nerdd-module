@@ -1,24 +1,24 @@
 from codecs import getreader
-from typing import Iterator
+from typing import Any, Iterator
 
 from rdkit.Chem import MolFromSmiles
 from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
-from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
+from .reader import ExploreCallable, MoleculeEntry, Reader
 
 __all__ = ["SmilesReader"]
 
 StreamReader = getreader("utf-8")
 
 
-@register_reader
 class SmilesReader(Reader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def read(self, input_stream, explore) -> Iterator[MoleculeEntry]:
+    def read(
+        self, input_stream: Any, explore: ExploreCallable
+    ) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 

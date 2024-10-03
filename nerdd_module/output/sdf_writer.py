@@ -3,12 +3,10 @@ from typing import IO, Any, Dict, Iterable
 from rdkit.Chem import SDWriter
 
 from .file_writer import FileLike, FileWriter
-from .writer_registry import register_writer
 
 __all__ = ["SdfWriter"]
 
 
-@register_writer("sdf")
 class SdfWriter(FileWriter):
     def __init__(self, output_file: FileLike) -> None:
         super().__init__(output_file, writes_bytes=False)
@@ -33,3 +31,7 @@ class SdfWriter(FileWriter):
                 writer.write(mol)
         finally:
             writer.close()
+
+    @classmethod
+    def get_output_format(cls) -> str:
+        return "sdf"

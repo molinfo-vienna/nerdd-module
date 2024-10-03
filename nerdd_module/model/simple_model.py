@@ -28,7 +28,7 @@ __all__ = ["SimpleModel"]
 
 
 class SimpleModel(Model):
-    def __init__(self, preprocessing_steps: Iterable[Step] = []):
+    def __init__(self, preprocessing_steps: Iterable[Step] = []) -> None:
         super().__init__()
         assert isinstance(preprocessing_steps, Iterable), (
             f"Expected Iterable for argument preprocessing_steps, "
@@ -41,14 +41,14 @@ class SimpleModel(Model):
         self._preprocessing_steps = preprocessing_steps
 
     def _get_input_steps(
-        self, input: Any, input_format: Optional[str], **kwargs
+        self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
             ReadInput(DepthFirstExplorer(), input),
         ]
 
     def _get_preprocessing_steps(
-        self, input: Any, input_format: Optional[str], **kwargs
+        self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
             AssignMolIdStep(),
@@ -60,7 +60,7 @@ class SimpleModel(Model):
         ]
 
     def _get_postprocessing_steps(
-        self, output_format: Optional[str], **kwargs
+        self, output_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
             AddSmilesStep("input_mol", "input_smiles"),
@@ -68,7 +68,9 @@ class SimpleModel(Model):
             EnforceSchemaStep(self._get_config()),
         ]
 
-    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
+    def _get_output_step(
+        self, output_format: Optional[str], **kwargs: Any
+    ) -> OutputStep:
         output_format = output_format or "pandas"
         return WriteOutputStep(output_format, **kwargs)
 
@@ -76,7 +78,7 @@ class SimpleModel(Model):
         return mol, []
 
     @abstractmethod
-    def _predict_mols(self, mols: List[Mol], **kwargs) -> List[dict]:
+    def _predict_mols(self, mols: List[Mol], **kwargs: Any) -> List[dict]:
         pass
 
     def _get_base_config(self) -> Union[Configuration, dict]:

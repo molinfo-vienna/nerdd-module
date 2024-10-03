@@ -6,7 +6,6 @@ from .inchi_reader import *
 from .list_reader import *
 from .mol_reader import *
 from .reader import *
-from .reader_registry import *
 from .sdf_reader import *
 from .smiles_reader import *
 from .string_reader import *
