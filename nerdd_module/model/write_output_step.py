@@ -1,6 +1,6 @@
 from typing import Any, Iterator
 
-from ..output import WriterRegistry
+from ..output import Writer
 from ..steps import OutputStep
 
 __all__ = ["WriteOutputStep"]
@@ -14,6 +14,6 @@ class WriteOutputStep(OutputStep):
 
     def _get_result(self, source: Iterator[dict]) -> Any:
         # get the correct output writer
-        writer = WriterRegistry().get_writer(self._output_format, **self._kawrgs)
+        writer = Writer.get_writer(self._output_format, **self._kawrgs)
         result = writer.write(source)
         return result

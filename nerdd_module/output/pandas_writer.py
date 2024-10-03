@@ -1,12 +1,10 @@
 import pandas as pd
 
 from .writer import Writer
-from .writer_registry import register_writer
 
 __all__ = ["PandasWriter"]
 
 
-@register_writer("pandas")
 class PandasWriter(Writer):
     def __init__(self) -> None:
         pass
@@ -14,3 +12,7 @@ class PandasWriter(Writer):
     def write(self, records):
         df = pd.DataFrame(records)
         return df
+
+    @classmethod
+    def get_output_format(cls) -> str:
+        return "pandas"
