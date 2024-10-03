@@ -8,7 +8,7 @@ __all__ = ["CsvWriter"]
 
 
 class CsvWriter(FileWriter):
-    def __init__(self, output_file: FileLike):
+    def __init__(self, output_file: FileLike) -> None:
         super().__init__(output_file, writes_bytes=False)
 
     def _write(self, output: IO[Any], entries: Iterable[Dict]) -> None:
