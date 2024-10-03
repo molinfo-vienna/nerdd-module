@@ -8,7 +8,7 @@ from .preprocessing_step import PreprocessingStep
 
 
 class RemoveStereochemistry(PreprocessingStep):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _preprocess(self, mol: Mol) -> Tuple[Mol, List[Problem]]:

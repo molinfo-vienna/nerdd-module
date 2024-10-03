@@ -18,7 +18,7 @@ UnknownPreprocessingProblem = lambda: Problem(
 
 
 class PreprocessingStep(MapStep):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _process(self, record: dict) -> Union[dict, Iterable[dict], Iterator[dict]]:
@@ -58,4 +58,4 @@ class PreprocessingStep(MapStep):
         """
         Runs the preprocesing step on a molecule.
         """
-        pass
+        ...

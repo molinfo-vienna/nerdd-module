@@ -11,7 +11,7 @@ __all__ = ["CheckValidSmiles"]
 class CheckValidSmiles(PreprocessingStep):
     """Checks if the molecule can be converted to SMILES and back."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
