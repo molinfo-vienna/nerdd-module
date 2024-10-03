@@ -5,7 +5,7 @@ __all__ = ["Step"]
 
 
 class Step(ABC):
-    def __init__(self, is_source=False) -> None:
+    def __init__(self, is_source: bool = False) -> None:
         self._is_source = is_source
 
     @property
