@@ -7,7 +7,7 @@ __all__ = ["WriteOutputStep"]
 
 
 class WriteOutputStep(OutputStep):
-    def __init__(self, output_format: str, **kwargs) -> None:
+    def __init__(self, output_format: str, **kwargs: Any) -> None:
         super().__init__()
         self._output_format = output_format
         self._kawrgs = kwargs

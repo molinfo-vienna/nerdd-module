@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Any, Iterator, List, Optional
+from typing import Any, Iterator, List, Optional, Tuple
 
 from rdkit.Chem import Mol
 from stringcase import snakecase  # type: ignore
@@ -26,33 +26,35 @@ IncompletePredictionProblem = lambda: Problem(
 
 
 class Model(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     @abstractmethod
-    def _predict_mols(self, mols: List[Mol], **kwargs) -> List[dict]:
+    def _predict_mols(self, mols: List[Mol], **kwargs: Any) -> List[dict]:
         pass
 
     @abstractmethod
     def _get_input_steps(
-        self, input: Any, input_format: Optional[str], **kwargs
+        self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         pass
 
     @abstractmethod
     def _get_preprocessing_steps(
-        self, input: Any, input_format: Optional[str], **kwargs
+        self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         pass
 
     @abstractmethod
     def _get_postprocessing_steps(
-        self, output_format: Optional[str], **kwargs
+        self, output_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         pass
 
     @abstractmethod
-    def _get_output_step(self, output_format: Optional[str], **kwargs) -> OutputStep:
+    def _get_output_step(
+        self, output_format: Optional[str], **kwargs: Any
+    ) -> OutputStep:
         pass
 
     def read(
@@ -61,7 +63,7 @@ class Model(ABC):
         input_format: Optional[str] = None,
         preprocess: bool = False,
         output_format: Optional[str] = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
         preprocessing_steps = (
@@ -83,10 +85,10 @@ class Model(ABC):
 
     def predict(
         self,
-        input,
-        input_format=None,
-        output_format=None,
-        **kwargs,
+        input: Any,
+        input_format: Optional[str] = None,
+        output_format: Optional[str] = None,
+        **kwargs: Any,
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
         preprocessing_steps = self._get_preprocessing_steps(
@@ -123,7 +125,7 @@ class Model(ABC):
 
 
 class PredictionStep(Step):
-    def __init__(self, model: Model, batch_size: int, **kwargs):
+    def __init__(self, model: Model, batch_size: int, **kwargs: Any) -> None:
         super().__init__()
         self.model = model
         self.batch_size = batch_size
@@ -133,7 +135,9 @@ class PredictionStep(Step):
         # We need to process the molecules in batches, because most ML models perform
         # better when predicting multiple molecules at once. Additionally, we want to
         # filter out molecules that could not be preprocessed.
-        def _batch_and_filter(source, n):
+        def _batch_and_filter(
+            source: Iterator[dict], n: int
+        ) -> Iterator[Tuple[List[dict], List[dict]]]:
             batch = []
             none_batch = []
             for record in source:
