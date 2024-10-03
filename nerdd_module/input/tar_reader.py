@@ -2,12 +2,10 @@ import tarfile
 from typing import Iterator
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["TarReader"]
 
 
-@register_reader
 class TarReader(Reader):
     def __init__(self):
         super().__init__()

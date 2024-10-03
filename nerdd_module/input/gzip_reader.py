@@ -2,12 +2,10 @@ import gzip
 from typing import Iterator
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["GzipReader"]
 
 
-@register_reader
 class GzipReader(Reader):
     def __init__(self):
         super().__init__()

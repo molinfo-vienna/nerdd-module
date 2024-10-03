@@ -2,12 +2,10 @@ import zipfile
 from typing import Iterator
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["ZipReader"]
 
 
-@register_reader
 class ZipReader(Reader):
     def __init__(self):
         super().__init__()

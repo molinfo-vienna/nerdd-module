@@ -6,14 +6,12 @@ from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["SdfReader"]
 
 StreamReader = getreader("utf-8")
 
 
-@register_reader
 class SdfReader(Reader):
     def __init__(self, max_num_lines_mol_block: int = 10000):
         super().__init__()

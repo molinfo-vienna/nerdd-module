@@ -3,7 +3,6 @@ from typing import Iterable, Iterator, Optional
 
 from .explorer import Explorer
 from .reader import MoleculeEntry, Problem, Reader
-from .reader_registry import ReaderRegistry
 
 __all__ = ["DepthFirstExplorer"]
 
@@ -36,7 +35,7 @@ class DepthFirstExplorer(Explorer):
         super().__init__()
 
         if readers is None:
-            self._reader_registry = list(ReaderRegistry().get_readers())
+            self._reader_registry = list(Reader.get_readers())
         else:
             self._reader_registry = list(readers)
 

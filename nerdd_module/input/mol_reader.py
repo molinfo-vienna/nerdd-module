@@ -3,10 +3,8 @@ from typing import Iterator
 from rdkit.Chem import Mol
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 
-@register_reader
 class MolReader(Reader):
     def __init__(self):
         super().__init__()

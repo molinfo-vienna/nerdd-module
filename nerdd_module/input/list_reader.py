@@ -2,12 +2,10 @@ from io import BytesIO, StringIO
 from typing import BinaryIO, Iterable, Iterator
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["ListReader"]
 
 
-@register_reader
 class ListReader(Reader):
     def __init__(self):
         super().__init__()

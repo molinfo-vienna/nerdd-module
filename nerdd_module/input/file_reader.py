@@ -3,12 +3,10 @@ from pathlib import Path
 from typing import Iterator, Optional, Tuple, Union
 
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["FileReader"]
 
 
-@register_reader
 class FileReader(Reader):
     def __init__(self, data_dir: Union[str, PathLike, None] = None):
         super().__init__()

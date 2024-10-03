@@ -6,14 +6,12 @@ from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
 from .reader import MoleculeEntry, Reader
-from .reader_registry import register_reader
 
 __all__ = ["InchiReader"]
 
 StreamReader = getreader("utf-8")
 
 
-@register_reader
 class InchiReader(Reader):
     def __init__(self):
         super().__init__()
