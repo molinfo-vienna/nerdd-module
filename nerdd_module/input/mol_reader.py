@@ -1,15 +1,15 @@
-from typing import Iterator
+from typing import Any, Iterator
 
 from rdkit.Chem import Mol
 
-from .reader import MoleculeEntry, Reader
+from .reader import ExploreCallable, MoleculeEntry, Reader
 
 
 class MolReader(Reader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def read(self, mol, explore) -> Iterator[MoleculeEntry]:
+    def read(self, mol: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         assert isinstance(mol, Mol)
         yield MoleculeEntry(
             raw_input=mol,

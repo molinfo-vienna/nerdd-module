@@ -3,14 +3,15 @@ from __future__ import annotations
 import inspect
 from abc import ABC, ABCMeta, abstractmethod
 from functools import partial
-from typing import Callable, Iterator, List, NamedTuple, Optional, Tuple
+from typing import Any, Callable, Iterator, List, NamedTuple, Optional, Tuple, Type
 
 from rdkit.Chem import Mol
+from typing_extensions import Protocol
 
 from ..problem import Problem
 from ..util import call_with_mappings
 
-__all__ = ["MoleculeEntry", "Reader"]
+__all__ = ["MoleculeEntry", "Reader", "ExploreCallable"]
 
 
 class MoleculeEntry(NamedTuple):
@@ -21,11 +22,18 @@ class MoleculeEntry(NamedTuple):
     errors: List[Problem]
 
 
-_factories: List[Callable[[dict], Reader]] = []
+ExploreCallable = Callable[[Any], Iterator[MoleculeEntry]]
+
+
+class ReaderFactory(Protocol):
+    def __call__(self, config: dict, *args: Any, **kwargs: Any) -> Reader: ...
+
+
+_factories: List[ReaderFactory] = []
 
 
 class ReaderMeta(ABCMeta):
-    def __init__(cls, name, bases, dct):
+    def __init__(cls, name: str, bases: Tuple[type, ...], dct: dict) -> None:
         super().__init__(name, bases, dct)
 
         if not inspect.isabstract(cls):
@@ -38,13 +46,13 @@ class ReaderMeta(ABCMeta):
 
 
 class Reader(ABC, metaclass=ReaderMeta):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     @abstractmethod
-    def read(self, input, explore) -> Iterator[MoleculeEntry]:
+    def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         pass
 
     @classmethod
-    def get_readers(cls, **kwargs) -> List[Reader]:
+    def get_readers(cls: Type[Reader], **kwargs: Any) -> List[Reader]:
         return [factory(kwargs) for factory in _factories]

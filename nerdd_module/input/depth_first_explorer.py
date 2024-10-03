@@ -1,17 +1,17 @@
 from itertools import chain, islice, repeat
-from typing import Iterable, Iterator, Optional
+from typing import Any, Callable, Iterable, Iterator, Optional
 
 from .explorer import Explorer
-from .reader import MoleculeEntry, Problem, Reader
+from .reader import ExploreCallable, MoleculeEntry, Problem, Reader
 
 __all__ = ["DepthFirstExplorer"]
 
 
 class InvalidInputReader(Reader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def read(self, input, explore) -> Iterator[MoleculeEntry]:
+    def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         yield MoleculeEntry(
             raw_input=input,
             input_type="unknown",
@@ -44,10 +44,10 @@ class DepthFirstExplorer(Explorer):
         self._state_stack = [self._empty_state()]
         self._maximum_depth = maximum_depth
 
-    def _empty_state(self):
+    def _empty_state(self) -> dict:
         return dict(first_guess=[])
 
-    def explore(self, input) -> Iterator[MoleculeEntry]:
+    def explore(self, input: Any) -> Iterator[MoleculeEntry]:
         # create a new child node and set it as the current node
         state = self._empty_state()
         parent = self._state_stack[-1]

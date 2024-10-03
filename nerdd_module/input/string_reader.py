@@ -1,16 +1,16 @@
 from io import BytesIO
-from typing import Iterator
+from typing import Any, Iterator
 
-from .reader import MoleculeEntry, Reader
+from .reader import ExploreCallable, MoleculeEntry, Reader
 
 __all__ = ["StringReader"]
 
 
 class StringReader(Reader):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def read(self, input, explore) -> Iterator[MoleculeEntry]:
+    def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         assert isinstance(input, str)
 
         with BytesIO(input.encode("utf-8")) as f:

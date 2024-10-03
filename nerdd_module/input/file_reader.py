@@ -1,20 +1,20 @@
 from os import PathLike
 from pathlib import Path
-from typing import Iterator, Optional, Tuple, Union
+from typing import Any, Iterator, Optional, Tuple, Union
 
-from .reader import MoleculeEntry, Reader
+from .reader import ExploreCallable, MoleculeEntry, Reader
 
 __all__ = ["FileReader"]
 
 
 class FileReader(Reader):
-    def __init__(self, data_dir: Union[str, PathLike, None] = None):
+    def __init__(self, data_dir: Union[str, PathLike, None] = None) -> None:
         super().__init__()
         self.data_dir = data_dir
         if self.data_dir is not None:
             self.data_dir = Path(self.data_dir)
 
-    def read(self, filename, explore) -> Iterator[MoleculeEntry]:
+    def read(self, filename: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         assert isinstance(filename, str), "input must be a string"
 
         # convert filename to path
@@ -46,5 +46,5 @@ class FileReader(Reader):
                     source = entry.source
                 yield entry._replace(source=tuple([filename, *source]))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"FileReader()"
