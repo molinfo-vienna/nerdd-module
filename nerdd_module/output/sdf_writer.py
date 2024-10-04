@@ -7,7 +7,7 @@ from .file_writer import FileLike, FileWriter
 __all__ = ["SdfWriter"]
 
 
-class SdfWriter(FileWriter):
+class SdfWriter(FileWriter, output_format="sdf"):
     def __init__(self, output_file: FileLike) -> None:
         super().__init__(output_file, writes_bytes=False)
 
@@ -31,7 +31,3 @@ class SdfWriter(FileWriter):
                 writer.write(mol)
         finally:
             writer.close()
-
-    @classmethod
-    def get_output_format(cls) -> str:
-        return "sdf"

@@ -4,7 +4,7 @@ import codecs
 import inspect
 from abc import ABC, ABCMeta, abstractmethod
 from functools import partial
-from typing import Any, Callable, Dict, Iterable, List, Tuple, Type
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 from typing_extensions import Protocol
 
@@ -22,23 +22,23 @@ class WriterFactory(Protocol):
 _factories: Dict[str, WriterFactory] = {}
 
 
-class WriterMeta(ABCMeta):
-    def __init__(cls, name: str, bases: Tuple[type, ...], dct: dict) -> None:
-        super().__init__(name, bases, dct)
-
-        if not inspect.isabstract(cls):
-            assert hasattr(
-                cls, "get_output_format"
-            ), f"{cls} must have a get_output_format method"
-            output_format = cls.get_output_format()
-            _factories[output_format] = partial(call_with_mappings, cls)
-
-
-class Writer(ABC, metaclass=WriterMeta):
+class Writer(ABC):
     """Abstract class for writers."""
 
     def __init__(self) -> None:
         pass
+
+    @classmethod
+    def __init_subclass__(
+        cls,
+        output_format: Optional[str] = None,
+        is_abstract: bool = False,
+        **kwargs: Any,
+    ) -> None:
+        super().__init_subclass__(**kwargs)
+        if not is_abstract:
+            assert output_format is not None, "output_format must not be None"
+            _factories[output_format] = partial(call_with_mappings, cls)
 
     @abstractmethod
     def write(self, records: Iterable[dict]) -> Any:
