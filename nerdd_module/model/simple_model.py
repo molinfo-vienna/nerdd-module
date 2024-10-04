@@ -19,6 +19,7 @@ from ..util import get_file_path_to_instance
 from .add_smiles_step import AddSmilesStep
 from .assign_mol_id_step import AssignMolIdStep
 from .assign_name_step import AssignNameStep
+from .convert_representations_step import ConvertRepresentationsStep
 from .enforce_schema_step import EnforceSchemaStep
 from .model import Model
 from .read_input_step import ReadInput
@@ -62,10 +63,14 @@ class SimpleModel(Model):
     def _get_postprocessing_steps(
         self, output_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
+        output_format = output_format or "pandas"
         return [
             AddSmilesStep("input_mol", "input_smiles"),
             AddSmilesStep("preprocessed_mol", "preprocessed_smiles"),
-            EnforceSchemaStep(self._get_config()),
+            EnforceSchemaStep(self._get_config(), output_format),
+            ConvertRepresentationsStep(
+                self.get_config().get("result_properties", []), output_format, **kwargs
+            ),
         ]
 
     def _get_output_step(
