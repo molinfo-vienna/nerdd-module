@@ -1,6 +1,6 @@
 import base64
 import os
-from os import PathLike
+from ..polyfills import PathLikeStr
 from pathlib import Path
 from typing import Any, Optional, Union
 
@@ -39,8 +39,8 @@ def image_constructor(loader: CustomLoaderLike, node: yaml.Node) -> str:
 class YamlConfiguration(Configuration):
     def __init__(
         self,
-        handle: Union[str, PathLike[str]],
-        base_path: Union[str, PathLike[str], None] = None,
+        handle: Union[str, PathLikeStr],
+        base_path: Union[str, PathLikeStr, None] = None,
     ) -> None:
         super().__init__()
 
