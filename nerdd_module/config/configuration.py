@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
-from typing import List
+from typing import Any, List, Union
 
 __all__ = ["Configuration"]
 
 
-def get_property_columns_of_type(config, t) -> List[dict]:
+def get_property_columns_of_type(config: dict, t: str) -> List[dict]:
     return [c for c in config["result_properties"] if c.get("level", "molecule") == t]
 
 
 class Configuration(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @lru_cache
@@ -39,13 +39,13 @@ class Configuration(ABC):
         return self.get_dict() == {}
 
     def molecular_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "molecule")
+        return get_property_columns_of_type(self.get_dict(), "molecule")
 
     def atom_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "atom")
+        return get_property_columns_of_type(self.get_dict(), "atom")
 
     def derivative_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "derivative")
+        return get_property_columns_of_type(self.get_dict(), "derivative")
 
     def get_task(self) -> str:
         # if task is specified in the config, use that
@@ -64,8 +64,5 @@ class Configuration(ABC):
         else:
             return "molecular_property_prediction"
 
-    def __getitem__(self, key):
-        return self.get_dict()[key]
-
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._get_dict()})"
