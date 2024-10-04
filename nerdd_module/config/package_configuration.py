@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class PackageConfiguration(Configuration):
-    def __init__(self, package):
+    def __init__(self, package: str) -> None:
         super().__init__()
 
         # get the resource directory
@@ -20,9 +20,8 @@ class PackageConfiguration(Configuration):
         except ModuleNotFoundError:
             root_dir = None
 
-        if root_dir is None:
-            self.config = DictConfiguration({})
-        else:
+        self.config: Configuration = DictConfiguration({})
+        if root_dir is not None:
             # navigate to the config file
             config_file = root_dir / "nerdd.yml"
 
@@ -32,5 +31,5 @@ class PackageConfiguration(Configuration):
             else:
                 self.config = DictConfiguration({})
 
-    def _get_dict(self):
+    def _get_dict(self) -> dict:
         return self.config.get_dict()

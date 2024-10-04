@@ -1,9 +1,10 @@
 import sys
+from typing import Any, Optional
 
 __all__ = ["get_file_path_to_instance"]
 
 
-def get_file_path_to_instance(instance):
+def get_file_path_to_instance(instance: Any) -> Optional[str]:
     # get the class of the provided class instance, e.g. <CypstrateModel>
     instance_class = instance.__class__
 

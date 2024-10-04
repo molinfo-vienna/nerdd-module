@@ -8,7 +8,12 @@ from .preprocessing_step import PreprocessingStep
 
 
 class FilterByWeight(PreprocessingStep):
-    def __init__(self, min_weight, max_weight, remove_invalid_molecules=False):
+    def __init__(
+        self,
+        min_weight: float,
+        max_weight: float,
+        remove_invalid_molecules: bool = False,
+    ) -> None:
         super().__init__()
         self.min_weight = min_weight
         self.max_weight = max_weight

@@ -1,3 +1,5 @@
+from typing import Any
+
 from stringcase import snakecase  # type: ignore
 
 from ..polyfills import version
@@ -7,7 +9,7 @@ __all__ = ["DefaultConfiguration"]
 
 
 class DefaultConfiguration(DictConfiguration):
-    def __init__(self, nerdd_module):
+    def __init__(self, nerdd_module: Any) -> None:
         # generate a name from the module name
         class_name = nerdd_module.__class__.__name__
         if class_name.endswith("Model"):

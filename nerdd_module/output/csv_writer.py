@@ -7,7 +7,7 @@ from .file_writer import FileLike, FileWriter
 __all__ = ["CsvWriter"]
 
 
-class CsvWriter(FileWriter):
+class CsvWriter(FileWriter, output_format="csv"):
     def __init__(self, output_file: FileLike) -> None:
         super().__init__(output_file, writes_bytes=False)
 
@@ -22,7 +22,3 @@ class CsvWriter(FileWriter):
         writer.writeheader()
         for entry in chain([first_entry], entry_iter):
             writer.writerow(entry)
-
-    @classmethod
-    def get_output_format(cls) -> str:
-        return "csv"

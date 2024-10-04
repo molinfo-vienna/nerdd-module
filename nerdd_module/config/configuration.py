@@ -1,16 +1,40 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
-from typing import List
+from typing import Any, List, Union
 
 __all__ = ["Configuration"]
 
 
-def get_property_columns_of_type(config, t) -> List[dict]:
+def get_property_columns_of_type(config: dict, t: str) -> List[dict]:
     return [c for c in config["result_properties"] if c.get("level", "molecule") == t]
 
 
+def is_visible(result_property: dict, output_format: str) -> bool:
+    formats = result_property.get("formats", {})
+
+    if isinstance(formats, list):
+        return output_format in formats
+    elif isinstance(formats, dict):
+        include = formats.get("include", "*")
+        exclude = formats.get("exclude", [])
+        assert include == "*" or isinstance(
+            include, list
+        ), f"Expected include to be a list or '*', got {include}"
+        assert isinstance(
+            exclude, list
+        ), f"Expected exclude to be a list, got {exclude}"
+        return (
+            include == "*" or output_format in include
+        ) and output_format not in exclude
+    else:
+        raise ValueError(
+            f"Invalid formats declaration {formats} in result property "
+            f"{result_property}"
+        )
+
+
 class Configuration(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @lru_cache
@@ -39,13 +63,13 @@ class Configuration(ABC):
         return self.get_dict() == {}
 
     def molecular_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "molecule")
+        return get_property_columns_of_type(self.get_dict(), "molecule")
 
     def atom_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "atom")
+        return get_property_columns_of_type(self.get_dict(), "atom")
 
     def derivative_property_columns(self) -> List[dict]:
-        return get_property_columns_of_type(self, "derivative")
+        return get_property_columns_of_type(self.get_dict(), "derivative")
 
     def get_task(self) -> str:
         # if task is specified in the config, use that
@@ -64,8 +88,12 @@ class Configuration(ABC):
         else:
             return "molecular_property_prediction"
 
-    def __getitem__(self, key):
-        return self.get_dict()[key]
+    def get_visible_properties(self, output_format: str) -> List[dict]:
+        return [
+            p
+            for p in self.get_dict().get("result_properties", [])
+            if is_visible(p, output_format)
+        ]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._get_dict()})"

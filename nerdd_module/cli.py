@@ -1,6 +1,8 @@
 import logging
 import os
 import sys
+from typing import Any, Callable
+from .model import Model
 
 import rich_click as click
 from decorator import decorator
@@ -35,37 +37,35 @@ def infer_click_type(param):
 
 
 @decorator
-def auto_cli(f, *args, **kwargs):
+def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
     # infer the command name
     command_name = os.path.basename(sys.argv[0])
 
     # get the model
     model = f()
 
-    config = model.get_config()
-
     # compose cli description
-    description = config.get("description", "")
-
     input_format_list = "\n".join([f"* {fmt}" for fmt in ["smiles", "sdf", "inchi"]])
 
     help_text = input_description.format(
-        description=description, input_format_list=input_format_list
+        description=model.description, input_format_list=input_format_list
     )
 
     output_format_list = ["sdf", "csv"]
 
     # compose footer with examples
-    examples = []
-    if "example_smiles" in config:
-        examples.append(config["example_smiles"])
+    # TODO: add examples
+    # examples = []
+    # if "example_smiles" in config:
+    #     examples.append(config["example_smiles"])
 
-    if len(examples) > 0:
-        footer = "Examples:\n"
-        for example in examples:
-            footer += f'* {command_name} "{example}"\n'
-    else:
-        footer = ""
+    # if len(examples) > 0:
+    #     footer = "Examples:\n"
+    #     for example in examples:
+    #         footer += f'* {command_name} "{example}"\n'
+    # else:
+    #     footer = ""
+    footer = ""
 
     # show_default=True: default values are shown in the help text
     # show_metavars_column=False: the column types are not in a separate column
@@ -102,7 +102,7 @@ def auto_cli(f, *args, **kwargs):
     #
     # Add job parameters
     #
-    for param in config.get("job_parameters", []):
+    for param in model.job_parameters:
         # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
         param_name = spinalcase(param["name"])
         main = click.option(

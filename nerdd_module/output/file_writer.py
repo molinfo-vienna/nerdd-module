@@ -13,7 +13,7 @@ __all__ = ["FileWriter", "FileLike"]
 FileLike = Union[str, Path, TextIO, BinaryIO]
 
 
-class FileWriter(Writer):
+class FileWriter(Writer, is_abstract=True):
     """Abstract class for writers."""
 
     def __init__(self, output_file: FileLike, writes_bytes: bool = False) -> None:

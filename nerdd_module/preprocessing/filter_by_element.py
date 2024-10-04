@@ -27,7 +27,7 @@ ORGANIC_SUBSET = [
 class FilterByElement(PreprocessingStep):
     def __init__(
         self, allowed_elements: Iterable[str], remove_invalid_molecules: bool = False
-    ):
+    ) -> None:
         super().__init__()
         self.allowed_elements = set([a[0].upper() + a[1:] for a in allowed_elements])
         self.hydrogen_in_allowed_elements = "H" in self.allowed_elements

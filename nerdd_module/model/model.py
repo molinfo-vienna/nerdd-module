@@ -113,6 +113,9 @@ class Model(ABC):
         # the last pipeline step holds the result
         return output_step.get_result()
 
+    #
+    # Properties
+    #
     def _get_batch_size(self) -> int:
         return 1
 
@@ -122,6 +125,16 @@ class Model(ABC):
         return snakecase(self.__class__.__name__)
 
     name = property(_get_name)
+
+    def _get_description(self) -> str:
+        return ""
+
+    description = property(_get_description)
+
+    def _get_job_parameters(self) -> List[dict]:
+        return []
+
+    job_parameters = property(_get_job_parameters)
 
 
 class PredictionStep(Step):

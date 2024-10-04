@@ -1,18 +1,27 @@
 import base64
 import os
-import pathlib
-from typing import Optional, Union
+from ..polyfills import PathLikeStr
 from pathlib import Path
+from typing import Any, Optional, Union
 
 import filetype  # type: ignore
 import yaml
+from typing_extensions import Protocol
 
 from .configuration import Configuration
 
 __all__ = ["YamlConfiguration"]
 
 
-def image_constructor(loader, node):
+class CustomLoaderLike(Protocol):
+    base_path: Path
+
+    def construct_scalar(self, node: yaml.ScalarNode) -> str: ...
+
+
+def image_constructor(loader: CustomLoaderLike, node: yaml.Node) -> str:
+    assert isinstance(node, yaml.ScalarNode)
+
     # obtain the actual file path from the scalar string node
     filepath = loader.construct_scalar(node)
 
@@ -29,32 +38,34 @@ def image_constructor(loader, node):
 
 class YamlConfiguration(Configuration):
     def __init__(
-        self, handle: Union[str, Path], base_path: Optional[Union[str, Path]] = None
+        self,
+        handle: Union[str, PathLikeStr],
+        base_path: Union[str, PathLikeStr, None] = None,
     ) -> None:
         super().__init__()
 
-        if base_path is None:
-            assert isinstance(handle, str) and os.path.isfile(handle)
-            base_path = os.path.dirname(handle)
-
         if isinstance(handle, str):
-            handle = pathlib.Path(handle)
+            handle = Path(handle)
 
-        if isinstance(base_path, str):
-            base_path = pathlib.Path(base_path)
+        if base_path is None:
+            assert os.path.isfile(handle), f"File {handle} does not exist"
+            base_path = os.path.dirname(handle)
+        else:
+            base_path = Path(base_path)
 
         # we want to parse and process special tags (e.g. !image) in yaml files
         # when loading a file with !image, the specified path should be relative to
         # the yaml file itself
-        # --> need a custom loader with the path to the yaml file
-        class CustomLoader(yaml.SafeLoader):
-            def __init__(self, *args, **kwargs):
+        # --> need a custom loader that knows the path to the yaml file
+        class CustomLoader(yaml.SafeLoader, CustomLoaderLike):
+            def __init__(self, *args: Any, **kwargs: Any) -> None:
                 super().__init__(*args, **kwargs)
-                self.base_path = base_path
+                assert base_path is not None, "base_path is None"
+                self.base_path = Path(base_path)
 
         yaml.add_constructor("!image", image_constructor, CustomLoader)
 
         self.yaml = yaml.load(open(handle, "r"), Loader=CustomLoader)
 
-    def _get_dict(self):
+    def _get_dict(self) -> dict:
         return self.yaml["module"]

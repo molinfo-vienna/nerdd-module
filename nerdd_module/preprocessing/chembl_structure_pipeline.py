@@ -31,7 +31,7 @@ __all__ = ["GetParentMolWithCsp", "StandardizeWithCsp"]
 
 
 class StandardizeWithCsp(PreprocessingStep):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         if import_error is not None:
@@ -55,7 +55,7 @@ class StandardizeWithCsp(PreprocessingStep):
 
 
 class GetParentMolWithCsp(PreprocessingStep):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         if import_error is not None:

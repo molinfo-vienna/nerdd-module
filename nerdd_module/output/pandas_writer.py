@@ -7,14 +7,10 @@ from .writer import Writer
 __all__ = ["PandasWriter"]
 
 
-class PandasWriter(Writer):
+class PandasWriter(Writer, output_format="pandas"):
     def __init__(self) -> None:
         pass
 
     def write(self, records: Iterable[dict]) -> pd.DataFrame:
         df = pd.DataFrame(records)
         return df
-
-    @classmethod
-    def get_output_format(cls) -> str:
-        return "pandas"

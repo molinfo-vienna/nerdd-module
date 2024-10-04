@@ -7,18 +7,18 @@ __all__ = ["MapStep"]
 
 
 class MapStep(Step):
-    def __init__(self, is_source=False) -> None:
+    def __init__(self, is_source: bool = False) -> None:
         super().__init__(is_source=is_source)
 
     def _run(self, source: Iterator[dict]) -> Iterator[dict]:
         # The _process method might return a single result or a list of results and we
         # define a wrapper function to handle both cases. In the first case, we yield
         # the result, in the second case we yield each element of the list.
-        def _wrapper(result):
+        def _wrapper(result: Union[dict, Iterable[dict]]) -> Iterator[dict]:
             if isinstance(result, dict):
                 yield result
-            elif hasattr(result, "__iter__"):
-                # this can be a list or a generator
+            elif isinstance(result, Iterable):
+                # this can be a list, an iterator or a generator
                 yield from result
             else:
                 # anything that is not a dict or an iterable / generator
@@ -34,5 +34,5 @@ class MapStep(Step):
                 yield from _wrapper(self._process(record))
 
     @abstractmethod
-    def _process(self, record: dict) -> Union[dict, Iterable[dict], Iterator[dict]]:
+    def _process(self, record: dict) -> Union[dict, Iterable[dict]]:
         pass

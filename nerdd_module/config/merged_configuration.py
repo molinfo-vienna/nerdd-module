@@ -6,7 +6,7 @@ from .dict_configuration import DictConfiguration
 __all__ = ["MergedConfiguration"]
 
 
-def merge(*args):
+def merge(*args: dict) -> dict:
     assert len(args) > 0
 
     first_entry = args[0]
