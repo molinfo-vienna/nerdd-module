@@ -9,6 +9,30 @@ def get_property_columns_of_type(config: dict, t: str) -> List[dict]:
     return [c for c in config["result_properties"] if c.get("level", "molecule") == t]
 
 
+def is_visible(result_property: dict, output_format: str) -> bool:
+    formats = result_property.get("formats", {})
+
+    if isinstance(formats, list):
+        return output_format in formats
+    elif isinstance(formats, dict):
+        include = formats.get("include", "*")
+        exclude = formats.get("exclude", [])
+        assert include == "*" or isinstance(
+            include, list
+        ), f"Expected include to be a list or '*', got {include}"
+        assert isinstance(
+            exclude, list
+        ), f"Expected exclude to be a list, got {exclude}"
+        return (
+            include == "*" or output_format in include
+        ) and output_format not in exclude
+    else:
+        raise ValueError(
+            f"Invalid formats declaration {formats} in result property "
+            f"{result_property}"
+        )
+
+
 class Configuration(ABC):
     def __init__(self) -> None:
         pass
@@ -63,6 +87,13 @@ class Configuration(ABC):
             return "derivative_property_prediction"
         else:
             return "molecular_property_prediction"
+
+    def get_visible_properties(self, output_format: str) -> List[dict]:
+        return [
+            p
+            for p in self.get_dict().get("result_properties", [])
+            if is_visible(p, output_format)
+        ]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._get_dict()})"
