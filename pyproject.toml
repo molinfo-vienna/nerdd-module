@@ -95,3 +95,18 @@ addopts = "-x -s --cov-report term --cov=nerdd_module"
 
 [tool.pytest-watcher]
 patterns = ["*.py", "*.feature", "pyproject.toml"]
+
+[tool.mypy]
+# disallow_untyped_defs = true
+# no_implicit_optional = True
+# check_untyped_defs = True
+# show_error_codes = True 
+
+[[tool.mypy.overrides]]
+module = ["rdkit.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[[tool.mypy.overrides]]
+module = ["nerdd_module.tests.*", "tests.*"]
+ignore_errors = true
