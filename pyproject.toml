@@ -1,0 +1,112 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nerdd-module"
+version = "0.3.3"
+description = "Base package to create NERDD modules"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
+maintainers = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
+dependencies = [
+    "pandas>=1.2.1",
+    "pyyaml>=6.0",
+    "filetype~=1.2.0",
+    "rich-click>=1.7.1",
+    "stringcase>=1.2.0",
+    "decorator>=5.1.1",
+    # install importlib-resources and importlib-metadata for old Python versions
+    "importlib-resources>=5; python_version<'3.10'",
+    "importlib-metadata>=4.6; python_version<'3.10'",
+]
+keywords = ["science", "research", "development", "nerdd"]
+classifiers = [
+    # audience
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    # license
+    "License :: OSI Approved :: BSD License",
+    # programming language
+    "Programming Language :: Python",
+    # topics
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    # operating systems
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    # python versions
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "mypy",
+    "pandas-stubs",
+    "types-PyYAML",
+    "types-decorator",
+    "types-setuptools",
+]
+rdkit = [
+    # Some old RDKit versions are not recognized by setuptools. For that reason,
+    # let the user install rdkit explicitly using an extra dependency.
+    # Note: rdkit 2022.3.3 is the oldest (working) version of rdkit on pypi.
+    "rdkit>=2022.3.3",
+]
+csp = [
+    # Note 1: Version 1.0.0 of chembl_structure_pipeline is not available on
+    # pypi, but maybe it was already installed in the current environment
+    # manually. So it makes sense to use version ">=1.0.0" here.
+    # Note 2: chembl_structure_pipeline *always* installs a recent version
+    # of rdkit.
+    "chembl_structure_pipeline>=1.0.0",
+]
+test = [
+    "pytest",
+    "pytest-sugar",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-bdd",
+    "pytest-mock",
+    "pytest-watcher",
+    "hypothesis",
+    "hypothesis-rdkit",
+]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings"]
+
+[project.urls]
+Repository = "https://github.com/molinfo-vienna/nerdd-module"
+
+#
+# TOOLS
+#
+[tool.pytest.ini_options]
+log_cli = 1
+log_cli_level = "INFO"
+addopts = "-x -s --cov-report term --cov=nerdd_module"
+
+[tool.pytest-watcher]
+patterns = ["*.py", "*.feature", "pyproject.toml"]
+
+[tool.mypy]
+# disallow_untyped_defs = true
+# no_implicit_optional = True
+# check_untyped_defs = True
+# show_error_codes = True 
+
+[[tool.mypy.overrides]]
+module = ["rdkit.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[[tool.mypy.overrides]]
+module = ["nerdd_module.tests.*", "tests.*"]
+ignore_errors = true

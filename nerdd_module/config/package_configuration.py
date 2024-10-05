@@ -25,9 +25,11 @@ class PackageConfiguration(Configuration):
             # navigate to the config file
             config_file = root_dir / "nerdd.yml"
 
-            if config_file is not None and config_file.exists():
+            if config_file is not None and config_file.is_file():
                 logger.info(f"Found configuration file in package: {config_file}")
-                self.config = YamlConfiguration(config_file, base_path=root_dir)
+                self.config = YamlConfiguration(
+                    config_file.open(), base_path=str(root_dir)
+                )
             else:
                 self.config = DictConfiguration({})
 
