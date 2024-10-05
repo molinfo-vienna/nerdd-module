@@ -2,11 +2,12 @@ import logging
 import os
 import sys
 from typing import Any, Callable
-from .model import Model
 
 import rich_click as click
 from decorator import decorator
 from stringcase import spinalcase  # type: ignore
+
+from .model import Model
 
 __all__ = ["auto_cli"]
 
@@ -67,26 +68,16 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
     #     footer = ""
     footer = ""
 
-    # show_default=True: default values are shown in the help text
-    # show_metavars_column=False: the column types are not in a separate column
-    # append_metavars_help=True: the column types are shown below the help text
-    @click.command(context_settings={"show_default": True}, help=help_text)
-    @click.rich_config(
-        help_config=click.RichHelpConfiguration(
-            use_markdown=True,
-            show_metavars_column=False,
-            append_metavars_help=True,
-            footer_text=footer,
-        )
-    )
-    @click.argument("input", type=click.Path(), nargs=-1, required=True)
+    #
+    # Define the CLI entry point
+    #
     def main(
-        input,
+        input: Any,
         format: str,
         output: click.Path,
         log_level: str,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> None:
         logging.basicConfig(level=log_level.upper())
 
         # write results
@@ -98,6 +89,11 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
             output_handle = click.open_file(str(output), "wb")
 
         model.predict(input, output_format=format, output_file=output_handle, **kwargs)
+
+    #
+    # Add required input parameter
+    #
+    main = click.argument("input", type=click.Path(), nargs=-1, required=True)(main)
 
     #
     # Add job parameters
@@ -137,5 +133,23 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
         ),
         help="The logging level.",
     )(main)
+
+    #
+    # Create Rich command
+    #
+
+    # show_metavars_column=False: the column types are not in a separate column
+    # append_metavars_help=True: the column types are shown below the help text
+    main = click.rich_config(
+        help_config=click.RichHelpConfiguration(
+            use_markdown=True,
+            show_metavars_column=False,
+            append_metavars_help=True,
+            footer_text=footer,
+        )
+    )(main)
+
+    # show_default=True: default values are shown in the help text
+    main = click.command(context_settings={"show_default": True}, help=help_text)(main)
 
     return main()
