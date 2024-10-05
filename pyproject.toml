@@ -85,8 +85,13 @@ docs = ["mkdocs", "mkdocs-material", "mkdocstrings"]
 [project.urls]
 Repository = "https://github.com/molinfo-vienna/nerdd-module"
 
-
+#
+# TOOLS
+#
 [tool.pytest.ini_options]
 log_cli = 1
 log_cli_level = "INFO"
 addopts = "-x -s --cov-report term --cov=nerdd_module"
+
+[tool.pytest-watcher]
+patterns = ["*.py", "*.feature", "pyproject.toml"]
