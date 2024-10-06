@@ -1,5 +1,4 @@
 import logging
-import os
 import sys
 from typing import Any, Callable
 
@@ -40,7 +39,7 @@ def infer_click_type(param):
 @decorator
 def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
     # infer the command name
-    command_name = os.path.basename(sys.argv[0])
+    # command_name = os.path.basename(sys.argv[0])
 
     # get the model
     model = f()

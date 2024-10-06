@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
-from typing import Any, List, Union
+from typing import List
 
 __all__ = ["Configuration"]
 

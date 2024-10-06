@@ -1,5 +1,5 @@
 from itertools import chain, islice, repeat
-from typing import Any, Callable, Iterable, Iterator, Optional
+from typing import Any, Iterable, Iterator, Optional
 
 from .explorer import Explorer
 from .reader import ExploreCallable, MoleculeEntry, Problem, Reader

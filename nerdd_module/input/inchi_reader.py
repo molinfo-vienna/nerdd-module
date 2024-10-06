@@ -39,7 +39,7 @@ class InchiReader(Reader):
 
                 try:
                     mol = MolFromInchi(line, sanitize=False)
-                except:
+                except:  # noqa: E722 (allow bare except, because RDKit is unpredictable)
                     mol = None
 
                 if mol is None:

@@ -12,17 +12,21 @@ from ..util import call_with_mappings
 
 logger = logging.getLogger(__name__)
 
+
 # an unknown prediction problem indicates that the model raised an exception during
 # prediction
-UnknownPredictionProblem = lambda: Problem(
-    "unknown_prediction_error", "An unknown error occured during prediction."
-)
+def UnknownPredictionProblem() -> Problem:
+    return Problem(
+        "unknown_prediction_error", "An unknown error occured during prediction."
+    )
+
 
 # an incomplete prediction problem indicates that the model successfully returns
 # predictions, but part of the input molecules are missing in the results
-IncompletePredictionProblem = lambda: Problem(
-    "incomplete_prediction_error", "The model couldn't process the molecule."
-)
+def IncompletePredictionProblem() -> Problem:
+    return Problem(
+        "incomplete_prediction_error", "The model couldn't process the molecule."
+    )
 
 
 class Model(ABC):

@@ -50,6 +50,7 @@ classifiers = [
 dev = [
     "black",
     "mypy",
+    "ruff",
     "pandas-stubs",
     "types-PyYAML",
     "types-decorator",
@@ -95,6 +96,15 @@ addopts = "-x -s --cov-report term --cov=nerdd_module"
 
 [tool.pytest-watcher]
 patterns = ["*.py", "*.feature", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["tests", "nerdd_module/tests"]
+
+[tool.ruff.lint]
+# F403: 'from module import *' used; unable to detect undefined names
+#       (but we need this for the __init__ files in submodules)
+ignore = ["F403"]
 
 [tool.mypy]
 # disallow_untyped_defs = true

@@ -53,7 +53,7 @@ class SdfReader(Reader):
                 if mol_block.strip() != "":
                     try:
                         mol = MolFromMolBlock(mol_block, sanitize=False, removeHs=False)
-                    except:
+                    except:  # noqa: E722 (allow bare except, because RDKit is unpredictable)
                         mol = None
 
                     if mol is None:

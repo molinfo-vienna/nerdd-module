@@ -39,7 +39,7 @@ class SmilesReader(Reader):
 
                 try:
                     mol = MolFromSmiles(line, sanitize=False)
-                except:
+                except:  # noqa: E722 (allow bare except, because RDKit is unpredictable)
                     mol = None
 
                 if mol is None:

@@ -1,7 +1,6 @@
 import logging
 import os
-import sys
-from typing import Any, Optional
+from typing import Optional
 
 from .configuration import Configuration
 from .dict_configuration import DictConfiguration
