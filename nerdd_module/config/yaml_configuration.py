@@ -1,7 +1,7 @@
 import base64
 import os
 from pathlib import Path
-from typing import IO, Any, Optional, Union
+from typing import IO, Any, Union
 
 import filetype  # type: ignore
 import yaml

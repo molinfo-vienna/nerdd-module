@@ -12,9 +12,9 @@ __all__ = ["PreprocessingStep"]
 
 logger = logging.getLogger(__name__)
 
-UnknownPreprocessingProblem = lambda: Problem(
-    "unknown_preprocessing_error", "An unknown error occurred during preprocessing."
-)
+
+def UnknownPreprocessingProblem() -> Problem:
+    return Problem("unknown_preprocessing_error", "An unknown error occurred during preprocessing.")
 
 
 class PreprocessingStep(MapStep):

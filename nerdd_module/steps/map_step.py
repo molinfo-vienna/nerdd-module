@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Iterable, Iterator, Optional, Union
+from typing import Iterable, Iterator, Union
 
 from .step import Step
 

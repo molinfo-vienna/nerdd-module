@@ -7,14 +7,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .[test,csp,dev]
+        pip install .[test,csp,dev,rdkit]
+
+    - name: Run Ruff linter
+      run: ruff check
+
+    - name: Run Ruff formatter
+      run: ruff format --check
 
     - name: Run Mypy
       run: mypy nerdd_module

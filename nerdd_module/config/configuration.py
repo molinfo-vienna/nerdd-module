@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
-from typing import Any, List, Union
+from typing import List
 
 __all__ = ["Configuration"]
 
@@ -20,16 +20,11 @@ def is_visible(result_property: dict, output_format: str) -> bool:
         assert include == "*" or isinstance(
             include, list
         ), f"Expected include to be a list or '*', got {include}"
-        assert isinstance(
-            exclude, list
-        ), f"Expected exclude to be a list, got {exclude}"
-        return (
-            include == "*" or output_format in include
-        ) and output_format not in exclude
+        assert isinstance(exclude, list), f"Expected exclude to be a list, got {exclude}"
+        return (include == "*" or output_format in include) and output_format not in exclude
     else:
         raise ValueError(
-            f"Invalid formats declaration {formats} in result property "
-            f"{result_property}"
+            f"Invalid formats declaration {formats} in result property " f"{result_property}"
         )
 
 
@@ -46,9 +41,7 @@ class Configuration(ABC):
 
         # check that a module can only predict atom or derivative properties, not both
         num_atom_properties = len(get_property_columns_of_type(config, "atom"))
-        num_derivative_properties = len(
-            get_property_columns_of_type(config, "derivative")
-        )
+        num_derivative_properties = len(get_property_columns_of_type(config, "derivative"))
         assert (
             num_atom_properties == 0 or num_derivative_properties == 0
         ), "A module can only predict atom or derivative properties, not both."
@@ -90,9 +83,7 @@ class Configuration(ABC):
 
     def get_visible_properties(self, output_format: str) -> List[dict]:
         return [
-            p
-            for p in self.get_dict().get("result_properties", [])
-            if is_visible(p, output_format)
+            p for p in self.get_dict().get("result_properties", []) if is_visible(p, output_format)
         ]
 
     def __repr__(self) -> str:

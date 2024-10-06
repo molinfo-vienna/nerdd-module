@@ -18,9 +18,7 @@ class RemoveStereochemistry(PreprocessingStep):
             remove_stereochemistry(mol)
         except Exception:
             problems.append(
-                Problem(
-                    "remove_stereochemistry_failed", "Cannot remove stereochemistry"
-                )
+                Problem("remove_stereochemistry_failed", "Cannot remove stereochemistry")
             )
 
         return mol, problems

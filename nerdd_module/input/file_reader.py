@@ -1,6 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import Any, Iterator, Optional, Tuple, Union
+from typing import Any, Iterator, Tuple, Union
 
 from .reader import ExploreCallable, MoleculeEntry, Reader
 
@@ -20,7 +20,7 @@ class FileReader(Reader):
         # convert filename to path
         try:
             path = Path(filename)
-        except:
+        except TypeError:
             raise ValueError("input must be a valid path")
 
         # convert to absolute path

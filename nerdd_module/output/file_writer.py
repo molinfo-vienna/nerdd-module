@@ -1,7 +1,7 @@
 import codecs
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from pathlib import Path
-from typing import IO, Any, BinaryIO, Iterable, List, TextIO, Union
+from typing import IO, Any, BinaryIO, Iterable, TextIO, Union
 
 from .writer import Writer
 

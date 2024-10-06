@@ -15,9 +15,7 @@ def call_with_mappings(
     # translate all args
     translated_args = tuple(config.get(arg) for arg in args_mapping)
     # translate all kwargs
-    translated_kwargs = {
-        k: config["v"] for k, v in kwargs_mapping.items() if v in config
-    }
+    translated_kwargs = {k: config["v"] for k, v in kwargs_mapping.items() if v in config}
 
     # copy config
     config = config.copy()

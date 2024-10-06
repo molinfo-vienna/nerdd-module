@@ -12,17 +12,17 @@ from ..util import call_with_mappings
 
 logger = logging.getLogger(__name__)
 
+
 # an unknown prediction problem indicates that the model raised an exception during
 # prediction
-UnknownPredictionProblem = lambda: Problem(
-    "unknown_prediction_error", "An unknown error occured during prediction."
-)
+def UnknownPredictionProblem() -> Problem:
+    return Problem("unknown_prediction_error", "An unknown error occured during prediction.")
+
 
 # an incomplete prediction problem indicates that the model successfully returns
 # predictions, but part of the input molecules are missing in the results
-IncompletePredictionProblem = lambda: Problem(
-    "incomplete_prediction_error", "The model couldn't process the molecule."
-)
+def IncompletePredictionProblem() -> Problem:
+    return Problem("incomplete_prediction_error", "The model couldn't process the molecule.")
 
 
 class Model(ABC):
@@ -46,15 +46,11 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def _get_postprocessing_steps(
-        self, output_format: Optional[str], **kwargs: Any
-    ) -> List[Step]:
+    def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
         pass
 
     @abstractmethod
-    def _get_output_step(
-        self, output_format: Optional[str], **kwargs: Any
-    ) -> OutputStep:
+    def _get_output_step(self, output_format: Optional[str], **kwargs: Any) -> OutputStep:
         pass
 
     def read(
@@ -67,9 +63,7 @@ class Model(ABC):
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
         preprocessing_steps = (
-            self._get_preprocessing_steps(input, input_format, **kwargs)
-            if preprocess
-            else []
+            self._get_preprocessing_steps(input, input_format, **kwargs) if preprocess else []
         )
         output_step = self._get_output_step(output_format, **kwargs)
 
@@ -91,9 +85,7 @@ class Model(ABC):
         **kwargs: Any,
     ) -> Any:
         input_steps = self._get_input_steps(input, input_format, **kwargs)
-        preprocessing_steps = self._get_preprocessing_steps(
-            input, input_format, **kwargs
-        )
+        preprocessing_steps = self._get_preprocessing_steps(input, input_format, **kwargs)
         postprocessing_steps = self._get_postprocessing_steps(output_format, **kwargs)
         output_step = self._get_output_step(output_format, **kwargs)
 
@@ -191,9 +183,7 @@ class PredictionStep(Step):
                 predictions = []
 
             # check that the predictions are a list
-            assert isinstance(
-                predictions, list
-            ), "The predictions must be a list of dictionaries."
+            assert isinstance(predictions, list), "The predictions must be a list of dictionaries."
             assert all(
                 isinstance(record, dict) for record in predictions
             ), "The predictions must be a list of dictionaries."
@@ -262,9 +252,7 @@ class PredictionStep(Step):
             for _, records in mol_id_to_record.items():
                 if len(records) > 1:
                     has_atom_id = all("atom_id" in record for record in records)
-                    has_derivative_id = all(
-                        "derivative_id" in record for record in records
-                    )
+                    has_derivative_id = all("derivative_id" in record for record in records)
                     assert has_atom_id or has_derivative_id, (
                         "The result contains multiple entries per molecule, but does "
                         "not contain atom_id or derivative_id."

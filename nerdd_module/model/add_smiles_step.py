@@ -18,7 +18,7 @@ class AddSmilesStep(MapStep):
 
         try:
             smiles = MolToSmiles(mol)
-        except:
+        except:  # noqa: E722 (allow bare except, because RDKit is unpredictable)
             smiles = None
 
         record[self._smiles_column] = smiles

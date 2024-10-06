@@ -1,5 +1,5 @@
 from itertools import chain, islice, repeat
-from typing import Any, Callable, Iterable, Iterator, Optional
+from typing import Any, Iterable, Iterator, Optional
 
 from .explorer import Explorer
 from .reader import ExploreCallable, MoleculeEntry, Problem, Reader
@@ -31,13 +31,14 @@ class DepthFirstExplorer(Explorer):
         num_test_entries: int = 10,
         threshold: float = 0.5,
         maximum_depth: int = 50,
+        **kwargs: Any,
     ):
         super().__init__()
 
         if readers is None:
-            self._reader_registry = list(Reader.get_readers())
+            self._readers = list(Reader.get_readers(**kwargs))
         else:
-            self._reader_registry = list(readers)
+            self._readers = list(readers)
 
         self._num_test_entries = num_test_entries
         self._threshold = threshold
@@ -59,7 +60,7 @@ class DepthFirstExplorer(Explorer):
 
         readers_iter = chain(
             zip(parent["first_guess"], repeat("guess")),
-            zip(self._reader_registry, repeat("builtin")),
+            zip(self._readers, repeat("builtin")),
         )
 
         # try all readers and take a sample of the first num_test_entries

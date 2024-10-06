@@ -16,9 +16,7 @@ class SmilesReader(Reader):
     def __init__(self) -> None:
         super().__init__()
 
-    def read(
-        self, input_stream: Any, explore: ExploreCallable
-    ) -> Iterator[MoleculeEntry]:
+    def read(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 
@@ -39,16 +37,14 @@ class SmilesReader(Reader):
 
                 try:
                     mol = MolFromSmiles(line, sanitize=False)
-                except:
+                except:  # noqa: E722 (allow bare except, because RDKit is unpredictable)
                     mol = None
 
                 if mol is None:
                     display_line = line
                     if len(display_line) > 100:
                         display_line = display_line[:100] + "..."
-                    errors = [
-                        Problem("invalid_smiles", f"Invalid SMILES {display_line}")
-                    ]
+                    errors = [Problem("invalid_smiles", f"Invalid SMILES {display_line}")]
                 else:
                     # old versions of RDKit do not parse the name
                     # --> get name from smiles manually

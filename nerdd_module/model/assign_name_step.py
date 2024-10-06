@@ -12,8 +12,6 @@ class AssignNameStep(MapStep):
     def _process(self, record: dict) -> Union[dict, Iterable[dict], Iterator[dict]]:
         mol = record.get("input_mol")
 
-        record["name"] = (
-            mol.GetProp("_Name") if mol is not None and mol.HasProp("_Name") else ""
-        )
+        record["name"] = mol.GetProp("_Name") if mol is not None and mol.HasProp("_Name") else ""
 
         return record
