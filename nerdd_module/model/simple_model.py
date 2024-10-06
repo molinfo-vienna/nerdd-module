@@ -45,7 +45,7 @@ class SimpleModel(Model):
         self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
-            ReadInput(DepthFirstExplorer(), input),
+            ReadInput(DepthFirstExplorer(**kwargs), input),
         ]
 
     def _get_preprocessing_steps(
