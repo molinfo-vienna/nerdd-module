@@ -10,9 +10,7 @@ class ZipReader(Reader):
     def __init__(self) -> None:
         super().__init__()
 
-    def read(
-        self, input_stream: Any, explore: ExploreCallable
-    ) -> Iterator[MoleculeEntry]:
+    def read(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 

@@ -127,9 +127,7 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
     main = click.option(
         "--log-level",
         default="warning",
-        type=click.Choice(
-            ["debug", "info", "warning", "error", "critical"], case_sensitive=False
-        ),
+        type=click.Choice(["debug", "info", "warning", "error", "critical"], case_sensitive=False),
         help="The logging level.",
     )(main)
 

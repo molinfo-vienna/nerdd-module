@@ -17,9 +17,7 @@ class SdfReader(Reader):
         super().__init__()
         self.max_num_lines_mol_block = max_num_lines_mol_block
 
-    def read(
-        self, input_stream: Any, explore: ExploreCallable
-    ) -> Iterator[MoleculeEntry]:
+    def read(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
             raise TypeError("input must be a stream-like object")
 
@@ -29,7 +27,6 @@ class SdfReader(Reader):
 
         # suppress RDKit warnings
         with BlockLogs():
-
             # We do not use SDMolSupplier, because it does not accept a stream-like
             # object as input. The ForwadSDMolSupplier is not suitable either, because
             # it does not allow to return the raw text.

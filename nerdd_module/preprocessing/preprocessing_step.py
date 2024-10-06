@@ -14,9 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def UnknownPreprocessingProblem() -> Problem:
-    return Problem(
-        "unknown_preprocessing_error", "An unknown error occurred during preprocessing."
-    )
+    return Problem("unknown_preprocessing_error", "An unknown error occurred during preprocessing.")
 
 
 class PreprocessingStep(MapStep):

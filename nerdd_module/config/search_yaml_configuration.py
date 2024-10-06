@@ -31,9 +31,7 @@ class SearchYamlConfiguration(DictConfiguration):
                 leaf = os.path.dirname(leaf)
 
             if default_config_file is not None:
-                logger.info(
-                    f"Found configuration file in project directory: {default_config_file}"
-                )
+                logger.info(f"Found configuration file in project directory: {default_config_file}")
                 config = YamlConfiguration(default_config_file, base_path)
 
         super().__init__(config.get_dict())

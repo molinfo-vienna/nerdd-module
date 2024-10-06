@@ -60,9 +60,7 @@ class SimpleModel(Model):
             CustomPreprocessingStep(self),
         ]
 
-    def _get_postprocessing_steps(
-        self, output_format: Optional[str], **kwargs: Any
-    ) -> List[Step]:
+    def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
         output_format = output_format or "pandas"
         return [
             AddSmilesStep("input_mol", "input_smiles"),
@@ -73,9 +71,7 @@ class SimpleModel(Model):
             ),
         ]
 
-    def _get_output_step(
-        self, output_format: Optional[str], **kwargs: Any
-    ) -> OutputStep:
+    def _get_output_step(self, output_format: Optional[str], **kwargs: Any) -> OutputStep:
         output_format = output_format or "pandas"
         return WriteOutputStep(output_format, **kwargs)
 
@@ -169,9 +165,7 @@ class SimpleModel(Model):
         return self.get_config().get("description", default)
 
     def _get_job_parameters(self) -> List[dict]:
-        return super()._get_job_parameters() + self.get_config().get(
-            "job_parameters", []
-        )
+        return super()._get_job_parameters() + self.get_config().get("job_parameters", [])
 
 
 class CustomPreprocessingStep(PreprocessingStep):
