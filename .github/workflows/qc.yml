@@ -23,4 +23,4 @@ jobs:
       run: ruff format --check
 
     - name: Run Mypy
-      run: mypy .
+      run: mypy nerdd_module
