@@ -119,3 +119,8 @@ follow_imports_for_stubs = true
 [[tool.mypy.overrides]]
 module = ["nerdd_module.tests.*", "tests.*"]
 ignore_errors = true
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+upload_to_vcs_release = true
