@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  lint:
+  release:
+    if: github.repository == 'molinfo-vienna/nerdd-module'
     runs-on: ubuntu-latest
     concurrency: release
     permissions:
