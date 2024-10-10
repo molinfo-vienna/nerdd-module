@@ -7,7 +7,7 @@ import filetype  # type: ignore
 import yaml
 from typing_extensions import Protocol
 
-from ..polyfills import PathLikeStr
+from ..polyfills import PathLikeStr, Traversable
 from .configuration import Configuration
 
 __all__ = ["YamlConfiguration"]
@@ -40,7 +40,7 @@ class YamlConfiguration(Configuration):
     def __init__(
         self,
         path_or_handle: Union[str, PathLikeStr, IO[str]],
-        base_path: Union[str, PathLikeStr, None] = None,
+        base_path: Union[str, PathLikeStr, Traversable, None] = None,
     ) -> None:
         super().__init__()
 
@@ -52,6 +52,8 @@ class YamlConfiguration(Configuration):
                 path_or_handle
             ), f"File {path_or_handle} does not exist"
             base_path = os.path.dirname(path_or_handle)
+        elif isinstance(base_path, Traversable):
+            pass
         else:
             base_path = Path(base_path)
 
@@ -71,7 +73,7 @@ class YamlConfiguration(Configuration):
             def __init__(self, *args: Any, **kwargs: Any) -> None:
                 super().__init__(*args, **kwargs)
                 assert base_path is not None, "base_path is None"
-                self.base_path = Path(base_path)
+                self.base_path = base_path
 
         yaml.add_constructor("!image", image_constructor, CustomLoader)
 

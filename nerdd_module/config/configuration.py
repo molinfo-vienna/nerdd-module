@@ -32,7 +32,7 @@ class Configuration(ABC):
     def __init__(self) -> None:
         pass
 
-    @lru_cache
+    @lru_cache(1)
     def get_dict(self) -> dict:
         config = self._get_dict()
 
