@@ -148,21 +148,24 @@ def check_png_image(subset, column_name):
 def check_column_type(subset, column_name, expected_type):
     expected_type = eval(expected_type)
 
+    values = [record[column_name] for record in subset]
+
     assert (
-        subset[column_name].map(lambda x: isinstance(x, expected_type)).all()
+        all(isinstance(value, expected_type) for value in values)
     ), f"Column {column_name} has unexpected type"
 
 
 @then(
     parsers.parse(
-        "the value in column '{column_name}' should have length greater than {length}"
+        "the value in column '{column_name}' should have length greater than {length:d}"
     )
 )
 def check_column_length(subset, column_name, length):
-    length = int(length)
+    values = [record[column_name] for record in subset]
+
     assert (
-        subset[column_name].map(lambda x: len(x) > length)
-    ).all(), f"Column {column_name} has unexpected length"
+        all(len(value) > length for value in values)
+    ), f"Column {column_name} has unexpected length"
 
 
 @then(

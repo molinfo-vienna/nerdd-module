@@ -7,14 +7,14 @@ import filetype  # type: ignore
 import yaml
 from typing_extensions import Protocol
 
-from ..polyfills import PathLikeStr
+from ..polyfills import PathLikeStr, Traversable, as_file
 from .configuration import Configuration
 
 __all__ = ["YamlConfiguration"]
 
 
 class CustomLoaderLike(Protocol):
-    base_path: Path
+    base_path: Union[str, PathLikeStr, Traversable]
 
     def construct_scalar(self, node: yaml.ScalarNode) -> str: ...
 
@@ -22,25 +22,36 @@ class CustomLoaderLike(Protocol):
 def image_constructor(loader: CustomLoaderLike, node: yaml.Node) -> str:
     assert isinstance(node, yaml.ScalarNode)
 
+    base_path = loader.base_path
+    if isinstance(base_path, Traversable):
+        pass
+    else:
+        base_path = Path(base_path)
+
     # obtain the actual file path from the scalar string node
     filepath = loader.construct_scalar(node)
 
+    p = base_path / filepath
+
+    assert p.is_file(), f"File {p} does not exist"
+
     # load the image from the provided logo path and convert it to base64
-    with open(loader.base_path / filepath, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode("ascii")
+    with as_file(p) as path:
+        with open(path, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode("ascii")
 
-        # determine the file type from the file extension
-        kind = filetype.guess(f)
-        assert kind is not None
+            # determine the file type from the file extension
+            kind = filetype.guess(f)
+            assert kind is not None
 
-        return f"data:{kind.mime};base64,{encoded}"
+            return f"data:{kind.mime};base64,{encoded}"
 
 
 class YamlConfiguration(Configuration):
     def __init__(
         self,
         path_or_handle: Union[str, PathLikeStr, IO[str]],
-        base_path: Union[str, PathLikeStr, None] = None,
+        base_path: Union[str, PathLikeStr, Traversable, None] = None,
     ) -> None:
         super().__init__()
 
@@ -52,8 +63,6 @@ class YamlConfiguration(Configuration):
                 path_or_handle
             ), f"File {path_or_handle} does not exist"
             base_path = os.path.dirname(path_or_handle)
-        else:
-            base_path = Path(base_path)
 
         handle: IO[str]
         if isinstance(path_or_handle, Path):
@@ -71,7 +80,7 @@ class YamlConfiguration(Configuration):
             def __init__(self, *args: Any, **kwargs: Any) -> None:
                 super().__init__(*args, **kwargs)
                 assert base_path is not None, "base_path is None"
-                self.base_path = Path(base_path)
+                self.base_path = base_path
 
         yaml.add_constructor("!image", image_constructor, CustomLoader)
 
