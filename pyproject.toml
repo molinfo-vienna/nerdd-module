@@ -88,6 +88,12 @@ Repository = "https://github.com/molinfo-vienna/nerdd-module"
 #
 # TOOLS
 #
+[tool.setuptools]
+packages = ["nerdd_module"]
+
+[tool.setuptools.package-data]
+nerdd_module = ["py.typed"]
+
 [tool.pytest.ini_options]
 log_cli = 1
 log_cli_level = "INFO"
