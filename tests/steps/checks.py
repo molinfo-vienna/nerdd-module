@@ -1,9 +1,8 @@
 from collections import defaultdict
 from typing import Iterable
 
-from pytest_bdd import parsers, then
-
 from nerdd_module import Problem
+from pytest_bdd import parsers, then
 
 
 @then("the result should contain the same number of rows as the input")
@@ -75,3 +74,10 @@ def check_problem_not_in_list(subset, problem):
         assert problem not in [
             p.type for p in problems
         ], f"Problem list contains problem {problem} in record {record}"
+
+
+@then(parsers.parse("the model should have attribute '{name}' with value {value}"))
+def check_model_name(predictor, name, value):
+    value = eval(value)
+    assert hasattr(predictor, name)
+    assert getattr(predictor, name) == value
