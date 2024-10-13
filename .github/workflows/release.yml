@@ -9,6 +9,8 @@ jobs:
   release:
     if: github.repository == 'molinfo-vienna/nerdd-module'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     concurrency: release
       
     steps:
@@ -25,8 +27,8 @@ jobs:
 
     - name: Python Semantic Release
       uses: python-semantic-release/python-semantic-release@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      # with:
+      #   github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
