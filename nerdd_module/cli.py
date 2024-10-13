@@ -20,7 +20,8 @@ supported:
 Note that input formats shouldn't be mixed.
 """
 
-def infer_click_type(param : dict) -> click.ParamType:
+
+def infer_click_type(param: dict) -> click.ParamType:
     if "choices" in param:
         choices = [c["value"] for c in param["choices"]]
         return click.Choice(choices)
@@ -34,7 +35,7 @@ def infer_click_type(param : dict) -> click.ParamType:
 
     if "type" not in param:
         raise ValueError(f"Parameter {param['name']} does not have a type")
-    
+
     t = param["type"]
 
     if t not in type_map:
