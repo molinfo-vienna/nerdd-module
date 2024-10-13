@@ -1,7 +1,6 @@
-from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
-
 from nerdd_module import SimpleModel
 from nerdd_module.preprocessing import Sanitize
+from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
 __all__ = ["MolWeightModel"]
 
@@ -33,7 +32,8 @@ class MolWeightModel(SimpleModel):
 
     def _get_base_config(self):
         return {
-            "name": "mol_weight_model",
+            "name": "mol_scale",
+            "description": "Computes the molecular weight of a molecule",
             "job_parameters": [
                 {"name": "multiplier", "type": "float"},
             ],

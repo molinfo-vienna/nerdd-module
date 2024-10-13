@@ -116,17 +116,17 @@ class Model(ABC):
     def _get_name(self) -> str:
         return snakecase(self.__class__.__name__)
 
-    name = property(_get_name)
+    name = property(fget=lambda self: self._get_name())
 
     def _get_description(self) -> str:
         return ""
 
-    description = property(_get_description)
+    description = property(fget=lambda self: self._get_description())
 
     def _get_job_parameters(self) -> List[dict]:
         return []
 
-    job_parameters = property(_get_job_parameters)
+    job_parameters = property(fget=lambda self: self._get_job_parameters())
 
 
 class PredictionStep(Step):

@@ -21,23 +21,31 @@ Note that input formats shouldn't be mixed.
 """
 
 
-def infer_click_type(param):
+def infer_click_type(param: dict) -> click.ParamType:
     if "choices" in param:
         choices = [c["value"] for c in param["choices"]]
         return click.Choice(choices)
 
     type_map = {
-        "float": float,
-        "int": int,
-        "str": str,
-        "bool": bool,
+        "float": click.FLOAT,
+        "int": click.INT,
+        "str": click.STRING,
+        "bool": click.BOOL,
     }
 
-    return type_map[param.get("type")]
+    if "type" not in param:
+        raise ValueError(f"Parameter {param['name']} does not have a type")
+
+    t = param["type"]
+
+    if t not in type_map:
+        raise ValueError(f"Unknown type {t} for parameter {param['name']}")
+
+    return type_map[t]
 
 
 @decorator
-def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any):
+def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     # infer the command name
     # command_name = os.path.basename(sys.argv[0])
 
