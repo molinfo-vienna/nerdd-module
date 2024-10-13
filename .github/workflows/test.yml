@@ -35,7 +35,7 @@ jobs:
     if: ${{ always() }}  # Ensure this job always runs to check the status of matrix jobs
     steps:
       - name: Ensure all test jobs succeeded
-      - run: exit 1
+        run: exit 1
         # see https://stackoverflow.com/a/67532120/4907315
         if: >-
           ${{
