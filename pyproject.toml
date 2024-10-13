@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nerdd-module"
-version = "0.3.3"
+version = "0.3.4"
 description = "Base package to create NERDD modules"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -88,6 +88,12 @@ Repository = "https://github.com/molinfo-vienna/nerdd-module"
 #
 # TOOLS
 #
+[tool.setuptools]
+packages = ["nerdd_module"]
+
+[tool.setuptools.package-data]
+nerdd_module = ["py.typed"]
+
 [tool.pytest.ini_options]
 log_cli = 1
 log_cli_level = "INFO"
