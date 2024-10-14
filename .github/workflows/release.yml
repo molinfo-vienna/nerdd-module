@@ -1,12 +1,13 @@
 name: "Semantic release"
 
 on:
-  push:
-    branches:
-      - main
+  check_suite:
+    types:
+      - completed
 
 jobs:
   release:
+    if: ${{ github.repository == 'molinfo-vienna/nerdd-module' && github.event.check_suite.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
