@@ -1,13 +1,14 @@
 name: "Semantic release"
 
 on:
-  check_suite:
+  workflow_run:
+    workflows: ["Test", "Check quality"]
     types:
       - completed
 
 jobs:
   release:
-    if: ${{ github.repository == 'molinfo-vienna/nerdd-module' && github.event.check_suite.conclusion == 'success' }}
+    if: ${{ github.repository == 'molinfo-vienna/nerdd-module' && github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
