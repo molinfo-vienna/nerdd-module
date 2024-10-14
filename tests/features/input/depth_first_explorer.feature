@@ -77,10 +77,10 @@ Feature: Reading molecule representations
     | smiles     | 10             | 5        | 1         |
     | mol_block  | 10             | 5        | 1         |
     | inchi      | 10             | 5        | 1         |
-    | smiles     | 100            | 0        | 10        |
-    | mol_block  | 100            | 0        | 10        |
-    | smiles     | 100            | 5        | 10        |
-    | mol_block  | 100            | 5        | 10        |
-    | smiles     | 100            | 50       | 10        |
-    | mol_block  | 100            | 50       | 10        |
+    | smiles     | 100            | 0        | 9         |
+    | mol_block  | 100            | 0        | 9         |
+    | smiles     | 100            | 5        | 9         |
+    | mol_block  | 100            | 5        | 9         |
+    | smiles     | 100            | 50       | 9         |
+    | mol_block  | 100            | 50       | 9         |
   
