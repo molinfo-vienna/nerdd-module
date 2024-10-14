@@ -1,9 +1,39 @@
 # CHANGELOG
 
 
-## v0.0.0 (2024-10-14)
+## v0.0.1 (2024-10-14)
+
+### Fixes
+
+* fix: revert to release when pushing to main branch ([`1ad4e3b`](https://github.com/molinfo-vienna/nerdd-module/commit/1ad4e3b320a10346e5548c2a8534d30c159b335e))
+
+* fix: Replace check_suite with workflow_run ([`b8765db`](https://github.com/molinfo-vienna/nerdd-module/commit/b8765db0c165f75f6d562841a50a724bb7725069))
+
+* fix: run release only after successful status checks ([`8e82933`](https://github.com/molinfo-vienna/nerdd-module/commit/8e829339c71808ddc33a5777291f815f01b0e828))
+
+* fix: remove release condition ([`125374f`](https://github.com/molinfo-vienna/nerdd-module/commit/125374f30ab8bc9ee03ffab24f06c9e146e950b3))
 
 ### Unknown
+
+* Merge pull request #25 from shirte/main
+
+fix: revert to release when pushing to main branch ([`ecfb026`](https://github.com/molinfo-vienna/nerdd-module/commit/ecfb026e4a6890fe91b2bd118ad062f1e334c44a))
+
+* Avoid random test failure ([`92a1e84`](https://github.com/molinfo-vienna/nerdd-module/commit/92a1e84dace723773ab2ce48b945ceda8853460d))
+
+* Merge pull request #24 from shirte/main
+
+fix: Replace check_suite with workflow_run ([`55708c8`](https://github.com/molinfo-vienna/nerdd-module/commit/55708c87b78fdb9e84046dc308ed904e28368b0c))
+
+* Merge pull request #23 from shirte/main
+
+Run release only after successful status checks ([`b267b1e`](https://github.com/molinfo-vienna/nerdd-module/commit/b267b1ee8da54ae6f5b84a92b4f2810274dd17a4))
+
+* Bump version to original state ([`e3e65ab`](https://github.com/molinfo-vienna/nerdd-module/commit/e3e65ab36ba0e1dc8d53d121506bbee2fd27ae22))
+
+* Merge pull request #22 from shirte/main
+
+fix: remove release condition ([`2cffead`](https://github.com/molinfo-vienna/nerdd-module/commit/2cffead71a9a189ff679a256148217e51a5ea30d))
 
 * Merge pull request #21 from shirte/main
 
