@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.0.2 (2024-10-15)
+
+### Fixes
+
+* fix: remove typo in pypi.yml ([`c39d86d`](https://github.com/molinfo-vienna/nerdd-module/commit/c39d86d2845c95f5162f3506a744e946a3bb306d))
+
+### Unknown
+
+* Merge pull request #27 from shirte/main
+
+fix: remove typo in pypi.yml ([`648bff1`](https://github.com/molinfo-vienna/nerdd-module/commit/648bff14a66691627ba22403b7371ad2a40b34a9))
+
+* Merge pull request #26 from shirte/main
+
+Add github action for publishing to PyPI ([`e35771f`](https://github.com/molinfo-vienna/nerdd-module/commit/e35771fb7f944002514f06da558baf9a31179225))
+
+* Add github action for publishing to PyPI ([`6fc1b3e`](https://github.com/molinfo-vienna/nerdd-module/commit/6fc1b3e7a0b2f204a38262dbed55bde76be9b4f8))
+
+* Add .ruff_cache to gitignore ([`a01b383`](https://github.com/molinfo-vienna/nerdd-module/commit/a01b383bd304c5a3238595ff922b0c721b488c64))
+
+
 ## v0.0.1 (2024-10-14)
 
 ### Fixes
