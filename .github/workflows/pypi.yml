@@ -37,7 +37,6 @@ jobs:
         name: python-package-distributions
         path: dist/    
 
-    steps:
     - name: Download all the dists
       uses: actions/download-artifact@v4
       with:
