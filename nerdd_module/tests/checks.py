@@ -170,8 +170,8 @@ def check_column_length(subset, column_name, length):
 
 @then(
     parsers.parse(
-        "when '{condition_column_name}' is '{condition_value}' "
-        "the value in column '{column_name}' should be '{expected_value}'"
+        "when '{condition_column_name}' is {condition_value} "
+        "the value in column '{column_name}' should be {expected_value}"
     )
 )
 def check_conditional_column_value(
@@ -191,24 +191,29 @@ def check_conditional_column_value(
         pass
 
     # condition value can be (none) to indicate None
-    if condition_value == "(none)":
-        subset = subset[pd.isnull(subset[condition_column_name])]
+    if condition_value is None:
+        subset = [record for record in subset if record[condition_column_name] is None]
     else:
-        subset = subset[subset[condition_column_name] == condition_value]
+        subset = [
+            record
+            for record in subset
+            if record[condition_column_name] == condition_value
+        ]
 
-    value = subset[column_name]
+    print(subset)
+
+    values = [record[column_name] for record in subset]
     assert (
-        len(value) > 0
+        len(values) > 0
     ), f"No rows found for condition {condition_column_name} == {condition_value}"
 
-    # expected value can be (none) to indicate None
-    if expected_value == "(none)":
-        # if expected_value is the magic string "(none)", we expect None
-        assert pd.isnull(
-            value
-        ).all(), f"Column {column_name} is assigned to {value} != None"
+    # expected value can be None
+    if expected_value is None:
+        assert all(
+            value is None for value in values
+        ), f"Column {column_name} is assigned to {values} != None"
     else:
         # otherwise, we expect the value to be equal to the expected value
-        assert (
-            value == expected_value
-        ).all(), f"Column {column_name} is assigned to {value} != {expected_value}"
+        assert all(
+            value == expected_value for value in values
+        ), f"Column {column_name} is assigned to {values} != {expected_value}"
