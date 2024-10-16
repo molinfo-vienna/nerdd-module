@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.0.3 (2024-10-16)
+
+### Fixes
+
+* fix: Simplify commands in Readme ([`3f2199c`](https://github.com/molinfo-vienna/nerdd-module/commit/3f2199c33fc8581f519157c18384c4e3116d2fe5))
+
+### Unknown
+
+* Merge pull request #28 from shirte/main
+
+Bump version to original version ([`097b2ee`](https://github.com/molinfo-vienna/nerdd-module/commit/097b2eeb68a1f38c1526fe0b1d724b1d01e26d7b))
+
+* Avoid random test failure ([`f7bc04b`](https://github.com/molinfo-vienna/nerdd-module/commit/f7bc04be98ffad79500c3ff5ab433cbdcc6db778))
+
+* Bump version to original version ([`3690488`](https://github.com/molinfo-vienna/nerdd-module/commit/36904881be60b67111e9052c635b19c952e2c246))
+
+
 ## v0.0.2 (2024-10-15)
 
 ### Fixes
