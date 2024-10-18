@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Any, Iterator, List, Optional, Tuple
+from typing import Any, Iterable, Iterator, List, Optional, Tuple
 
 from rdkit.Chem import Mol
 from stringcase import snakecase  # type: ignore
@@ -30,7 +30,7 @@ class Model(ABC):
         super().__init__()
 
     @abstractmethod
-    def _predict_mols(self, mols: List[Mol], **kwargs: Any) -> List[dict]:
+    def _predict_mols(self, mols: List[Mol], **kwargs: Any) -> Iterable[dict]:
         pass
 
     @abstractmethod
@@ -175,15 +175,17 @@ class PredictionStep(Step):
         # do the actual prediction
         try:
             if len(batch) > 0:
-                predictions = call_with_mappings(
-                    self.model._predict_mols,
-                    {**self.kwargs, "mols": mols},
+                predictions = list(
+                    call_with_mappings(
+                        self.model._predict_mols,
+                        {**self.kwargs, "mols": mols},
+                    )
                 )
             else:
                 predictions = []
 
             # check that the predictions are a list
-            assert isinstance(predictions, list), "The predictions must be a list of dictionaries."
+            assert isinstance(predictions, list), "The predictions must be an iterable."
             assert all(
                 isinstance(record, dict) for record in predictions
             ), "The predictions must be a list of dictionaries."
