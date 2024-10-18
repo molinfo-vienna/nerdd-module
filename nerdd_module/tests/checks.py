@@ -1,7 +1,6 @@
 from ast import literal_eval
 
 import numpy as np
-import pandas as pd
 from pytest_bdd import parsers, then
 
 
@@ -13,11 +12,7 @@ def check_result_columns(predictions, expected_column_names):
             assert c in record, f"Column {c} not in record {list(record.keys())}"
 
 
-@then(
-    parsers.parse(
-        "the value in column '{column_name}' should be between {low} and {high}"
-    )
-)
+@then(parsers.parse("the value in column '{column_name}' should be between {low} and {high}"))
 def check_column_range(subset, column_name, low, high):
     if low == "infinity":
         low = np.inf
@@ -40,11 +35,7 @@ def check_column_range(subset, column_name, low, high):
     ), f"Column {column_name} is assigned to {values} not in [{low}, {high}]"
 
 
-@then(
-    parsers.parse(
-        "the value in column '{column_name}' should be equal to {expected_value}"
-    )
-)
+@then(parsers.parse("the value in column '{column_name}' should be equal to {expected_value}"))
 def check_column_value_equality(subset, column_name, expected_value):
     if len(subset) == 0:
         return
@@ -70,11 +61,7 @@ def check_column_value_equality(subset, column_name, expected_value):
         ), f"Column {column_name} is assigned to {values} != {expected_value}"
 
 
-@then(
-    parsers.parse(
-        "the value in column '{column_name}' should not be equal to {forbidden_value}"
-    )
-)
+@then(parsers.parse("the value in column '{column_name}' should not be equal to {forbidden_value}"))
 def check_column_value_inequality(subset, column_name, forbidden_value):
     if len(subset) == 0:
         return
@@ -100,11 +87,7 @@ def check_column_value_inequality(subset, column_name, forbidden_value):
         ), f"Column {column_name} is assigned to {values} == {forbidden_value}"
 
 
-@then(
-    parsers.parse(
-        "the value in column '{column_name}' should be a subset of {superset}"
-    )
-)
+@then(parsers.parse("the value in column '{column_name}' should be a subset of {superset}"))
 def check_column_subset(subset, column_name, superset):
     superset = set(literal_eval(superset))
 
@@ -119,9 +102,7 @@ def check_column_subset(subset, column_name, superset):
 def check_column_membership(subset, column_name, superset):
     superset = literal_eval(superset)
 
-    assert isinstance(
-        superset, list
-    ), f"Expected a list for superset, got {type(superset)}"
+    assert isinstance(superset, list), f"Expected a list for superset, got {type(superset)}"
 
     values = [record[column_name] for record in subset]
 
@@ -140,31 +121,25 @@ def check_png_image(subset, column_name):
     ).all(), f"Column {column_name} does not contain a PNG image"
 
 
-@then(
-    parsers.parse(
-        "the value in column '{column_name}' should have type '{expected_type}'"
-    )
-)
+@then(parsers.parse("the value in column '{column_name}' should have type '{expected_type}'"))
 def check_column_type(subset, column_name, expected_type):
     expected_type = eval(expected_type)
 
     values = [record[column_name] for record in subset]
 
-    assert (
-        all(isinstance(value, expected_type) for value in values)
+    assert all(
+        isinstance(value, expected_type) for value in values
     ), f"Column {column_name} has unexpected type"
 
 
 @then(
-    parsers.parse(
-        "the value in column '{column_name}' should have length greater than {length:d}"
-    )
+    parsers.parse("the value in column '{column_name}' should have length greater than {length:d}")
 )
 def check_column_length(subset, column_name, length):
     values = [record[column_name] for record in subset]
 
-    assert (
-        all(len(value) > length for value in values)
+    assert all(
+        len(value) > length for value in values
     ), f"Column {column_name} has unexpected length"
 
 
@@ -194,13 +169,7 @@ def check_conditional_column_value(
     if condition_value is None:
         subset = [record for record in subset if record[condition_column_name] is None]
     else:
-        subset = [
-            record
-            for record in subset
-            if record[condition_column_name] == condition_value
-        ]
-
-    print(subset)
+        subset = [record for record in subset if record[condition_column_name] == condition_value]
 
     values = [record[column_name] for record in subset]
     assert (
