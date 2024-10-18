@@ -1,13 +1,52 @@
 # CHANGELOG
 
 
-## v0.0.3 (2024-10-16)
+## v0.3.4 (2024-10-18)
 
 ### Fixes
 
-* fix: Simplify commands in Readme ([`3f2199c`](https://github.com/molinfo-vienna/nerdd-module/commit/3f2199c33fc8581f519157c18384c4e3116d2fe5))
+* fix: format test files ([`c189697`](https://github.com/molinfo-vienna/nerdd-module/commit/c18969761991a87a8745d906fe3c14ebb5360596))
 
 ### Unknown
+
+* Merge pull request #31 from shirte/main
+
+Allow _predict_mols to return an iterator ([`98eaecf`](https://github.com/molinfo-vienna/nerdd-module/commit/98eaecfcdaf32936b14e037a0e99159c470553b7))
+
+* Add tests for _predict_mols ([`8eebe3d`](https://github.com/molinfo-vienna/nerdd-module/commit/8eebe3db62572dcecd1a06299b750bf0a827114e))
+
+* Allow _predict_mols to return an iterator ([`3c3274e`](https://github.com/molinfo-vienna/nerdd-module/commit/3c3274e774c9f7afebf41b5c85417c86bbcff6ed))
+
+
+## v0.3.3 (2024-10-16)
+
+### Fixes
+
+* fix: rewrite test check ([`390c34e`](https://github.com/molinfo-vienna/nerdd-module/commit/390c34e56ad01cdfc485eff70ae66e12c9ff9291))
+
+* fix: Bump version to original version ([`d807f55`](https://github.com/molinfo-vienna/nerdd-module/commit/d807f556bfe8f2930366cc0d8ebd3041addd4a94))
+
+* fix: Simplify commands in Readme ([`3f2199c`](https://github.com/molinfo-vienna/nerdd-module/commit/3f2199c33fc8581f519157c18384c4e3116d2fe5))
+
+* fix: remove typo in pypi.yml ([`c39d86d`](https://github.com/molinfo-vienna/nerdd-module/commit/c39d86d2845c95f5162f3506a744e946a3bb306d))
+
+* fix: revert to release when pushing to main branch ([`1ad4e3b`](https://github.com/molinfo-vienna/nerdd-module/commit/1ad4e3b320a10346e5548c2a8534d30c159b335e))
+
+* fix: Replace check_suite with workflow_run ([`b8765db`](https://github.com/molinfo-vienna/nerdd-module/commit/b8765db0c165f75f6d562841a50a724bb7725069))
+
+* fix: run release only after successful status checks ([`8e82933`](https://github.com/molinfo-vienna/nerdd-module/commit/8e829339c71808ddc33a5777291f815f01b0e828))
+
+* fix: remove release condition ([`125374f`](https://github.com/molinfo-vienna/nerdd-module/commit/125374f30ab8bc9ee03ffab24f06c9e146e950b3))
+
+### Unknown
+
+* Merge pull request #30 from shirte/main
+
+fix: rewrite test check ([`65bba22`](https://github.com/molinfo-vienna/nerdd-module/commit/65bba22b8d17effd7a7bf52418a44b5ce1bb995f))
+
+* Merge pull request #29 from shirte/main
+
+fix: Bump version to original version ([`f5be8f4`](https://github.com/molinfo-vienna/nerdd-module/commit/f5be8f499309c63a3e276975f499c8d6185e0aa0))
 
 * Merge pull request #28 from shirte/main
 
@@ -16,15 +55,6 @@ Bump version to original version ([`097b2ee`](https://github.com/molinfo-vienna/
 * Avoid random test failure ([`f7bc04b`](https://github.com/molinfo-vienna/nerdd-module/commit/f7bc04be98ffad79500c3ff5ab433cbdcc6db778))
 
 * Bump version to original version ([`3690488`](https://github.com/molinfo-vienna/nerdd-module/commit/36904881be60b67111e9052c635b19c952e2c246))
-
-
-## v0.0.2 (2024-10-15)
-
-### Fixes
-
-* fix: remove typo in pypi.yml ([`c39d86d`](https://github.com/molinfo-vienna/nerdd-module/commit/c39d86d2845c95f5162f3506a744e946a3bb306d))
-
-### Unknown
 
 * Merge pull request #27 from shirte/main
 
@@ -37,21 +67,6 @@ Add github action for publishing to PyPI ([`e35771f`](https://github.com/molinfo
 * Add github action for publishing to PyPI ([`6fc1b3e`](https://github.com/molinfo-vienna/nerdd-module/commit/6fc1b3e7a0b2f204a38262dbed55bde76be9b4f8))
 
 * Add .ruff_cache to gitignore ([`a01b383`](https://github.com/molinfo-vienna/nerdd-module/commit/a01b383bd304c5a3238595ff922b0c721b488c64))
-
-
-## v0.0.1 (2024-10-14)
-
-### Fixes
-
-* fix: revert to release when pushing to main branch ([`1ad4e3b`](https://github.com/molinfo-vienna/nerdd-module/commit/1ad4e3b320a10346e5548c2a8534d30c159b335e))
-
-* fix: Replace check_suite with workflow_run ([`b8765db`](https://github.com/molinfo-vienna/nerdd-module/commit/b8765db0c165f75f6d562841a50a724bb7725069))
-
-* fix: run release only after successful status checks ([`8e82933`](https://github.com/molinfo-vienna/nerdd-module/commit/8e829339c71808ddc33a5777291f815f01b0e828))
-
-* fix: remove release condition ([`125374f`](https://github.com/molinfo-vienna/nerdd-module/commit/125374f30ab8bc9ee03ffab24f06c9e146e950b3))
-
-### Unknown
 
 * Merge pull request #25 from shirte/main
 
