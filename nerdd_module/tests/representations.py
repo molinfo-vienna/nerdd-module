@@ -46,9 +46,7 @@ def representations_from_molecules(molecules, input_type):
 
 
 @given(
-    parsers.parse(
-        "a list of {num:d} random molecules, where {num_none:d} entries are None"
-    ),
+    parsers.parse("a list of {num:d} random molecules, where {num_none:d} entries are None"),
     target_fixture="molecules",
 )
 def molecules(num, num_none, random_seed=0):
