@@ -57,6 +57,15 @@ Feature: Molecular property prediction
     | rdkit_mol  | mols        | 0             | 3          | 0        |
     | smiles     | mols        | 0             | 3          | 0        |
     | mol_block  | mols        | 0             | 3          | 0        |
+    | rdkit_mol  | iterator    | 10            | 3          | 0        |
+    | smiles     | iterator    | 10            | 3          | 0        |
+    | mol_block  | iterator    | 10            | 3          | 0        |
+    | rdkit_mol  | iterator    | 10            | 3          | 5        |
+    | smiles     | iterator    | 10            | 3          | 5        |
+    | mol_block  | iterator    | 10            | 3          | 5        |
+    | rdkit_mol  | iterator    | 0             | 3          | 0        |
+    | smiles     | iterator    | 0             | 3          | 0        |
+    | mol_block  | iterator    | 0             | 3          | 0        |
 
   Scenario: Predicting a molecular property with an invalid model
     Given a list of 10 random molecules, where 0 entries are None
