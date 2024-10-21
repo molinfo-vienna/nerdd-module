@@ -77,7 +77,7 @@ def check_problem_not_in_list(subset, problem):
 
 
 @then(parsers.parse("the model should have attribute '{name}' with value {value}"))
-def check_model_name(predictor, name, value):
+def check_model_name(model, name, value):
     value = eval(value)
-    assert hasattr(predictor, name)
-    assert getattr(predictor, name) == value
+    assert hasattr(model, name)
+    assert getattr(model, name) == value
