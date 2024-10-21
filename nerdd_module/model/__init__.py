@@ -1,4 +1,3 @@
-from .add_smiles_step import *
 from .assign_mol_id_step import *
 from .assign_name_step import *
 from .convert_representations_step import *

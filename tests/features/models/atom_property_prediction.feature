@@ -4,10 +4,9 @@ Feature: Atom property prediction
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
     And the input type is '<input_type>'
     And the representations of the molecules
-    And an example model predicting atomic masses, version '<version>'
     And a prediction parameter 'multiplier' set to <multiplier>
 
-    When the model generates predictions for the molecule representations
+    When the atomic mass model (version '<version>') generates predictions for the molecule representations
     And the subset of the result where the input was not None is considered
 
     Then the result should contain as many rows as atoms in the input molecules
@@ -61,11 +60,10 @@ Scenario: Predicting a property for each atom with an invalid model
     Given a list of 10 random molecules, where 0 entries are None
     And the input type is 'rdkit_mol'
     And the representations of the molecules
-    And an example model predicting atomic masses, version 'error'
     And a prediction parameter 'multiplier' set to 10
 
-    When the model generates predictions for the molecule representations
-
+    When the atomic mass model (version 'error') generates predictions for the molecule representations
+    
     Then the result should contain the same number of rows as the input
     And the result should contain the columns:
           mol_id

@@ -1,15 +1,10 @@
-from pytest_bdd import given, parsers, when
-
 from nerdd_module.input import DepthFirstExplorer
-from nerdd_module.model import ReadInput
-from nerdd_module.preprocessing import (
-    FilterByElement,
-    FilterByWeight,
-    GetParentMolWithCsp,
-    Sanitize,
-    StandardizeWithCsp,
-)
+from nerdd_module.model import ReadInputStep
+from nerdd_module.preprocessing import (FilterByElement, FilterByWeight,
+                                        GetParentMolWithCsp, Sanitize,
+                                        StandardizeWithCsp)
 from nerdd_module.tests.preprocessing import DummyPreprocessingStep
+from pytest_bdd import given, parsers, when
 
 
 #
@@ -22,7 +17,7 @@ from nerdd_module.tests.preprocessing import DummyPreprocessingStep
     target_fixture="predictions",
 )
 def preprocessed_molecules_dummy_preprocessing_step(representations, mode):
-    input_step = ReadInput(DepthFirstExplorer(), representations)
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
     sanitize = Sanitize()
     dummy_preprocessing_step = DummyPreprocessingStep(mode)
     return list(dummy_preprocessing_step(sanitize(input_step())))
@@ -54,7 +49,7 @@ def remove_invalid_molecules(value):
 def preprocessed_molecules_filter_by_element(
     representations, allowed_elements, remove_invalid_molecules
 ):
-    input_step = ReadInput(DepthFirstExplorer(), representations)
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
     sanitize = Sanitize()
     filter_by_element = FilterByElement(
         allowed_elements, remove_invalid_molecules=remove_invalid_molecules
@@ -73,7 +68,7 @@ def preprocessed_molecules_filter_by_weight(
 ):
     remove_invalid_molecules = eval(remove_invalid_molecules)
 
-    input_step = ReadInput(DepthFirstExplorer(), representations)
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
     sanitize = Sanitize()
     filter_by_weight = FilterByWeight(
         min_weight=min_weight,
@@ -91,7 +86,7 @@ def preprocessed_molecules_filter_by_weight(
     target_fixture="predictions",
 )
 def preprocessed_molecules_standardize_with_csp(representations):
-    input_step = ReadInput(DepthFirstExplorer(), representations)
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
     sanitize = Sanitize()
     standardize = StandardizeWithCsp()
     return list(standardize(sanitize(input_step())))
@@ -105,7 +100,7 @@ def preprocessed_molecules_standardize_with_csp(representations):
     target_fixture="predictions",
 )
 def preprocessed_molecules_get_parent_mol_with_csp(representations):
-    input_step = ReadInput(DepthFirstExplorer(), representations)
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
     sanitize = Sanitize()
     get_parent_mol = GetParentMolWithCsp()
     return list(get_parent_mol(sanitize(input_step())))

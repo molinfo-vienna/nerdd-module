@@ -53,30 +53,6 @@ class Model(ABC):
     def _get_output_step(self, output_format: Optional[str], **kwargs: Any) -> OutputStep:
         pass
 
-    def read(
-        self,
-        input: Any,
-        input_format: Optional[str] = None,
-        preprocess: bool = False,
-        output_format: Optional[str] = None,
-        **kwargs: Any,
-    ) -> Any:
-        input_steps = self._get_input_steps(input, input_format, **kwargs)
-        preprocessing_steps = (
-            self._get_preprocessing_steps(input, input_format, **kwargs) if preprocess else []
-        )
-        output_step = self._get_output_step(output_format, **kwargs)
-
-        steps = [*input_steps, *preprocessing_steps, output_step]
-
-        # build the pipeline from the list of steps
-        pipeline = None
-        for t in steps:
-            pipeline = t(pipeline)
-
-        # run the pipeline
-        return output_step.get_result()
-
     def predict(
         self,
         input: Any,
