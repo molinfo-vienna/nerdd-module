@@ -16,7 +16,6 @@ from ..preprocessing import PreprocessingStep
 from ..problem import Problem
 from ..steps import OutputStep, Step
 from ..util import get_file_path_to_instance
-from .add_smiles_step import AddSmilesStep
 from .assign_mol_id_step import AssignMolIdStep
 from .assign_name_step import AssignNameStep
 from .convert_representations_step import ConvertRepresentationsStep
