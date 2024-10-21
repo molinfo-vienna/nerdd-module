@@ -1,26 +1,30 @@
 # CHANGELOG
 
 
+## v0.3.5 (2024-10-21)
+
+### Fixes
+
+* fix: remove predictor fixture ([`5ffb13c`](https://github.com/molinfo-vienna/nerdd-module/commit/5ffb13c8ce7035738c4881b72a440cb23e59c05e))
+
+### Unknown
+
+* Merge pull request #32 from shirte/main
+
+Remove unused code ([`7a4b6a3`](https://github.com/molinfo-vienna/nerdd-module/commit/7a4b6a3c7e95ccd5f8b633e244f9a8485f402e8e))
+
+* Remove AddSmilesStep ([`ce45c2d`](https://github.com/molinfo-vienna/nerdd-module/commit/ce45c2d9ff237f846c240c1ea8e9b1c26c5b9c09))
+
+* Add step suffix to ReadInput ([`8efb681`](https://github.com/molinfo-vienna/nerdd-module/commit/8efb6816c4318b63faefe8638913c68012a6c8c1))
+
+* Remove read function in model ([`e263611`](https://github.com/molinfo-vienna/nerdd-module/commit/e26361165072ab1df3fe9c7aa13b81047b4a372b))
+
+
 ## v0.3.4 (2024-10-18)
 
 ### Fixes
 
 * fix: format test files ([`c189697`](https://github.com/molinfo-vienna/nerdd-module/commit/c18969761991a87a8745d906fe3c14ebb5360596))
-
-### Unknown
-
-* Merge pull request #31 from shirte/main
-
-Allow _predict_mols to return an iterator ([`98eaecf`](https://github.com/molinfo-vienna/nerdd-module/commit/98eaecfcdaf32936b14e037a0e99159c470553b7))
-
-* Add tests for _predict_mols ([`8eebe3d`](https://github.com/molinfo-vienna/nerdd-module/commit/8eebe3db62572dcecd1a06299b750bf0a827114e))
-
-* Allow _predict_mols to return an iterator ([`3c3274e`](https://github.com/molinfo-vienna/nerdd-module/commit/3c3274e774c9f7afebf41b5c85417c86bbcff6ed))
-
-
-## v0.3.3 (2024-10-16)
-
-### Fixes
 
 * fix: rewrite test check ([`390c34e`](https://github.com/molinfo-vienna/nerdd-module/commit/390c34e56ad01cdfc485eff70ae66e12c9ff9291))
 
@@ -39,6 +43,14 @@ Allow _predict_mols to return an iterator ([`98eaecf`](https://github.com/molinf
 * fix: remove release condition ([`125374f`](https://github.com/molinfo-vienna/nerdd-module/commit/125374f30ab8bc9ee03ffab24f06c9e146e950b3))
 
 ### Unknown
+
+* Merge pull request #31 from shirte/main
+
+Allow _predict_mols to return an iterator ([`98eaecf`](https://github.com/molinfo-vienna/nerdd-module/commit/98eaecfcdaf32936b14e037a0e99159c470553b7))
+
+* Add tests for _predict_mols ([`8eebe3d`](https://github.com/molinfo-vienna/nerdd-module/commit/8eebe3db62572dcecd1a06299b750bf0a827114e))
+
+* Allow _predict_mols to return an iterator ([`3c3274e`](https://github.com/molinfo-vienna/nerdd-module/commit/3c3274e774c9f7afebf41b5c85417c86bbcff6ed))
 
 * Merge pull request #30 from shirte/main
 
