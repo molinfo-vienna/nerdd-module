@@ -3,10 +3,10 @@ from typing import Any, Iterator
 from ..input.explorer import Explorer
 from ..steps import Step
 
-__all__ = ["ReadInput"]
+__all__ = ["ReadInputStep"]
 
 
-class ReadInput(Step):
+class ReadInputStep(Step):
     def __init__(self, explorer: Explorer, input: Any) -> None:
         super().__init__(is_source=True)
         self._explorer = explorer

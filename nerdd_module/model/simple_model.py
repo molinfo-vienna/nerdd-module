@@ -22,7 +22,7 @@ from .assign_name_step import AssignNameStep
 from .convert_representations_step import ConvertRepresentationsStep
 from .enforce_schema_step import EnforceSchemaStep
 from .model import Model
-from .read_input_step import ReadInput
+from .read_input_step import ReadInputStep
 from .write_output_step import WriteOutputStep
 
 __all__ = ["SimpleModel"]
@@ -45,7 +45,7 @@ class SimpleModel(Model):
         self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
-            ReadInput(DepthFirstExplorer(**kwargs), input),
+            ReadInputStep(DepthFirstExplorer(**kwargs), input),
         ]
 
     def _get_preprocessing_steps(
@@ -63,8 +63,6 @@ class SimpleModel(Model):
     def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
         output_format = output_format or "pandas"
         return [
-            AddSmilesStep("input_mol", "input_smiles"),
-            AddSmilesStep("preprocessed_mol", "preprocessed_smiles"),
             EnforceSchemaStep(self._get_config(), output_format),
             ConvertRepresentationsStep(
                 self.get_config().get("result_properties", []), output_format, **kwargs
