@@ -3,3 +3,4 @@ from .iterator_writer import *
 from .pandas_writer import *
 from .record_list_writer import *
 from .writer import *
+from .sdf_writer import *

@@ -125,3 +125,5 @@ class DepthFirstExplorer(Explorer):
 
         yield from sample
         yield from generator
+
+        self._state_stack.pop()
