@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.3.6 (2024-10-22)
+
+### Fixes
+
+* fix: fix a bug involving DepthFirstExplorer and long lists ([`9912f11`](https://github.com/molinfo-vienna/nerdd-module/commit/9912f114b3e2b169f388c9b6c6c900b096b508a9))
+
+### Unknown
+
+* Merge pull request #34 from shirte/main
+
+Fix a bug involving DepthFirstExplorer and long lists ([`0da2a36`](https://github.com/molinfo-vienna/nerdd-module/commit/0da2a36debfef7e40070bfeb1524368793e0bf5c))
+
+* Export sdf_writer in output submodule ([`7bdbf4c`](https://github.com/molinfo-vienna/nerdd-module/commit/7bdbf4ca6ac84f651a9d2bfe08c4a9e2b955f754))
+
+* Merge pull request #33 from shirte/main
+
+Configure package auto-discovery ([`7a86d24`](https://github.com/molinfo-vienna/nerdd-module/commit/7a86d24550b65e7b6583a71d65d22a408dfa6768))
+
+* Configure package auto-discovery ([`1c943e2`](https://github.com/molinfo-vienna/nerdd-module/commit/1c943e286ae0d5b7bc41d68884c2080a996cfdf0))
+
+
 ## v0.3.5 (2024-10-21)
 
 ### Fixes
