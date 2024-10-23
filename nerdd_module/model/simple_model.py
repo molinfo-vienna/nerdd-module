@@ -14,7 +14,7 @@ from ..config import (
 from ..input import DepthFirstExplorer
 from ..preprocessing import PreprocessingStep
 from ..problem import Problem
-from ..steps import OutputStep, Step
+from ..steps import Step
 from ..util import get_file_path_to_instance
 from .assign_mol_id_step import AssignMolIdStep
 from .assign_name_step import AssignNameStep
@@ -66,11 +66,8 @@ class SimpleModel(Model):
             ConvertRepresentationsStep(
                 self.get_config().get("result_properties", []), output_format, **kwargs
             ),
+            WriteOutputStep(output_format, **kwargs),
         ]
-
-    def _get_output_step(self, output_format: Optional[str], **kwargs: Any) -> OutputStep:
-        output_format = output_format or "pandas"
-        return WriteOutputStep(output_format, **kwargs)
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
         return mol, []
@@ -129,9 +126,7 @@ class SimpleModel(Model):
             {"name": "source"},
             {"name": "name", "type": "string"},
             {"name": "input_mol", "type": "mol"},
-            {"name": "input_smiles", "type": "string"},
             {"name": "preprocessed_mol", "type": "mol"},
-            {"name": "preprocessed_smiles", "type": "string"},
         ]
 
         default_properties_end = [

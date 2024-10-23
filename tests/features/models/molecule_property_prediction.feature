@@ -17,9 +17,7 @@ Feature: Molecular property prediction
           source
           name
           input_mol
-          input_smiles
           preprocessed_mol
-          preprocessed_smiles
           weight
           problems
     And the value in column 'input_type' should be equal to '<input_type>'

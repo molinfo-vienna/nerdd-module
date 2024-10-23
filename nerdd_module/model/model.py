@@ -49,10 +49,6 @@ class Model(ABC):
     def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
         pass
 
-    @abstractmethod
-    def _get_output_step(self, output_format: Optional[str], **kwargs: Any) -> OutputStep:
-        pass
-
     def predict(
         self,
         input: Any,
@@ -63,14 +59,15 @@ class Model(ABC):
         input_steps = self._get_input_steps(input, input_format, **kwargs)
         preprocessing_steps = self._get_preprocessing_steps(input, input_format, **kwargs)
         postprocessing_steps = self._get_postprocessing_steps(output_format, **kwargs)
-        output_step = self._get_output_step(output_format, **kwargs)
+        output_step = postprocessing_steps[-1]
+
+        assert isinstance(output_step, OutputStep), "The last step must be an OutputStep."
 
         steps = [
             *input_steps,
             *preprocessing_steps,
             PredictionStep(self, batch_size=self.batch_size, **kwargs),
             *postprocessing_steps,
-            output_step,
         ]
 
         # build the pipeline from the list of steps
