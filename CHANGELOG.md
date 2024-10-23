@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.7 (2024-10-23)
+
+### Fixes
+
+* fix: remove output step ([`1fcebac`](https://github.com/molinfo-vienna/nerdd-module/commit/1fcebacb0a3f3eca0ed60cf4951e64eab753810d))
+
+### Unknown
+
+* Merge pull request #35 from shirte/main
+
+Remove output step ([`b840f69`](https://github.com/molinfo-vienna/nerdd-module/commit/b840f694ad3044fec0b28bf9513c52f7171a7eac))
+
+* Don't require smiles columns in tests ([`a1597f8`](https://github.com/molinfo-vienna/nerdd-module/commit/a1597f8a6e11f12e408b93680463c80cc2ca76b4))
+
+
 ## v0.3.6 (2024-10-22)
 
 ### Fixes
