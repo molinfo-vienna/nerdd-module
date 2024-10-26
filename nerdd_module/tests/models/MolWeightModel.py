@@ -39,6 +39,7 @@ class MolWeightModel(SimpleModel):
     def _get_base_config(self):
         return {
             "name": "mol_scale",
+            "version": "0.1",
             "description": "Computes the molecular weight of a molecule",
             "job_parameters": [
                 {"name": "multiplier", "type": "float"},
