@@ -1,4 +1,4 @@
-from typing import List, NamedTuple
+from typing import Iterable, NamedTuple
 
 __all__ = [
     "Problem",
@@ -29,11 +29,12 @@ def InvalidWeightProblem(weight: float, min_weight: float, max_weight: float) ->
     )
 
 
-def InvalidElementsProblem(invalid_elements: List[str]) -> Problem:
-    if len(invalid_elements) > 3:
-        invalid_elements_str = ", ".join(list(invalid_elements)[:3]) + "..."
+def InvalidElementsProblem(invalid_elements: Iterable[str]) -> Problem:
+    invalid_element_list = list(invalid_elements)
+    if len(invalid_element_list) > 3:
+        invalid_elements_str = ", ".join(invalid_element_list[:3]) + "..."
     else:
-        invalid_elements_str = ", ".join(list(invalid_elements))
+        invalid_elements_str = ", ".join(invalid_element_list)
 
     return Problem(
         "invalid_elements",
