@@ -37,7 +37,7 @@ class FilterByElement(PreprocessingStep):
         problems = []
         result_mol = mol
 
-        elements : Set[str] = set(atom.GetSymbol() for atom in mol.GetAtoms())
+        elements: Set[str] = set(atom.GetSymbol() for atom in mol.GetAtoms())
         invalid_elements = elements - self.allowed_elements
 
         # special case: hydrogens are not recognized by mol.GetAtoms()
