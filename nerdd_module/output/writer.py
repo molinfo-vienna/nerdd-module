@@ -50,5 +50,5 @@ class Writer(ABC):
         return _factories[output_format](kwargs)
 
     @classmethod
-    def get_output_formats(self) -> List[str]:
+    def get_output_formats(cls) -> List[str]:
         return list(_factories.keys())
