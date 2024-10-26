@@ -1,8 +1,8 @@
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Set, Tuple
 
 from rdkit.Chem import Mol
 
-from ..problem import Problem
+from ..problem import InvalidElementsProblem, Problem
 from .preprocessing_step import PreprocessingStep
 
 __all__ = ["FilterByElement", "ORGANIC_SUBSET"]
@@ -37,7 +37,7 @@ class FilterByElement(PreprocessingStep):
         problems = []
         result_mol = mol
 
-        elements = set(atom.GetSymbol() for atom in mol.GetAtoms())
+        elements: Set[str] = set(atom.GetSymbol() for atom in mol.GetAtoms())
         invalid_elements = elements - self.allowed_elements
 
         # special case: hydrogens are not recognized by mol.GetAtoms()
@@ -52,16 +52,6 @@ class FilterByElement(PreprocessingStep):
             if self.remove_invalid_molecules:
                 result_mol = None
 
-            if len(invalid_elements) > 3:
-                invalid_elements_str = ", ".join(list(invalid_elements)[:3]) + "..."
-            else:
-                invalid_elements_str = ", ".join(list(invalid_elements))
-
-            problems.append(
-                Problem(
-                    "invalid_elements",
-                    f"Molecule contains invalid elements {invalid_elements_str}",
-                )
-            )
+            problems.append(InvalidElementsProblem(invalid_elements))
 
         return result_mol, problems

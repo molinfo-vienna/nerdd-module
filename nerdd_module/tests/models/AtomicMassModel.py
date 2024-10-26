@@ -56,6 +56,7 @@ class AtomicMassModel(SimpleModel):
     def _get_base_config(self):
         return {
             "name": "atomic_mass_model",
+            "version": "0.1",
             "job_parameters": [
                 {"name": "multiplier", "type": "float"},
             ],

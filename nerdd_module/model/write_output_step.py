@@ -17,3 +17,6 @@ class WriteOutputStep(OutputStep):
         writer = Writer.get_writer(self._output_format, **self._kawrgs)
         result = writer.write(source)
         return result
+
+    def __repr__(self) -> str:
+        return f"WriteOutputStep(output_format={self._output_format}, kwargs={self._kawrgs})"

@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 from rdkit.Chem import Mol
 from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
-from ..problem import Problem
+from ..problem import InvalidWeightProblem, Problem
 from .preprocessing_step import PreprocessingStep
 
 
@@ -27,14 +27,6 @@ class FilterByWeight(PreprocessingStep):
         if weight < self.min_weight or weight > self.max_weight:
             if self.remove_invalid_molecules:
                 result_mol = None
-            problems.append(
-                Problem(
-                    type="invalid_weight",
-                    message=(
-                        f"Molecular weight {weight:.2f} out of range "
-                        f"[{self.min_weight}, {self.max_weight}]"
-                    ),
-                )
-            )
+            problems.append(InvalidWeightProblem(weight, self.min_weight, self.max_weight))
 
         return result_mol, problems
