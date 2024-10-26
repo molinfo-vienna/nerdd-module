@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v0.3.8 (2024-10-26)
+
+### Fixes
+
+* fix: add missing export to __init__ ([`0812a4a`](https://github.com/molinfo-vienna/nerdd-module/commit/0812a4a7a2d20292cccc5668633566634669ecb0))
+
+### Unknown
+
+* Merge pull request #36 from shirte/main
+
+Minor changes ([`e2b75ce`](https://github.com/molinfo-vienna/nerdd-module/commit/e2b75ce7338dd538974e1af01b1a2a563d439882))
+
+* Format files ([`f377f4d`](https://github.com/molinfo-vienna/nerdd-module/commit/f377f4d5ed6fc7ea8b7a81269083fb1decdfe5d9))
+
+* Fix type in InvalidElementsProblem ([`81bc687`](https://github.com/molinfo-vienna/nerdd-module/commit/81bc6873470ac8a40ce54837e4d86a43c1c477bd))
+
+* Add missing export in output.__init__ ([`9810738`](https://github.com/molinfo-vienna/nerdd-module/commit/98107385ecb6e482dbaa2123b2d0bfcbdffff3cc))
+
+* Add __repr__ method to WriteOutputStep ([`6e09e3a`](https://github.com/molinfo-vienna/nerdd-module/commit/6e09e3a1ee826f9eee90eb2127f40f2bbcd7f99e))
+
+* Fix typo in writer class ([`ac53f2d`](https://github.com/molinfo-vienna/nerdd-module/commit/ac53f2d6bf30cd744e17922b768280002d5388f1))
+
+* Move custom problems to problem module ([`352c03b`](https://github.com/molinfo-vienna/nerdd-module/commit/352c03b1fe4a4d909317f8ef5a436622dae71c43))
+
+* Add fixed version to test models ([`cf760a5`](https://github.com/molinfo-vienna/nerdd-module/commit/cf760a5e1df67e7e4a2e76366b46066022eff5a2))
+
+
 ## v0.3.7 (2024-10-23)
 
 ### Fixes
