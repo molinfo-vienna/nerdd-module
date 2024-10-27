@@ -54,6 +54,7 @@ dev = [
     "types-PyYAML",
     "types-decorator",
     "types-setuptools",
+    "pre-commit",
 ]
 rdkit = [
     # Some old RDKit versions are not recognized by setuptools. For that reason,
