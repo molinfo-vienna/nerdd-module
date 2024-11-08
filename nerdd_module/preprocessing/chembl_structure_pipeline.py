@@ -18,8 +18,7 @@ try:
     # importing chembl_structure_pipeline already logs messages
     # --> suppress them temporarily
     with BlockLogs():
-        from chembl_structure_pipeline import get_parent_mol  # type: ignore
-        from chembl_structure_pipeline import standardize_mol  # type: ignore
+        from chembl_structure_pipeline import get_parent_mol, standardize_mol
 
     import_error = None
 except ImportError as e:
@@ -38,7 +37,7 @@ class StandardizeWithCsp(PreprocessingStep):
             raise import_error
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        problems = []
+        problems: List[Problem] = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
         # --> delete conformers
