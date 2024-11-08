@@ -1,4 +1,5 @@
 import base64
+import mimetypes
 import os
 from pathlib import Path
 from typing import IO, Any, Union
@@ -42,9 +43,16 @@ def image_constructor(loader: CustomLoaderLike, node: yaml.Node) -> str:
 
             # determine the file type from the file extension
             kind = filetype.guess(f)
-            assert kind is not None
+            if kind is not None:
+                mime = kind.mime
+            else:
+                # For filetypes without magic headers (e.g. SVG), the filetype library
+                # doesn't work. In these cases, we try the mimetypes library.
+                mime, _ = mimetypes.guess_type(path)
 
-            return f"data:{kind.mime};base64,{encoded}"
+            assert mime is not None, f"Could not determine mime type for {path}"
+
+            return f"data:{mime};base64,{encoded}"
 
 
 class YamlConfiguration(Configuration):
