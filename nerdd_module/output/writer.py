@@ -24,9 +24,6 @@ _factories: Dict[str, WriterFactory] = {}
 class Writer(ABC):
     """Abstract class for writers."""
 
-    def __init__(self) -> None:
-        pass
-
     @classmethod
     def __init_subclass__(
         cls,

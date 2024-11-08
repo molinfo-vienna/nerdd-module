@@ -16,9 +16,9 @@ class EnforceSchemaStep(Step):
 
         # check that properties are unique
         if len(self._property_names) != len(set(self._property_names)):
-            duplicate_properties = set(
-                [x for x in self._property_names if self._property_names.count(x) > 1]
-            )
+            duplicate_properties = {
+                x for x in self._property_names if self._property_names.count(x) > 1
+            }
             logger.warning(
                 f"Duplicate properties in result_properties: " f"{', '.join(duplicate_properties)}"
             )

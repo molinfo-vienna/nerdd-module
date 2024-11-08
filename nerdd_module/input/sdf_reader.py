@@ -61,7 +61,9 @@ class SdfReader(Reader):
                     yield MoleculeEntry(
                         raw_input=mol_block,
                         input_type="mol_block",
-                        source=tuple(["raw_input"]),
+                        source=tuple(
+                            "raw_input",
+                        ),
                         mol=mol,
                         errors=errors,
                     )

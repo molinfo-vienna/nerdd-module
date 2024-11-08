@@ -14,7 +14,9 @@ class MolReader(Reader):
         yield MoleculeEntry(
             raw_input=mol,
             input_type="rdkit_mol",
-            source=tuple(["raw_input"]),
+            source=tuple(
+                "raw_input",
+            ),
             mol=mol,
             errors=[],
         )
