@@ -4,7 +4,7 @@ from typing import Any, Callable
 
 import rich_click as click
 from decorator import decorator
-from stringcase import spinalcase  # type: ignore
+from stringcase import spinalcase
 
 from .model import Model
 
