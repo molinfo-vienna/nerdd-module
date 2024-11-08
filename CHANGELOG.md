@@ -1,6 +1,43 @@
 # CHANGELOG
 
 
+## v0.3.9 (2024-11-08)
+
+### Fixes
+
+* fix: Fix problem occuring when using svg images ([`bee14f2`](https://github.com/molinfo-vienna/nerdd-module/commit/bee14f2d1c0541c30b58d710130dd4c66faae1ba))
+
+### Unknown
+
+* Merge pull request #38 from shirte/main
+
+Minor changes ([`16eb4c0`](https://github.com/molinfo-vienna/nerdd-module/commit/16eb4c0f527f1ca8ca888dccc4d2b477c92b7914))
+
+* Use parentheses instead of tuple constructor ([`b69a2d4`](https://github.com/molinfo-vienna/nerdd-module/commit/b69a2d498d107a8dc8da2fbca331c755e830ad91))
+
+* Make ruff linter happy ([`13efa5c`](https://github.com/molinfo-vienna/nerdd-module/commit/13efa5cebe494255c1921b542a83e36531c48f70))
+
+* Disable printing to stdout in pytest ([`8f300e0`](https://github.com/molinfo-vienna/nerdd-module/commit/8f300e0a54e67bbf73d725527d677cba7af855c8))
+
+* Add types for stringcase library ([`dfdbf70`](https://github.com/molinfo-vienna/nerdd-module/commit/dfdbf7025702b94123610bcbfb924706778dabce))
+
+* Add type stubs for chembl_structure_pipeline ([`2511953`](https://github.com/molinfo-vienna/nerdd-module/commit/2511953c5339d016afadb95cee9a6a59c0ddbd8a))
+
+* Use set comprehensions ([`a014312`](https://github.com/molinfo-vienna/nerdd-module/commit/a014312a2c9ff56f3f1e6b2de77bfaaf3af809e4))
+
+* Format cli ([`c9f8cfe`](https://github.com/molinfo-vienna/nerdd-module/commit/c9f8cfe99c0fbdd8512976982550f4519d67e455))
+
+* Specify versions of dev tools ([`98e7d4d`](https://github.com/molinfo-vienna/nerdd-module/commit/98e7d4d63a49fa2f47d1bf0489fbf606d342d6d0))
+
+* Add all dependencies to pre-commit-config ([`cbf769b`](https://github.com/molinfo-vienna/nerdd-module/commit/cbf769b428e8b64f4117d046e0708fd2971d9136))
+
+* Merge pull request #37 from shirte/main
+
+Add precommit hooks ([`aff91c8`](https://github.com/molinfo-vienna/nerdd-module/commit/aff91c8962ede2c428a3513da39a47611195adef))
+
+* Add precommit hooks ([`fed3003`](https://github.com/molinfo-vienna/nerdd-module/commit/fed300302cf94c47082b380ea76e33c7479f9c63))
+
+
 ## v0.3.8 (2024-10-26)
 
 ### Fixes
