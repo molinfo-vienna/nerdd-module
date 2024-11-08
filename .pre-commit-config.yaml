@@ -11,4 +11,12 @@ repos:
     rev: v1.13.0
     hooks:
       - id: mypy
-        additional_dependencies: [types-decorator, types-PyYAML]
+        additional_dependencies: 
+          - types-decorator
+          - types-PyYAML
+          - pandas-stubs
+          - rdkit-stubs
+          - importlib-metadata
+          - importlib-resources
+          - rich-click
+        args: [--config-file=pyproject.toml]

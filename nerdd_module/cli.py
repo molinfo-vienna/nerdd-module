@@ -157,4 +157,4 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     # show_default=True: default values are shown in the help text
     main = click.command(context_settings={"show_default": True}, help=help_text)(main)
 
-    return main()
+    main()
