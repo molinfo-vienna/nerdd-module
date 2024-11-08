@@ -12,7 +12,7 @@ __all__ = ["auto_cli"]
 
 input_description = """{description}
 
-INPUT molecules are provided as file paths or strings. The following formats are 
+INPUT molecules are provided as file paths or strings. The following formats are
 supported:
 
 {input_format_list}
