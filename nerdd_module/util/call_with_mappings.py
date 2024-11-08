@@ -1,5 +1,5 @@
 import inspect
-from typing import Callable, Dict, Tuple, Type, TypeVar, Union
+from typing import Callable, Dict, Optional, Tuple, Type, TypeVar, Union
 
 __all__ = ["call_with_mappings"]
 
@@ -10,8 +10,11 @@ def call_with_mappings(
     class_or_function: Union[Type[T], Callable[..., T]],
     config: dict,
     args_mapping: Tuple[str, ...] = (),
-    kwargs_mapping: Dict[str, str] = {},
+    kwargs_mapping: Optional[Dict[str, str]] = None,
 ) -> T:
+    if kwargs_mapping is None:
+        kwargs_mapping = {}
+
     # translate all args
     translated_args = tuple(config.get(arg) for arg in args_mapping)
     # translate all kwargs

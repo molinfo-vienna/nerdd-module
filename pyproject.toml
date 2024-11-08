@@ -48,13 +48,14 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy",
-    "ruff",
+    "mypy==1.13.0",
+    "ruff==0.7.1",
     "pandas-stubs",
+    "rdkit-stubs",
     "types-PyYAML",
     "types-decorator",
     "types-setuptools",
-    "pre-commit",
+    "pre-commit==3.5.0",
 ]
 rdkit = [
     # Some old RDKit versions are not recognized by setuptools. For that reason,
@@ -99,7 +100,7 @@ nerdd_module = ["py.typed"]
 [tool.pytest.ini_options]
 log_cli = 1
 log_cli_level = "INFO"
-addopts = "-x -s --cov-report term --cov=nerdd_module"
+addopts = "-x --cov-report term --cov=nerdd_module"
 
 [tool.pytest-watcher]
 patterns = ["*.py", "*.feature", "pyproject.toml"]
@@ -109,12 +110,23 @@ line-length = 100
 extend-exclude = ["tests", "nerdd_module/tests"]
 
 [tool.ruff.lint]
-# F403: 'from module import *' used; unable to detect undefined names
-#       (but we need this for the __init__ files in submodules)
-ignore = ["F403"]
-extend-select = ["T20"]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "T20"  # no print statements
+]
+ignore = [
+    "F403", # I often use 'from .submodule import *' in __init__.py files
+    "C408"  # I prefer dict(a=5) over {'a': 5}
+]
 
 [tool.mypy]
+mypy_path="typings"
+# strict=true
 disallow_untyped_defs = true
 # no_implicit_optional = True
 # check_untyped_defs = True

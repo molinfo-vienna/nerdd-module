@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from functools import lru_cache
-from typing import List
+from typing import List, Optional
 
 __all__ = ["Configuration"]
 
@@ -30,23 +29,25 @@ def is_visible(result_property: dict, output_format: str) -> bool:
 
 class Configuration(ABC):
     def __init__(self) -> None:
-        pass
+        self._cached_config: Optional[dict] = None
 
-    @lru_cache(1)
     def get_dict(self) -> dict:
-        config = self._get_dict()
+        if self._cached_config is None:
+            config = self._get_dict()
 
-        if "result_properties" not in config:
-            config["result_properties"] = []
+            if "result_properties" not in config:
+                config["result_properties"] = []
 
-        # check that a module can only predict atom or derivative properties, not both
-        num_atom_properties = len(get_property_columns_of_type(config, "atom"))
-        num_derivative_properties = len(get_property_columns_of_type(config, "derivative"))
-        assert (
-            num_atom_properties == 0 or num_derivative_properties == 0
-        ), "A module can only predict atom or derivative properties, not both."
+            # check that a module can only predict atom or derivative properties, not both
+            num_atom_properties = len(get_property_columns_of_type(config, "atom"))
+            num_derivative_properties = len(get_property_columns_of_type(config, "derivative"))
+            assert (
+                num_atom_properties == 0 or num_derivative_properties == 0
+            ), "A module can only predict atom or derivative properties, not both."
 
-        return config
+            self._cached_config = config
+
+        return self._cached_config
 
     @abstractmethod
     def _get_dict(self) -> dict:

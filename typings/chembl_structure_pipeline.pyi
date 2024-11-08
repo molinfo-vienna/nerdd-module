@@ -1,0 +1,6 @@
+from typing import Optional, Tuple
+
+from rdkit.Chem import Mol
+
+def get_parent_mol(mol: Mol) -> Tuple[Optional[Mol], bool]: ...
+def standardize_mol(mol: Mol) -> Tuple[Optional[Mol], bool]: ...

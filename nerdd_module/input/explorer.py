@@ -5,9 +5,6 @@ from .reader import MoleculeEntry, Reader
 
 
 class Explorer(ABC):
-    def __init__(self) -> None:
-        pass
-
     @abstractmethod
     def explore(self, input: Any) -> Iterator[MoleculeEntry]:
         pass

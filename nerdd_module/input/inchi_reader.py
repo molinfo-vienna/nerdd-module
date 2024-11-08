@@ -48,7 +48,7 @@ class InchiReader(Reader):
                 yield MoleculeEntry(
                     raw_input=line,
                     input_type="inchi",
-                    source=tuple(["raw_input"]),
+                    source=("raw_input",),
                     mol=mol,
                     errors=errors,
                 )

@@ -20,8 +20,8 @@ class FileReader(Reader):
         # convert filename to path
         try:
             path = Path(filename)
-        except TypeError:
-            raise ValueError("input must be a valid path")
+        except TypeError as e:
+            raise ValueError("input must be a valid path") from e
 
         # convert to absolute path
         if not path.is_absolute():
@@ -44,7 +44,7 @@ class FileReader(Reader):
                     source: Tuple[str, ...] = tuple()
                 else:
                     source = entry.source
-                yield entry._replace(source=tuple([filename, *source]))
+                yield entry._replace(source=(filename, *source))
 
     def __repr__(self) -> str:
         return f"FileReader(data_dir={self.data_dir})"

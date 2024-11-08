@@ -4,7 +4,7 @@ from typing import Any, Callable
 
 import rich_click as click
 from decorator import decorator
-from stringcase import spinalcase  # type: ignore
+from stringcase import spinalcase
 
 from .model import Model
 
@@ -12,7 +12,7 @@ __all__ = ["auto_cli"]
 
 input_description = """{description}
 
-INPUT molecules are provided as file paths or strings. The following formats are 
+INPUT molecules are provided as file paths or strings. The following formats are
 supported:
 
 {input_format_list}
@@ -157,4 +157,4 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     # show_default=True: default values are shown in the help text
     main = click.command(context_settings={"show_default": True}, help=help_text)(main)
 
-    return main()
+    main()
