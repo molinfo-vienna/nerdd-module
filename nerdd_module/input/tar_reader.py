@@ -21,7 +21,7 @@ class TarReader(Reader):
                 if not member.isfile():
                     continue
                 for entry in explore(tar.extractfile(member)):
-                    yield entry._replace(source=tuple(member.name, *entry.source))
+                    yield entry._replace(source=(member.name, *entry.source))
 
     def __repr__(self) -> str:
         return "TarReader()"

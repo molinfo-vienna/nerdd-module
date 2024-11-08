@@ -23,7 +23,7 @@ class ZipReader(Reader):
                     continue
                 with zipf.open(member, "r") as f:
                     for entry in explore(f):
-                        yield entry._replace(source=tuple(member, *entry.source))
+                        yield entry._replace(source=(member, *entry.source))
 
     def __repr__(self) -> str:
         return "ZipReader()"

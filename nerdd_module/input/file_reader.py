@@ -44,7 +44,7 @@ class FileReader(Reader):
                     source: Tuple[str, ...] = tuple()
                 else:
                     source = entry.source
-                yield entry._replace(source=tuple(filename, *source))
+                yield entry._replace(source=(filename, *source))
 
     def __repr__(self) -> str:
         return f"FileReader(data_dir={self.data_dir})"

@@ -15,9 +15,7 @@ class InvalidInputReader(Reader):
         yield MoleculeEntry(
             raw_input=input,
             input_type="unknown",
-            source=tuple(
-                "input",
-            ),
+            source=("input",),
             mol=None,
             errors=[Problem("invalid_input", "Invalid input")],
         )
