@@ -19,4 +19,5 @@ repos:
           - importlib-metadata
           - importlib-resources
           - rich-click
+          - pydantic
         args: [--config-file=pyproject.toml]
