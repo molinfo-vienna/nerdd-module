@@ -24,15 +24,20 @@ class Author(BaseModel):
 
     first_name: str
     last_name: str
-    email: Optional[str]
+    email: Optional[str] = None
 
 
 class Publication(BaseModel):
     title: str
     authors: List[Author] = []
     journal: str
-    year: str
+    year: int
     doi: Optional[str]
+
+
+class JobParameterChoice(BaseModel):
+    value: str
+    label: Optional[str] = None
 
 
 class JobParameter(BaseModel):
@@ -42,6 +47,7 @@ class JobParameter(BaseModel):
     help_text: Optional[str] = None
     default: Optional[str] = None
     required: bool = False
+    choices: Optional[List[JobParameterChoice]] = None
 
 
 Task = Literal[
@@ -68,6 +74,7 @@ class ResultProperty(BaseModel):
     group: Optional[str] = None
     level: Level = "molecule"
     formats: Union[FormatSpec, IncludeExcludeFormatSpec, None] = None
+    representation: Optional[str] = None
 
     def is_visible(self, output_format: str) -> bool:
         formats = self.formats

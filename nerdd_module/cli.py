@@ -6,6 +6,7 @@ import rich_click as click
 from decorator import decorator
 from stringcase import spinalcase
 
+from .config import JobParameter
 from .model import Model
 
 __all__ = ["auto_cli"]
@@ -21,25 +22,21 @@ Note that input formats shouldn't be mixed.
 """
 
 
-def infer_click_type(param: dict) -> click.ParamType:
-    if "choices" in param:
-        choices = [c["value"] for c in param["choices"]]
+def infer_click_type(param: JobParameter) -> click.ParamType:
+    if param.choices is not None:
+        choices = [c.value for c in param.choices]
         return click.Choice(choices)
 
     type_map = {
         "float": click.FLOAT,
-        "int": click.INT,
-        "str": click.STRING,
+        "integer": click.INT,
+        "string": click.STRING,
         "bool": click.BOOL,
     }
 
-    if "type" not in param:
-        raise ValueError(f"Parameter {param['name']} does not have a type")
-
-    t = param["type"]
-
+    t = param.type
     if t not in type_map:
-        raise ValueError(f"Unknown type {t} for parameter {param['name']}")
+        raise ValueError(f"Unknown type {t} for parameter {param.name}")
 
     return type_map[t]
 
@@ -107,12 +104,12 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     #
     for param in model.job_parameters:
         # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
-        param_name = spinalcase(param["name"])
+        param_name = spinalcase(param.name)
         main = click.option(
             f"--{param_name}",
-            default=param.get("default", None),
+            default=param.default,
             type=infer_click_type(param),
-            help=param.get("help_text", None),
+            help=param.help_text,
         )(main)
 
     #
