@@ -15,7 +15,7 @@ class ReadInputStep(Step):
     def _run(self, source: Iterator[dict]) -> Iterator[dict]:
         for entry in self._explorer.explore(self._input):
             record = dict(
-                raw_input=entry.raw_input,
+                input_text=entry.raw_input,
                 source=entry.source,
                 input_type=entry.input_type,
                 input_mol=entry.mol,

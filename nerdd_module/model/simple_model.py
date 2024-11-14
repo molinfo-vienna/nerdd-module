@@ -123,7 +123,7 @@ class SimpleModel(Model):
         default_properties_start = [
             {"name": "mol_id", "type": "integer"},
             *task_based_property,
-            {"name": "raw_input", "type": "string"},
+            {"name": "input_text", "type": "string"},
             {"name": "input_type", "type": "string"},
             {"name": "source", "type": "string"},
             {"name": "name", "type": "string"},

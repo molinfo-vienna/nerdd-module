@@ -12,7 +12,7 @@ Feature: Molecular property prediction
     Then the result should contain the same number of rows as the input
     And the result should contain the columns:
           mol_id
-          raw_input
+          input_text
           input_type
           source
           name
