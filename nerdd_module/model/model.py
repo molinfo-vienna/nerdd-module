@@ -6,6 +6,7 @@ from typing import Any, Iterable, Iterator, List, Optional, Tuple
 from rdkit.Chem import Mol
 from stringcase import snakecase  # type: ignore
 
+from ..config import JobParameter
 from ..problem import Problem
 from ..steps import OutputStep, Step
 from ..util import call_with_mappings
@@ -96,7 +97,7 @@ class Model(ABC):
 
     description = property(fget=lambda self: self._get_description())
 
-    def _get_job_parameters(self) -> List[dict]:
+    def _get_job_parameters(self) -> List[JobParameter]:
         return []
 
     job_parameters = property(fget=lambda self: self._get_job_parameters())

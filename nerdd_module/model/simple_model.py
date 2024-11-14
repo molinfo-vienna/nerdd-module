@@ -7,7 +7,9 @@ from ..config import (
     Configuration,
     DefaultConfiguration,
     DictConfiguration,
+    JobParameter,
     MergedConfiguration,
+    Module,
     PackageConfiguration,
     SearchYamlConfiguration,
 )
@@ -64,7 +66,7 @@ class SimpleModel(Model):
         return [
             EnforceSchemaStep(self._get_config(), output_format),
             ConvertRepresentationsStep(
-                self.get_config().get("result_properties", []), output_format, **kwargs
+                self.get_config().result_properties, output_format, **kwargs
             ),
             WriteOutputStep(output_format, **kwargs),
         ]
@@ -105,7 +107,7 @@ class SimpleModel(Model):
         ]
 
         # add default properties mol_id, raw_input, etc.
-        task = MergedConfiguration(*configs).get_task()
+        task = MergedConfiguration(*configs).get_dict().task
 
         # check whether we need to add to add a property "atom_id" or "derivative_id"
         task_based_property = []
@@ -123,7 +125,7 @@ class SimpleModel(Model):
             *task_based_property,
             {"name": "raw_input", "type": "string"},
             {"name": "input_type", "type": "string"},
-            {"name": "source"},
+            {"name": "source", "type": "string"},
             {"name": "name", "type": "string"},
             {"name": "input_mol", "type": "mol"},
             {"name": "preprocessed_mol", "type": "mol"},
@@ -141,23 +143,23 @@ class SimpleModel(Model):
 
         return MergedConfiguration(*configs)
 
-    def get_config(self) -> dict:
+    def get_config(self) -> Module:
         return self._get_config().get_dict()
 
     def _get_batch_size(self) -> int:
         default = super()._get_batch_size()
-        return self.get_config().get("batch_size", default)
+        return self.get_config().batch_size or default
 
     def _get_name(self) -> str:
         default = super()._get_name()
-        return self.get_config().get("name", default)
+        return self.get_config().name or default
 
     def _get_description(self) -> str:
         default = super()._get_description()
-        return self.get_config().get("description", default)
+        return self.get_config().description or default
 
-    def _get_job_parameters(self) -> List[dict]:
-        return super()._get_job_parameters() + self.get_config().get("job_parameters", [])
+    def _get_job_parameters(self) -> List[JobParameter]:
+        return super()._get_job_parameters() + self.get_config().job_parameters
 
 
 class CustomPreprocessingStep(PreprocessingStep):
