@@ -1,6 +1,39 @@
 # CHANGELOG
 
 
+## v0.3.10 (2024-11-14)
+
+### Fixes
+
+* fix: Change raw_input to input_text ([`2e2b193`](https://github.com/molinfo-vienna/nerdd-module/commit/2e2b193ce17ca018b72f8cc54826be0b669adda7))
+
+* fix: Incorporate types ([`fd2d368`](https://github.com/molinfo-vienna/nerdd-module/commit/fd2d368ce5741e2ea398adda778efe0e35b1331f))
+
+* fix: Define pydantic models for configuration ([`ef978e6`](https://github.com/molinfo-vienna/nerdd-module/commit/ef978e6aef17a03b3404a373bbfb8cde818dfc7b))
+
+### Unknown
+
+* Merge pull request #40 from shirte/main
+
+Define types for configuration ([`04892c9`](https://github.com/molinfo-vienna/nerdd-module/commit/04892c917f28aa719e89d3cf3e017fd20785a6e9))
+
+* Fix version of pytest-bdd ([`cb3656c`](https://github.com/molinfo-vienna/nerdd-module/commit/cb3656c0c2c614c429c91af09a39d0a554fd1e29))
+
+* Add examples to reader classes ([`b754c09`](https://github.com/molinfo-vienna/nerdd-module/commit/b754c094e704243230d6ffcc100f0aab62ca1569))
+
+* Obtain output formats automatically ([`1346c36`](https://github.com/molinfo-vienna/nerdd-module/commit/1346c36f578ed40f3dcc9b83cf0e68f79203190d))
+
+* Add choices field to JobParameter ([`85e1abc`](https://github.com/molinfo-vienna/nerdd-module/commit/85e1abc1484095731864ca1b0cca171723aa3e09))
+
+* Add vscode to gitignore ([`a69db32`](https://github.com/molinfo-vienna/nerdd-module/commit/a69db3260926508942022af01156d210876ee596))
+
+* Merge pull request #39 from shirte/main
+
+Enable no_implicit_optional ([`7f8d1c1`](https://github.com/molinfo-vienna/nerdd-module/commit/7f8d1c1d2452982260f719444a15f48ae6c22f59))
+
+* Enable no_implicit_optional ([`28719b8`](https://github.com/molinfo-vienna/nerdd-module/commit/28719b8af4fc14e58a99b1f2f04cceaf630f80d6))
+
+
 ## v0.3.9 (2024-11-08)
 
 ### Fixes
