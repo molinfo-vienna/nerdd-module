@@ -6,6 +6,7 @@ from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
 from .reader import ExploreCallable, MoleculeEntry, Reader
+from .reader_config import ReaderConfig
 
 __all__ = ["InchiReader"]
 
@@ -55,3 +56,9 @@ class InchiReader(Reader):
 
     def __repr__(self) -> str:
         return "InchiReader()"
+
+    config = ReaderConfig(
+        examples=[
+            "InChI=1S/C18H16O3/c1-2-13(12-8-4-3-5-9-12)16-17(19)14-10-6-7-11-15(14)21-18(16)20/h3-11,13,19H,2H2,1H3"
+        ]
+    )

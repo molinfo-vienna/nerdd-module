@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 class EnforceSchemaStep(Step):
     def __init__(self, config: Configuration, output_format: str) -> None:
         super().__init__()
-        self._property_names = [p["name"] for p in config.get_visible_properties(output_format)]
+        self._property_names = [
+            p.name for p in config.get_dict().get_visible_properties(output_format)
+        ]
 
         # check that properties are unique
         if len(self._property_names) != len(set(self._property_names)):

@@ -17,6 +17,7 @@ dependencies = [
     "rich-click>=1.7.1",
     "stringcase>=1.2.0",
     "decorator>=5.1.1",
+    "pydantic>=2",
     # install importlib-resources and importlib-metadata for old Python versions
     "importlib-resources>=5; python_version<'3.9'",
     "importlib-metadata>=4.6; python_version<'3.10'",
@@ -76,7 +77,7 @@ test = [
     "pytest-sugar",
     "pytest-cov",
     "pytest-asyncio",
-    "pytest-bdd",
+    "pytest-bdd==7.3.0",
     "pytest-mock",
     "pytest-watcher",
     "hypothesis",
@@ -125,6 +126,7 @@ ignore = [
 ]
 
 [tool.mypy]
+# type stubs of packages lacking types are in the "typings" directory
 mypy_path="typings"
 # strict=true
 disallow_untyped_defs = true

@@ -34,4 +34,4 @@ class SearchYamlConfiguration(DictConfiguration):
                 logger.info(f"Found configuration file in project directory: {default_config_file}")
                 config = YamlConfiguration(default_config_file, base_path)
 
-        super().__init__(config.get_dict())
+        super().__init__(config._get_dict())

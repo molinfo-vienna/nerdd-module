@@ -41,4 +41,4 @@ def merge(*args: dict) -> dict:
 
 class MergedConfiguration(DictConfiguration):
     def __init__(self, *configs: Configuration):
-        super().__init__(merge(*[c.get_dict() for c in configs]))
+        super().__init__(merge(*[c._get_dict() for c in configs]))

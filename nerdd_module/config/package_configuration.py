@@ -32,4 +32,4 @@ class PackageConfiguration(Configuration):
                 self.config = DictConfiguration({})
 
     def _get_dict(self) -> dict:
-        return self.config.get_dict()
+        return self.config._get_dict()
