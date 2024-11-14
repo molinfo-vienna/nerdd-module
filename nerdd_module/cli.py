@@ -8,6 +8,7 @@ from stringcase import spinalcase
 
 from .config import JobParameter
 from .model import Model
+from .output import FileWriter, Writer
 
 __all__ = ["auto_cli"]
 
@@ -56,7 +57,11 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
         description=model.description, input_format_list=input_format_list
     )
 
-    output_format_list = ["sdf", "csv"]
+    output_format_list = [
+        output_format
+        for output_format, writer in Writer.get_writers(output_file=None).items()
+        if isinstance(writer, FileWriter)
+    ]
 
     # compose footer with examples
     # TODO: add examples

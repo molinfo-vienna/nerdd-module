@@ -47,5 +47,12 @@ class Writer(ABC):
         return _factories[output_format](kwargs)
 
     @classmethod
+    def get_writers(cls, **kwargs: Any) -> Dict[str, Writer]:
+        return {
+            output_format: cls.get_writer(output_format, **kwargs)
+            for output_format in _factories.keys()
+        }
+
+    @classmethod
     def get_output_formats(cls) -> List[str]:
         return list(_factories.keys())
