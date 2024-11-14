@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Any, Iterator, Tuple, Union
 
 from .reader import ExploreCallable, MoleculeEntry, Reader
+from .reader_config import ReaderConfig
 
 __all__ = ["FileReader"]
 
@@ -48,3 +49,5 @@ class FileReader(Reader):
 
     def __repr__(self) -> str:
         return f"FileReader(data_dir={self.data_dir})"
+
+    config = ReaderConfig(examples=["compounds.smiles"])

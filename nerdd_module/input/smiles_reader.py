@@ -6,6 +6,7 @@ from rdkit.rdBase import BlockLogs
 
 from ..problem import Problem
 from .reader import ExploreCallable, MoleculeEntry, Reader
+from .reader_config import ReaderConfig
 
 __all__ = ["SmilesReader"]
 
@@ -65,3 +66,5 @@ class SmilesReader(Reader):
 
     def __repr__(self) -> str:
         return "SmilesReader()"
+
+    config = ReaderConfig(examples=["C1=NC2=C(N1COCCO)N=C(NC2=O)N"])

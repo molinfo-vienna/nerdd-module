@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 from typing import Any, Callable
 
@@ -7,6 +8,7 @@ from decorator import decorator
 from stringcase import spinalcase
 
 from .config import JobParameter
+from .input import Reader
 from .model import Model
 from .output import FileWriter, Writer
 
@@ -45,7 +47,7 @@ def infer_click_type(param: JobParameter) -> click.ParamType:
 @decorator
 def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     # infer the command name
-    # command_name = os.path.basename(sys.argv[0])
+    command_name = os.path.basename(sys.argv[0])
 
     # get the model
     model = f()
@@ -64,18 +66,26 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     ]
 
     # compose footer with examples
-    # TODO: add examples
-    # examples = []
-    # if "example_smiles" in config:
-    #     examples.append(config["example_smiles"])
+    examples = []
+    if hasattr(model, "get_config"):
+        example_smiles = model.get_config().example_smiles
+        if example_smiles is not None:
+            examples.append(example_smiles)
 
-    # if len(examples) > 0:
-    #     footer = "Examples:\n"
-    #     for example in examples:
-    #         footer += f'* {command_name} "{example}"\n'
-    # else:
-    #     footer = ""
-    footer = ""
+    for ReaderClass in Reader.get_reader_mapping():
+        if hasattr(ReaderClass, "config"):
+            reader_examples = ReaderClass.config.get("examples", [])
+            for example in reader_examples:
+                # check if example fits on one line
+                if len(example) < 120 and "\n" not in example:
+                    examples.append(example)
+
+    if len(examples) > 0:
+        footer = "Examples:\n"
+        for example in examples:
+            footer += f'* {command_name} "{example}"\n'
+    else:
+        footer = ""
 
     #
     # Define the CLI entry point
