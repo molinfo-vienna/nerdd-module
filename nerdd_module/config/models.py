@@ -47,7 +47,7 @@ class JobParameter(BaseModel):
     type: str
     visible_name: Optional[str] = None
     help_text: Optional[str] = None
-    default: Optional[str] = None
+    default: Any = None
     required: bool = False
     choices: Optional[List[JobParameterChoice]] = None
 
