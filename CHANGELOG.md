@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.11 (2024-11-16)
+
+### Fixes
+
+* fix: Provide compatibility with Python 3.7 ([`ae807cc`](https://github.com/molinfo-vienna/nerdd-module/commit/ae807cc9c3e9eb2aacfeaffefb5472e2868d0836))
+
+### Unknown
+
+* Merge pull request #41 from shirte/main
+
+fix: Provide compatibility with Python 3.7 ([`6220ca3`](https://github.com/molinfo-vienna/nerdd-module/commit/6220ca39a1081cf85d2d32700f4e1479122eec83))
+
+
 ## v0.3.10 (2024-11-14)
 
 ### Fixes
