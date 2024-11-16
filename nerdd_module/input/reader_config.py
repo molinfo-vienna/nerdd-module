@@ -1,4 +1,6 @@
-from typing import List, TypedDict
+from typing import List
+
+from ..polyfills import TypedDict
 
 __all__ = ["ReaderConfig"]
 
