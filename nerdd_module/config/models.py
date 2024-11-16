@@ -1,6 +1,8 @@
-from typing import Any, List, Literal, Optional, Union
+from typing import Any, List, Optional, Union
 
 from pydantic import BaseModel, model_validator
+
+from ..polyfills import Literal
 
 
 class Partner(BaseModel):
