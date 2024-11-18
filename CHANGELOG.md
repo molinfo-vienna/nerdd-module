@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.12 (2024-11-18)
+
+### Fixes
+
+* fix: Change type of "default" to Any ([`34c73fe`](https://github.com/molinfo-vienna/nerdd-module/commit/34c73fe7ce0ec3c10729161f21d0e2ffc34f1f93))
+
+### Unknown
+
+* Merge pull request #42 from shirte/main
+
+fix: Change type of "default" to Any ([`a1a7604`](https://github.com/molinfo-vienna/nerdd-module/commit/a1a76047889ab48ddc82a1edac50cca209149c71))
+
+
 ## v0.3.11 (2024-11-16)
 
 ### Fixes
