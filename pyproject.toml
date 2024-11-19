@@ -50,14 +50,14 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy==1.13.0",
+    "mypy>=1",
     "ruff==0.7.1",
     "pandas-stubs",
     "rdkit-stubs",
     "types-PyYAML",
     "types-decorator",
     "types-setuptools",
-    "pre-commit==3.5.0",
+    "pre-commit>=2",
 ]
 rdkit = [
     # Some old RDKit versions are not recognized by setuptools. For that reason,
@@ -78,7 +78,7 @@ test = [
     "pytest-sugar",
     "pytest-cov",
     "pytest-asyncio",
-    "pytest-bdd==7.3.0",
+    "pytest-bdd<8",
     "pytest-mock",
     "pytest-watcher",
     "hypothesis",
