@@ -14,17 +14,23 @@ warnings.filterwarnings(
     module="rdkit.Chem.MolStandardize",
 )
 
+# We check if chembl_structure_pipeline is installed. Since importing this library already logs
+# messages, we suppress them using RDKit's BlockLogs. We would like to use
+#   with BlockLogs(): ...
+# but this does not work with old versions of RDKit. Therefore, we create an instance of
+# BlockLogs that will suppress log messages as long as it exists. When it is deleted (in the
+# "finally" block), logs are enabled again.
+block_logs = BlockLogs()
 try:
-    # importing chembl_structure_pipeline already logs messages
-    # --> suppress them temporarily
-    with BlockLogs():
-        from chembl_structure_pipeline import get_parent_mol, standardize_mol
+    from chembl_structure_pipeline import get_parent_mol, standardize_mol
 
     import_error = None
 except ImportError as e:
     # raise ImportError later when using this class
     # --> this allows to use the rest of the package without chembl_structure_pipeline
     import_error = e
+finally:
+    del block_logs
 
 __all__ = ["GetParentMolWithCsp", "StandardizeWithCsp"]
 
