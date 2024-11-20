@@ -16,11 +16,16 @@ class FileReader(Reader):
             self.data_dir = Path(self.data_dir)
 
     def read(self, filename: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
-        assert isinstance(filename, str), "input must be a string"
+        assert isinstance(filename, (str, bytes)), "input must be a string or bytes"
+
+        if isinstance(filename, bytes):
+            filename_str = filename.decode("utf-8")
+        else:
+            filename_str = filename
 
         # convert filename to path
         try:
-            path = Path(filename)
+            path = Path(filename_str)
         except TypeError as e:
             raise ValueError("input must be a valid path") from e
 
@@ -45,7 +50,7 @@ class FileReader(Reader):
                     source: Tuple[str, ...] = tuple()
                 else:
                     source = entry.source
-                yield entry._replace(source=(filename, *source))
+                yield entry._replace(source=(filename_str, *source))
 
     def __repr__(self) -> str:
         return f"FileReader(data_dir={self.data_dir})"

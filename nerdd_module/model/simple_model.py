@@ -123,12 +123,16 @@ class SimpleModel(Model):
         default_properties_start = [
             {"name": "mol_id", "type": "integer"},
             *task_based_property,
-            {"name": "input_text", "type": "string"},
-            {"name": "input_type", "type": "string"},
-            {"name": "source", "type": "string"},
-            {"name": "name", "type": "string"},
-            {"name": "input_mol", "type": "mol"},
-            {"name": "preprocessed_mol", "type": "mol"},
+            {"name": "input_text", "visible_name": "Input text", "type": "string"},
+            {"name": "input_type", "visible_name": "Input type", "type": "string"},
+            {"name": "source", "visible_name": "Source", "type": "string"},
+            {"name": "name", "visible_name": "Name", "type": "string"},
+            {"name": "input_mol", "visible_name": "Input SMILES", "type": "mol"},
+            {
+                "name": "preprocessed_mol",
+                "visible_name": "Preprocessed SMILES",
+                "type": "mol",
+            },
         ]
 
         default_properties_end = [
