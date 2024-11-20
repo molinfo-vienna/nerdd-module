@@ -107,7 +107,7 @@ class DepthFirstExplorer(Explorer):
             except Exception:
                 pass
 
-            # clean up tree
+            # clean up stack
             while len(self._state_stack) > depth:
                 self._state_stack.pop()
             generator = None
@@ -115,12 +115,11 @@ class DepthFirstExplorer(Explorer):
         if generator is None:
             if best_reader is None:
                 generator = self._read(InvalidInputReader(), input)
-                sample = []
             else:
                 generator = self._read(best_reader, input)
-                sample = list(islice(generator, self._num_test_entries))
+            sample = []
         else:
-            if best_mode is not None and best_mode != "guess":
+            if best_mode == "builtin":
                 parent["first_guess"].append(best_reader)
 
         yield from sample
