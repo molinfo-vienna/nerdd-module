@@ -20,28 +20,30 @@ def mol_weight_model(version):
 
 
 @when(
-    parsers.parse("the mol weight model (version '{version}') generates predictions for the molecule representations"),
+    parsers.parse(
+        "the mol weight model (version '{version}') generates predictions for the molecule representations"
+    ),
     target_fixture="predictions",
 )
-def predictions_mol_weight_model(representations, version, input_type, multiplier):
+def predictions_mol_weight_model(representations, version, multiplier):
     model = MolWeightModel(version=version)
     return model.predict(
         representations,
-        input_type=input_type,
         multiplier=multiplier,
         output_format="record_list",
     )
 
 
 @when(
-    parsers.parse("the atomic mass model (version '{version}') generates predictions for the molecule representations"),
+    parsers.parse(
+        "the atomic mass model (version '{version}') generates predictions for the molecule representations"
+    ),
     target_fixture="predictions",
 )
-def predictions_atomic_mass_model(representations, version, input_type, multiplier):
+def predictions_atomic_mass_model(representations, version, multiplier):
     model = AtomicMassModel(version=version)
     return model.predict(
         representations,
-        input_type=input_type,
         multiplier=multiplier,
         output_format="record_list",
     )

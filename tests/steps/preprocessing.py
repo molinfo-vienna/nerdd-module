@@ -1,8 +1,12 @@
 from nerdd_module.input import DepthFirstExplorer
 from nerdd_module.model import ReadInputStep
-from nerdd_module.preprocessing import (FilterByElement, FilterByWeight,
-                                        GetParentMolWithCsp, Sanitize,
-                                        StandardizeWithCsp)
+from nerdd_module.preprocessing import (
+    FilterByElement,
+    FilterByWeight,
+    GetParentMolWithCsp,
+    Sanitize,
+    StandardizeWithCsp,
+)
 from nerdd_module.tests.preprocessing import DummyPreprocessingStep
 from pytest_bdd import given, parsers, when
 
