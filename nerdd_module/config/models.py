@@ -77,6 +77,8 @@ class ResultProperty(BaseModel):
     level: Level = "molecule"
     formats: Union[FormatSpec, IncludeExcludeFormatSpec, None] = None
     representation: Optional[str] = None
+    image_width: Optional[int] = None
+    image_height: Optional[int] = None
 
     def is_visible(self, output_format: str) -> bool:
         formats = self.formats
