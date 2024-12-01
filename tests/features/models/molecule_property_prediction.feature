@@ -2,14 +2,13 @@ Feature: Molecular property prediction
 
   Scenario Outline: Predicting a molecular property
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
-    And the input type is '<input_type>'
-    And the representations of the molecules
+    And the representations of the molecules in <input_type> format
     And a prediction parameter 'multiplier' set to <multiplier>
 
     When the mol weight model (version '<version>') generates predictions for the molecule representations
     And the subset of the result where the input was not None is considered
 
-    Then the result should contain the same number of rows as the input
+    Then the result should contain the same number of entries as the input
     And the result should contain the columns:
           mol_id
           input_text
@@ -66,13 +65,12 @@ Feature: Molecular property prediction
 
   Scenario: Predicting a molecular property with an invalid model
     Given a list of 10 random molecules, where 0 entries are None
-    And the input type is 'rdkit_mol'
-    And the representations of the molecules
+    And the representations of the molecules in rdkit_mol format
     And a prediction parameter 'multiplier' set to 10
 
     When the mol weight model (version 'error') generates predictions for the molecule representations
     
-    Then the result should contain the same number of rows as the input
+    Then the result should contain the same number of entries as the input
     And the result should contain the columns:
           mol_id
           name

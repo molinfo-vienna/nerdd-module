@@ -2,10 +2,9 @@ Feature: Reading molecule representations
 
   Scenario Outline: Read a single molecule from a valid representation
 
-    Given a list of 1 random molecules, where 0 entries are None
-    And the input type is '<input_type>'
-    And the representations of the molecules
-    When the reader gets the representations as input with input type <input_type>
+    Given a list of 1 random molecules
+    And the representations of the molecules in <input_type> format
+    When the reader gets the representations as input
     Then the result should contain the same number of entries as the input
     And the result should contain the same number of non-null entries as the input
 
@@ -19,9 +18,8 @@ Feature: Reading molecule representations
   Scenario Outline: Read lists of molecules from valid representations
 
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
-    And the input type is '<input_type>'
-    And the representations of the molecules
-    When the reader gets the representations as input with input type <input_type>
+    And the representations of the molecules in <input_type> format
+    When the reader gets the representations as input
     Then the result should contain the same number of entries as the input
 
     Examples:
@@ -47,9 +45,7 @@ Feature: Reading molecule representations
   Scenario Outline: Read a single file containing valid representations
 
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
-    And the input type is '<input_type>'
-    And the representations of the molecules
-    And a file containing the representations
+    And a file containing the molecules in <input_type> format
     When the reader gets the file name(s) as input
     Then the result should contain the same number of entries as the input
 
@@ -69,9 +65,7 @@ Feature: Reading molecule representations
   Scenario Outline: Read multiple files containing valid representations
 
     Given a list of <num_molecules> random molecules, where <num_none> entries are None
-    And the input type is '<input_type>'
-    And the representations of the molecules
-    And a list of <num_files> files containing the representations
+    And a list of <num_files> files containing the representations in <input_type> format
     When the reader gets the file name(s) as input
     Then the result should contain the same number of entries as the input
     And the source of each entry should be one of the file names

@@ -5,13 +5,13 @@ from nerdd_module import Problem
 from pytest_bdd import parsers, then
 
 
-@then("the result should contain the same number of rows as the input")
-def check_result_length(representations, predictions):
-    if len(representations) == 0:
+@then("the result should contain the same number of entries as the input")
+def check_result_length(molecules, predictions):
+    if len(molecules) == 0:
         # expect one entry saying that nothing could be read from this source
         assert len(predictions) == 1
     else:
-        assert len(predictions) == len(representations)
+        assert len(predictions) == len(molecules)
 
 
 @then(

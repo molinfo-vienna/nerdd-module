@@ -24,10 +24,12 @@ def representations_from_input(input):
 
 
 @given(
-    parsers.parse("the representations of the molecules"),
+    parsers.parse("the representations of the molecules in {input_type} format"),
     target_fixture="representations",
 )
 def representations_from_molecules(molecules, input_type):
+    input_type = input_type.lower()
+
     if input_type == "smiles":
         converter = MolToSmiles
     elif input_type == "mol_block":
@@ -46,10 +48,14 @@ def representations_from_molecules(molecules, input_type):
 
 
 @given(
-    parsers.parse("a list of {num:d} random molecules, where {num_none:d} entries are None"),
+    parsers.re(
+        r"a list of (?P<num>\d+) random molecules(?:, where (?P<num_none>\d+) entries are None)?"
+    ),
     target_fixture="molecules",
 )
-def molecules(num, num_none, random_seed=0):
+def molecules_with_none(num, num_none=None, random_seed=0):
+    num = int(num)
+    num_none = int(num_none) if num_none is not None else 0
     result = None
 
     # pytest-bdd and hypothesis don't play well together (yet)
@@ -69,8 +75,3 @@ def molecules(num, num_none, random_seed=0):
         result[i] = None
 
     return result
-
-
-@given(parsers.parse("the input type is '{input_type}'"), target_fixture="input_type")
-def input_type(input_type):
-    return input_type
