@@ -113,15 +113,15 @@ class SimpleModel(Model):
         task_based_property = []
         if task == "atom_property_prediction":
             task_based_property = [
-                {"name": "atom_id", "type": "integer"},
+                {"name": "atom_id", "type": "int"},
             ]
         elif task == "derivative_property_prediction":
             task_based_property = [
-                {"name": "derivative_id", "type": "integer"},
+                {"name": "derivative_id", "type": "int"},
             ]
 
         default_properties_start = [
-            {"name": "mol_id", "type": "integer"},
+            {"name": "mol_id", "type": "int"},
             *task_based_property,
             {"name": "input_text", "visible_name": "Input text", "type": "string"},
             {"name": "input_type", "visible_name": "Input type", "type": "string"},
