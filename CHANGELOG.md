@@ -1,6 +1,63 @@
 # CHANGELOG
 
 
+## v0.3.13 (2024-12-01)
+
+### Fixes
+
+* fix: Add image_width and image_height to ResultProperty ([`b377925`](https://github.com/molinfo-vienna/nerdd-module/commit/b377925dc9d41d324cec448e6e7a2a881d2172ac))
+
+* fix: Use correct data type for auto-generated columns ([`11656f8`](https://github.com/molinfo-vienna/nerdd-module/commit/11656f8719f19716dc1ee30ac102203b725a335f))
+
+### Unknown
+
+* Merge pull request #46 from shirte/main
+
+Implement converters ([`d05f62a`](https://github.com/molinfo-vienna/nerdd-module/commit/d05f62a01a11104ddf4caeba6a68c6babaab3654))
+
+* Add all converters to __init__ ([`51427de`](https://github.com/molinfo-vienna/nerdd-module/commit/51427def331a49411fb0c4ab024ceec88272ec80))
+
+* Implement MolToImageConverter ([`c38a0de`](https://github.com/molinfo-vienna/nerdd-module/commit/c38a0de628a16ee2f9b35062dc37334aaf125b01))
+
+* Implement MolConverter ([`461a0e5`](https://github.com/molinfo-vienna/nerdd-module/commit/461a0e539d21aa759f33201e7bbe5bbce1082d6c))
+
+* Implement and test problem list converter ([`a701ac6`](https://github.com/molinfo-vienna/nerdd-module/commit/a701ac6772e03b8526be854605e0afe09eb00485))
+
+* Make ConvertRepresentationStep aware of the HIDE literal ([`877d343`](https://github.com/molinfo-vienna/nerdd-module/commit/877d343df4f816a34c2e3f208e3d8829cb034087))
+
+* Implement and test basic converters ([`66e1ab6`](https://github.com/molinfo-vienna/nerdd-module/commit/66e1ab690d8ee0a3063a32590d883741f2e7df5c))
+
+* Use converter config instead of class parameters ([`e6873b9`](https://github.com/molinfo-vienna/nerdd-module/commit/e6873b9a962889e13aa53a639ec07d6e01149e8b))
+
+* Add converter submodule to __init__ ([`889c91a`](https://github.com/molinfo-vienna/nerdd-module/commit/889c91a57debab66fa26098025f3b0683becdc5c))
+
+* Merge pull request #45 from shirte/main
+
+Simplify tests ([`e9baec8`](https://github.com/molinfo-vienna/nerdd-module/commit/e9baec8f7fd48cfb89df465cf980de66f501e778))
+
+* Move files test fixtures into main code ([`76de5a5`](https://github.com/molinfo-vienna/nerdd-module/commit/76de5a5f14d78e5554db9198bbfe6fbff2b47a1f))
+
+* Simplify tests by removing input_type fixture ([`6f7e101`](https://github.com/molinfo-vienna/nerdd-module/commit/6f7e1015fbe8105c4aeeaac59a66b6bc9878111c))
+
+* Merge pull request #44 from shirte/main
+
+Minor changes ([`56d1037`](https://github.com/molinfo-vienna/nerdd-module/commit/56d103711d43e3e2cfc1431b73a4ed761c9093c7))
+
+* Simplify DepthFirstExplorer ([`c15b8f4`](https://github.com/molinfo-vienna/nerdd-module/commit/c15b8f48b8c5435eded317503444c5341bc8d970))
+
+* Accept str and bytes as filename in FileReader ([`308593e`](https://github.com/molinfo-vienna/nerdd-module/commit/308593e97ed8d659adaf7d7b3cc38de519422ee9))
+
+* Add types to default result properties ([`f5c6bac`](https://github.com/molinfo-vienna/nerdd-module/commit/f5c6bac4570aae5df6642d7c23532e3a66041141))
+
+* Merge pull request #43 from shirte/main
+
+Handle old versions of rdkit in csp module ([`3444319`](https://github.com/molinfo-vienna/nerdd-module/commit/3444319149492e21d07db9402161017f3709f921))
+
+* Handle old versions of rdkit in csp module ([`8920b48`](https://github.com/molinfo-vienna/nerdd-module/commit/8920b488dce510da8b5c69449b7b28ac06e5664e))
+
+* Make dev requirements more flexible ([`fd9d055`](https://github.com/molinfo-vienna/nerdd-module/commit/fd9d055637cdad5f2054ce7d61bbdc949a001fbb))
+
+
 ## v0.3.12 (2024-11-18)
 
 ### Fixes
