@@ -113,25 +113,59 @@ class SimpleModel(Model):
         task_based_property = []
         if task == "atom_property_prediction":
             task_based_property = [
-                {"name": "atom_id", "type": "int"},
+                {"name": "atom_id", "type": "int", "visible": False},
             ]
         elif task == "derivative_property_prediction":
             task_based_property = [
-                {"name": "derivative_id", "type": "int"},
+                {"name": "derivative_id", "type": "int", "visible": False},
             ]
 
         default_properties_start = [
-            {"name": "mol_id", "type": "int"},
+            {"name": "mol_id", "type": "int", "visible": False},
             *task_based_property,
-            {"name": "input_text", "visible_name": "Input text", "type": "string"},
-            {"name": "input_type", "visible_name": "Input type", "type": "string"},
-            {"name": "source", "visible_name": "Source", "type": "string"},
+            {
+                "name": "input_text",
+                "visible_name": "Input text",
+                "type": "string",
+                "visible": False,
+            },
+            {
+                "name": "input_type",
+                "visible_name": "Input type",
+                "type": "string",
+                "visible": False,
+            },
+            {
+                "name": "source",
+                "visible_name": "Source",
+                "type": "string",
+                "visible": False,
+            },
             {"name": "name", "visible_name": "Name", "type": "string"},
-            {"name": "input_mol", "visible_name": "Input SMILES", "type": "mol"},
+            {
+                "name": "input_mol",
+                "visible_name": "Input Structure",
+                "type": "mol",
+                "visible": False,
+            },
+            {
+                "name": "input_smiles",
+                "visible_name": "Input SMILES",
+                "type": "representation",
+                "from_property": "input_mol",
+                "visible": False,
+            },
             {
                 "name": "preprocessed_mol",
-                "visible_name": "Preprocessed SMILES",
+                "visible_name": "Preprocessed Structure",
                 "type": "mol",
+            },
+            {
+                "name": "preprocessed_smiles",
+                "visible_name": "Preprocessed SMILES",
+                "type": "representation",
+                "from_property": "preprocessed_mol",
+                "visible": False,
             },
         ]
 
