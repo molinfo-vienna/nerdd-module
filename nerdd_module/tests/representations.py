@@ -2,7 +2,6 @@ import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import seed, settings
 from hypothesis import strategies as st
-
 # TODO: remove "type: ignore" later
 from hypothesis_rdkit import mols  # type: ignore
 from pytest_bdd import given, parsers
@@ -68,6 +67,11 @@ def molecules_with_none(num, num_none=None, random_seed=0):
         result = ms
 
     generate()
+
+    for m in result:
+        if m is None:
+            continue
+        m.SetProp("_Name", "mol")
 
     # replace random entries with None
     indices = np.random.choice(num, num_none, replace=False)
