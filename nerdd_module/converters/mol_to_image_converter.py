@@ -9,14 +9,14 @@ from .converter_config import ConverterConfig
 
 __all__ = ["MolToImageConverter"]
 
-default_width = 400
-default_height = 300
+default_width = 300
+default_height = 180
 
 
 class MolToImageConverter(Converter):
     def _convert(self, input: Any, context: dict) -> Any:
-        width = self.property.image_width
-        height = self.property.image_height
+        width = self.result_property.image_width
+        height = self.result_property.image_height
 
         if width is None:
             width = default_width
