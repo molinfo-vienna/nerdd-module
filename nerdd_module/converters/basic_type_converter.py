@@ -3,9 +3,9 @@ from typing import Any
 from .converter import Converter
 from .converter_config import ALL, ConverterConfig
 
-__all__ = ["IdentityConverter", "primitive_data_types"]
+__all__ = ["BasicTypeConverter", "basic_data_types"]
 
-primitive_data_types = [
+basic_data_types = [
     "int",
     "float",
     "string",
@@ -13,11 +13,11 @@ primitive_data_types = [
 ]
 
 
-class IdentityConverter(Converter):
+class BasicTypeConverter(Converter):
     def _convert(self, input: Any, context: dict) -> Any:
         return input
 
     config = ConverterConfig(
-        data_types=primitive_data_types,
+        data_types=basic_data_types,
         output_formats=ALL,
     )
