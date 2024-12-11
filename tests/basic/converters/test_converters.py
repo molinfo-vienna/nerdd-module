@@ -1,11 +1,7 @@
 from nerdd_module import Problem
 from nerdd_module.config import ResultProperty
-from nerdd_module.converters import (
-    Converter,
-    IdentityConverter,
-    ProblemListConverter,
-    VoidConverter,
-)
+from nerdd_module.converters import (BasicTypeConverter, Converter,
+                                     ProblemListConverter, VoidConverter)
 
 primitive_data_types = [
     "int",
@@ -23,7 +19,7 @@ def test_basic_data_types():
             result_property = ResultProperty(name="test", type=primitive_data_type)
             converter = Converter.get_converter(result_property, output_format)
             assert converter is not None
-            assert isinstance(converter, IdentityConverter)
+            assert isinstance(converter, BasicTypeConverter)
 
 
 def test_non_existing_data_type():
