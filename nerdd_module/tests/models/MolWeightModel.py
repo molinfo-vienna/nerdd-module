@@ -1,6 +1,7 @@
+from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
+
 from nerdd_module import SimpleModel
 from nerdd_module.preprocessing import Sanitize
-from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
 __all__ = ["MolWeightModel"]
 

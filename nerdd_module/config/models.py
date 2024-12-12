@@ -71,12 +71,14 @@ class ResultProperty(BaseModel):
     name: str
     type: str
     visible_name: Optional[str] = None
+    visible: bool = True
     help_text: Optional[str] = None
     sortable: bool = False
     group: Optional[str] = None
     level: Level = "molecule"
     formats: Union[FormatSpec, IncludeExcludeFormatSpec, None] = None
     representation: Optional[str] = None
+    from_property: Optional[str] = None
     image_width: Optional[int] = None
     image_height: Optional[int] = None
 

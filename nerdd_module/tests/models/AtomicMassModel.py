@@ -64,3 +64,5 @@ class AtomicMassModel(SimpleModel):
                 {"name": "mass", "type": "float", "level": "atom"},
             ],
         }
+
+

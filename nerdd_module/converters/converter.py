@@ -25,7 +25,7 @@ class Converter(ABC):
 
     def __init__(self, result_property: ResultProperty, output_format: str, **kwargs: Any) -> None:
         super().__init__()
-        self.property = result_property
+        self.result_property = result_property
         self.output_format = output_format
 
     @classmethod
