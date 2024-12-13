@@ -1,6 +1,41 @@
 # CHANGELOG
 
 
+## v0.3.14 (2024-12-13)
+
+### Fixes
+
+* fix: Rename IdentityConverter ([`a561455`](https://github.com/molinfo-vienna/nerdd-module/commit/a561455a9a5cd325c9d2bc732bb056e70f1bd4ee))
+
+### Unknown
+
+* Merge pull request #48 from shirte/main
+
+Make SdfWriter handle mol=None ([`9916c36`](https://github.com/molinfo-vienna/nerdd-module/commit/9916c3687cfe9943f5c4262f7f473a399c149654))
+
+* Adapt tests to BasicTypeConverter ([`752b53f`](https://github.com/molinfo-vienna/nerdd-module/commit/752b53f527c6012a82d0cce339b1b65adb3285a4))
+
+* Make SdfWriter handle mol=None ([`faa8002`](https://github.com/molinfo-vienna/nerdd-module/commit/faa8002d02a51dcdeab4f41ecab854258b085436))
+
+* Merge pull request #47 from shirte/main
+
+Update converters ([`840af50`](https://github.com/molinfo-vienna/nerdd-module/commit/840af5048907a63ee482d40b9e2282ff9c2d788d))
+
+* Let ConvertRepresentationStep ignore unspecified result properties ([`1c01cec`](https://github.com/molinfo-vienna/nerdd-module/commit/1c01cec724a0af8dd068fc9a4715372191e0eab5))
+
+* Make auto-generated properties in SimpleModel more specific ([`d8d094b`](https://github.com/molinfo-vienna/nerdd-module/commit/d8d094b731a253d789d47418c2c09f3119c9e645))
+
+* Add RepresentationConverter ([`72451d5`](https://github.com/molinfo-vienna/nerdd-module/commit/72451d5f9f4aba69af24cdd6f6ab01bf97864aaf))
+
+* Hide mols in sdf if it is not the input_mol ([`1e78f81`](https://github.com/molinfo-vienna/nerdd-module/commit/1e78f816f7d3fafcc123db9e0010b39d6c255bed))
+
+* Rename property to result_property ([`280b46b`](https://github.com/molinfo-vienna/nerdd-module/commit/280b46bb5d4f3fb28450147b78f1b7a14ad517a6))
+
+* Format code ([`d6f7eb5`](https://github.com/molinfo-vienna/nerdd-module/commit/d6f7eb514df0b2b0f43adc1989b99de66570e8e7))
+
+* Add fields 'visible' and 'from_property' to ResultProperty ([`cd2963d`](https://github.com/molinfo-vienna/nerdd-module/commit/cd2963d63ed46ce391ea1e364451e15906e3b9c4))
+
+
 ## v0.3.13 (2024-12-01)
 
 ### Fixes
