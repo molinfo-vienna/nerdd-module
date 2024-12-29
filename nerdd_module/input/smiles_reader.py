@@ -57,7 +57,7 @@ class SmilesReader(Reader):
                     errors = []
 
                 yield MoleculeEntry(
-                    raw_input=line,
+                    raw_input=line.strip("\n"),
                     input_type="smiles",
                     source=("raw_input",),
                     mol=mol,
