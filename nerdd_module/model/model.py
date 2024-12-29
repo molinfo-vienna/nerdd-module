@@ -85,7 +85,7 @@ class Model(ABC):
     def _get_batch_size(self) -> int:
         return 1
 
-    batch_size = property(_get_batch_size)
+    batch_size = property(fget=lambda self: self._get_batch_size())
 
     def _get_name(self) -> str:
         return snakecase(self.__class__.__name__)
