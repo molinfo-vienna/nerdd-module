@@ -1,3 +1,4 @@
+from .block_logs import *
 from .files import *
 from .get_entry_points import *
 from .literal import *
