@@ -2,8 +2,8 @@ from codecs import getreader
 from typing import Any, Iterator
 
 from rdkit.Chem import MolFromInchi
-from rdkit.rdBase import BlockLogs
 
+from ..polyfills import BlockLogs
 from ..problem import Problem
 from .reader import ExploreCallable, MoleculeEntry, Reader
 from .reader_config import ReaderConfig

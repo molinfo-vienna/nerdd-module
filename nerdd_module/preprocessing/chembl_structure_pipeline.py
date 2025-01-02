@@ -2,8 +2,8 @@ import warnings
 from typing import List, Optional, Tuple
 
 from rdkit.Chem import Mol
-from rdkit.rdBase import BlockLogs
 
+from ..polyfills import BlockLogs
 from ..problem import Problem
 from .preprocessing_step import PreprocessingStep
 
@@ -15,22 +15,16 @@ warnings.filterwarnings(
 )
 
 # We check if chembl_structure_pipeline is installed. Since importing this library already logs
-# messages, we suppress them using RDKit's BlockLogs. We would like to use
-#   with BlockLogs(): ...
-# but this does not work with old versions of RDKit. Therefore, we create an instance of
-# BlockLogs that will suppress log messages as long as it exists. When it is deleted (in the
-# "finally" block), logs are enabled again.
-block_logs = BlockLogs()
-try:
-    from chembl_structure_pipeline import get_parent_mol, standardize_mol
+# messages, we suppress them using RDKit's BlockLogs.
+with BlockLogs():
+    try:
+        from chembl_structure_pipeline import get_parent_mol, standardize_mol
 
-    import_error = None
-except ImportError as e:
-    # raise ImportError later when using this class
-    # --> this allows to use the rest of the package without chembl_structure_pipeline
-    import_error = e
-finally:
-    del block_logs
+        import_error = None
+    except ImportError as e:
+        # raise ImportError later when using this class
+        # --> this allows to use the rest of the package without chembl_structure_pipeline
+        import_error = e
 
 __all__ = ["GetParentMolWithCsp", "StandardizeWithCsp"]
 
