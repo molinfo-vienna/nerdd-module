@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.3.15 (2025-01-02)
+
+### Fixes
+
+* fix: Strip line breaks in input lines ([`850e4a2`](https://github.com/molinfo-vienna/nerdd-module/commit/850e4a29fe9579d14e3a47c7838121a21dd182c9))
+
+* fix: Pass input_mol down if output_format is sdf ([`52da234`](https://github.com/molinfo-vienna/nerdd-module/commit/52da23438ddbb773ea643deecc562a7b6712d99a))
+
+### Unknown
+
+* Merge pull request #50 from shirte/main
+
+Improve output files ([`3dc8196`](https://github.com/molinfo-vienna/nerdd-module/commit/3dc81968b37e8bb98e43136af880ea28e263d1f4))
+
+* Merge pull request #49 from shirte/main
+
+Add polyfill for BlockLogs ([`a0708c4`](https://github.com/molinfo-vienna/nerdd-module/commit/a0708c4aadd9cd3bab4e4421c36388dce0c2b397))
+
+* Add polyfill for BlockLogs ([`3d49ab8`](https://github.com/molinfo-vienna/nerdd-module/commit/3d49ab8e8defa70428090d0aa7ebd72562d5acb9))
+
+
 ## v0.3.14 (2024-12-13)
 
 ### Fixes
