@@ -15,7 +15,7 @@ class MolConverter(Converter):
         if self.output_format == "sdf" and self.result_property.name != "input_mol":
             # in an SDF, the main molecule (input_mol) can be a Mol object
             return Converter.HIDE
-        elif self.output_format in ["pandas", "record_list", "iterator"]:
+        elif self.output_format in ["sdf", "pandas", "record_list", "iterator"]:
             return input
 
     config = ConverterConfig(
