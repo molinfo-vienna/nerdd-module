@@ -1,6 +1,7 @@
 from typing import Any, List, Optional, Union
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, computed_field, model_validator
+from stringcase import spinalcase
 
 from ..polyfills import Literal
 
@@ -98,9 +99,22 @@ class ResultProperty(BaseModel):
 
 
 class Module(BaseModel):
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def id(self) -> str:
+        # TODO: incorporate versioning
+        # compute the primary key from name and version
+        # if "version" in module.keys():
+        #     version = module["version"]
+        # else:
+        #     version = "1.0.0"
+        # name = module["name"]
+
+        return spinalcase(self.name)
+
     task: Optional[Task] = None
     rank: Optional[int] = None
-    name: Optional[str] = None
+    name: str
     batch_size: int = 100
     version: Optional[str] = None
     visible_name: Optional[str] = None
