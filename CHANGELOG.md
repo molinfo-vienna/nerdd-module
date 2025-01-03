@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.17 (2025-01-03)
+
+### Fixes
+
+* fix: Move MolToImageConverter to nerdd-link ([`a558f5a`](https://github.com/molinfo-vienna/nerdd-module/commit/a558f5a152ff378e8d0759fbf5006e00ed0eb675))
+
+### Unknown
+
+* Merge pull request #52 from shirte/main
+
+Add id field to Module ([`b330140`](https://github.com/molinfo-vienna/nerdd-module/commit/b330140b61bff941b9acebf7d9039654ac8306c4))
+
+* Add id field to Module ([`232e3cf`](https://github.com/molinfo-vienna/nerdd-module/commit/232e3cf7899c2d8b8fe61a9e633fa310babd0242))
+
+
 ## v0.3.16 (2025-01-03)
 
 ### Fixes
