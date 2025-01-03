@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.16 (2025-01-03)
+
+### Fixes
+
+* fix: Pass batch size ([`9cc20e9`](https://github.com/molinfo-vienna/nerdd-module/commit/9cc20e9f1188656a27b387fa71982644de5fa4cd))
+
+### Unknown
+
+* Merge pull request #51 from shirte/main
+
+fix: Pass batch size ([`32d6249`](https://github.com/molinfo-vienna/nerdd-module/commit/32d6249b67a8e54d38393aab18a2724bab8d2b77))
+
+
 ## v0.3.15 (2025-01-02)
 
 ### Fixes
