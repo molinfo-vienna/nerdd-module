@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.18 (2025-01-05)
+
+### Fixes
+
+* fix: Use typing_extensions to polyfill Protocol ([`d0a5d2d`](https://github.com/molinfo-vienna/nerdd-module/commit/d0a5d2d4659aa879f4cbf152df7798949ea2587a))
+
+### Unknown
+
+* Merge pull request #53 from shirte/main
+
+fix: Use typing_extensions to polyfill Protocol ([`7bd5301`](https://github.com/molinfo-vienna/nerdd-module/commit/7bd5301ff132ea622c65ced584b8af81e96fc2df))
+
+
 ## v0.3.17 (2025-01-03)
 
 ### Fixes
