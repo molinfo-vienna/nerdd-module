@@ -1,6 +1,7 @@
-from typing import Optional, Protocol, Type
+from typing import Optional, Type
 
 from rdkit.rdBase import BlockLogs as OriginalBlockLogs
+from typing_extensions import Protocol
 
 __all__ = ["BlockLogs"]
 
