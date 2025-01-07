@@ -1,7 +1,9 @@
 from nerdd_module import Problem
 from nerdd_module.config import ResultProperty
 from nerdd_module.converters import (BasicTypeConverter, Converter,
-                                     ProblemListConverter, VoidConverter)
+                                     ProblemListConverter,
+                                     ProblemListIdentityConverter,
+                                     VoidConverter)
 
 primitive_data_types = [
     "int",
@@ -10,7 +12,7 @@ primitive_data_types = [
     "bool",
 ]
 
-output_formats = ["sdf", "csv", "pandas", "record_list", "iterator"]
+output_formats = ["sdf", "csv", "pandas", "record_list", "iterator", "non-existing"]
 
 
 def test_basic_data_types():
@@ -35,11 +37,15 @@ def test_problem_list_converter():
     for output_format in output_formats:
         converter = Converter.get_converter(result_property, output_format)
         converted_value = converter.convert(problem_list, {})
-        assert isinstance(converter, ProblemListConverter)
         if output_format in ["pandas", "record_list", "iterator"]:
+            assert isinstance(converter, ProblemListIdentityConverter)
             assert isinstance(converted_value, list)
             assert len(converted_value) == len(problem_list)
             assert isinstance(converted_value[0], Problem)
-        else:
+        elif output_format in ["sdf", "csv"]:
+            assert isinstance(converter, ProblemListConverter)
             assert isinstance(converted_value, str)
             assert converted_value.startswith("problem_type")
+        else:
+            assert isinstance(converter, VoidConverter)
+            assert converted_value is Converter.HIDE
