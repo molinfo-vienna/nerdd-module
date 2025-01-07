@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.19 (2025-01-07)
+
+### Fixes
+
+* fix: Restrict output formats of ProblemListConverter ([`738fff7`](https://github.com/molinfo-vienna/nerdd-module/commit/738fff7f858bedf31350f239e87586c3dc940811))
+
+* fix: Allow strings in problem lists ([`28ba0c4`](https://github.com/molinfo-vienna/nerdd-module/commit/28ba0c407f27fe14c3c67fd46ac0a2f90856ceec))
+
+### Unknown
+
+* Merge pull request #54 from shirte/main
+
+Restrict output formats of ProblemListConverter ([`fdac965`](https://github.com/molinfo-vienna/nerdd-module/commit/fdac965449f013121961cd7e978f856e9518645a))
+
+
 ## v0.3.18 (2025-01-05)
 
 ### Fixes
