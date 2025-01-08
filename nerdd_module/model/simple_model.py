@@ -170,7 +170,12 @@ class SimpleModel(Model):
         ]
 
         default_properties_end = [
-            {"name": "problems", "type": "problem_list"},
+            {
+                "name": "problems",
+                "visible_name": "Problems",
+                "type": "problem_list",
+                "visible": False,
+            },
         ]
 
         configs = [
