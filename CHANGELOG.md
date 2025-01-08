@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.20 (2025-01-08)
+
+### Fixes
+
+* fix: Use package_root in PackageConfiguration due to Python >3.9 ([`4b75cfb`](https://github.com/molinfo-vienna/nerdd-module/commit/4b75cfb67d84ec5e67609371d23d5c2d6bfc5689))
+
+### Unknown
+
+* Merge pull request #55 from shirte/main
+
+Use package_root in PackageConfiguration due to Python >3.9 ([`e680320`](https://github.com/molinfo-vienna/nerdd-module/commit/e680320f4fe93d1cc015ed12a62997cb6ba9392d))
+
+* Improve property spec of problem_list ([`a04fcf4`](https://github.com/molinfo-vienna/nerdd-module/commit/a04fcf4289f648d52e2ec33b12324f1cdb6ba1a5))
+
+
 ## v0.3.19 (2025-01-07)
 
 ### Fixes
