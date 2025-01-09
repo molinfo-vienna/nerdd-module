@@ -3,6 +3,8 @@ from nerdd_module.config import ResultProperty
 from nerdd_module.converters import (BasicTypeConverter, Converter,
                                      ProblemListConverter,
                                      ProblemListIdentityConverter,
+                                     SourceListConverter,
+                                     SourceListIdentityConverter,
                                      VoidConverter)
 
 primitive_data_types = [
@@ -46,6 +48,26 @@ def test_problem_list_converter():
             assert isinstance(converter, ProblemListConverter)
             assert isinstance(converted_value, str)
             assert converted_value.startswith("problem_type")
+        else:
+            assert isinstance(converter, VoidConverter)
+            assert converted_value is Converter.HIDE
+
+
+def test_source_list_converter():
+    result_property = ResultProperty(name="test", type="source_list")
+    source_list = ('source1', 'source2')
+    for output_format in output_formats:
+        converter = Converter.get_converter(result_property, output_format)
+        converted_value = converter.convert(source_list, {})
+        if output_format in ["pandas", "record_list", "iterator"]:
+            assert isinstance(converter, SourceListIdentityConverter)
+            assert isinstance(converted_value, tuple)
+            assert len(converted_value) == len(source_list)
+            assert isinstance(converted_value[0], str)
+            assert isinstance(converted_value[1], str)
+        elif output_format in ["sdf", "csv"]:
+            assert isinstance(converter, SourceListConverter)
+            assert isinstance(converted_value, str)
         else:
             assert isinstance(converter, VoidConverter)
             assert converted_value is Converter.HIDE
