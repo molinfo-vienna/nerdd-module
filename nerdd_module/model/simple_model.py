@@ -138,7 +138,7 @@ class SimpleModel(Model):
             {
                 "name": "source",
                 "visible_name": "Source",
-                "type": "string",
+                "type": "source_list",
                 "visible": False,
             },
             {"name": "name", "visible_name": "Name", "type": "string"},
