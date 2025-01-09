@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.21 (2025-01-09)
+
+### Fixes
+
+* fix: Introduce type "source_list" ([`4451c6b`](https://github.com/molinfo-vienna/nerdd-module/commit/4451c6bedbd4c8bd2f84a68079ac456ea8928daf))
+
+### Unknown
+
+* Merge pull request #56 from shirte/main
+
+fix: Introduce type "source_list" ([`56fedfa`](https://github.com/molinfo-vienna/nerdd-module/commit/56fedfaf4cba368039a402ca2d1916059b62a443))
+
+
 ## v0.3.20 (2025-01-08)
 
 ### Fixes
