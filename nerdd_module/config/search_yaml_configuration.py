@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class SearchYamlConfiguration(DictConfiguration):
-    def __init__(self, start: str, base_path: Optional[str] = None) -> None:
+    def __init__(
+        self, start: str, base_path: Optional[str] = None, filename: str = "nerdd.yml"
+    ) -> None:
         # provide a default configuration if no configuration file is found
         config: Configuration = DictConfiguration({})
 
@@ -22,8 +24,8 @@ class SearchYamlConfiguration(DictConfiguration):
             # reached)
             leaf = start
             while True:
-                if os.path.isfile(os.path.join(leaf, "nerdd.yml")):
-                    default_config_file = os.path.join(leaf, "nerdd.yml")
+                if os.path.isfile(os.path.join(leaf, filename)):
+                    default_config_file = os.path.join(leaf, filename)
                     break
                 elif leaf == os.path.dirname(leaf):  # reached root
                     default_config_file = None

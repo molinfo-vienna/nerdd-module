@@ -32,10 +32,9 @@ __all__ = ["SimpleModel"]
 class SimpleModel(Model):
     def __init__(self, preprocessing_steps: Iterable[Step] = []) -> None:
         super().__init__()
-        assert isinstance(preprocessing_steps, Iterable), (
-            f"Expected Iterable for argument preprocessing_steps, "
-            f"got {type(preprocessing_steps)}"
-        )
+        assert isinstance(
+            preprocessing_steps, Iterable
+        ), f"Expected Iterable for argument preprocessing_steps, got {type(preprocessing_steps)}"
         assert all(isinstance(step, Step) for step in preprocessing_steps), (
             f"Expected all elements of preprocessing_steps to be of type Step, "
             f"got {[type(step) for step in preprocessing_steps if not isinstance(step, Step)]}"
@@ -79,14 +78,6 @@ class SimpleModel(Model):
         pass
 
     def _get_base_config(self) -> Union[Configuration, dict]:
-        return {}
-
-    def _get_config(self) -> Configuration:
-        # get base configuration specified in this class
-        base_config = self._get_base_config()
-        if isinstance(base_config, dict):
-            base_config = DictConfiguration(base_config)
-
         # get the class of the nerdd module, e.g. <CypstrateModel>
         nerdd_module_class = self.__class__
 
@@ -97,17 +88,30 @@ class SimpleModel(Model):
         # get the root module name, e.g. "cypstrate"
         root_module = python_module.split(".")[0]
 
-        configs = [
-            DefaultConfiguration(self),
-            # TODO: remove "."
-            SearchYamlConfiguration(get_file_path_to_instance(self) or "."),
-            PackageConfiguration(f"{root_module}.data"),
-            # base config comes last -> highest priority
-            base_config,
-        ]
+        configs: List[Configuration] = []
+
+        try:
+            configs.append(  # TODO: remove "."
+                SearchYamlConfiguration(get_file_path_to_instance(self) or ".")
+            )
+        except Exception:
+            pass
+
+        try:
+            configs.append(PackageConfiguration(f"{root_module}.data", filename="nerdd.yml"))
+        except Exception:
+            pass
+
+        return MergedConfiguration(*configs)
+
+    def _get_config(self) -> Configuration:
+        # get base configuration specified in this class
+        base_config = self._get_base_config()
+        if isinstance(base_config, dict):
+            base_config = DictConfiguration(base_config)
 
         # add default properties mol_id, raw_input, etc.
-        task = MergedConfiguration(*configs).get_dict().task
+        task = base_config.get_dict().task
 
         # check whether we need to add to add a property "atom_id" or "derivative_id"
         task_based_property = []
@@ -179,8 +183,9 @@ class SimpleModel(Model):
         ]
 
         configs = [
+            DefaultConfiguration(self),
             DictConfiguration({"result_properties": default_properties_start}),
-            *configs,
+            base_config,
             DictConfiguration({"result_properties": default_properties_end}),
         ]
 
