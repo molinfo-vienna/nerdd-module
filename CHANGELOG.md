@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.22 (2025-01-11)
+
+### Fixes
+
+* fix: Restructure configuration code in SimpleModel ([`5136494`](https://github.com/molinfo-vienna/nerdd-module/commit/51364947ad6d003b1dd56278a8d8a9b6b35f6e0a))
+
+### Unknown
+
+* Merge pull request #57 from shirte/main
+
+fix: Restructure configuration code in SimpleModel ([`440e7ad`](https://github.com/molinfo-vienna/nerdd-module/commit/440e7adee47ba0ade9f794b482d03c202fe4c075))
+
+
 ## v0.3.21 (2025-01-09)
 
 ### Fixes
