@@ -118,6 +118,7 @@ class Module(BaseModel):
     batch_size: int = 100
     version: Optional[str] = None
     visible_name: Optional[str] = None
+    visible: bool = True
     logo: Optional[str] = None
     logo_title: Optional[str] = None
     logo_caption: Optional[str] = None
