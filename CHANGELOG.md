@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.23 (2025-01-13)
+
+### Fixes
+
+* fix: Add option to hide a module ([`8384766`](https://github.com/molinfo-vienna/nerdd-module/commit/8384766c79b36ec95f4385a64f17fa7b310515e3))
+
+### Unknown
+
+* Merge pull request #58 from shirte/main
+
+fix: Add option to hide a module ([`f03ccc1`](https://github.com/molinfo-vienna/nerdd-module/commit/f03ccc187b5a606ff1be9acb8e18ba65f183a4c1))
+
+
 ## v0.3.22 (2025-01-11)
 
 ### Fixes
