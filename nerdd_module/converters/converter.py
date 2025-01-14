@@ -4,7 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Tuple, Union
 
-from ..config import ResultProperty
+from ..config import Module, ResultProperty
 from ..util import call_with_mappings
 from .converter_config import ALL, ALL_TYPE
 
@@ -23,8 +23,15 @@ class Converter(ABC):
     # a special symbol to indicate that a property should be hidden
     HIDE = object()
 
-    def __init__(self, result_property: ResultProperty, output_format: str, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        module_config: Module,
+        result_property: ResultProperty,
+        output_format: str,
+        **kwargs: Any,
+    ) -> None:
         super().__init__()
+        self.module_config = module_config
         self.result_property = result_property
         self.output_format = output_format
 
@@ -69,6 +76,7 @@ class Converter(ABC):
     @classmethod
     def get_converter(
         cls,
+        module_config: Module,
         result_property: ResultProperty,
         output_format: str,
         return_default: bool = True,
@@ -94,6 +102,7 @@ class Converter(ABC):
 
         # kwargs will be passed to the constructor of the converter
         # --> add data_type and output_format to the kwargs
+        kwargs["module_config"] = module_config
         kwargs["result_property"] = result_property
         kwargs["output_format"] = output_format
 

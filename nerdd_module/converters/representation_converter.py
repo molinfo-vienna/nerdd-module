@@ -2,7 +2,7 @@ from typing import Any
 
 from rdkit.Chem import MolToInchi, MolToSmiles
 
-from ..config import ResultProperty
+from ..config import Module, ResultProperty
 from .converter import Converter
 from .converter_config import ALL, ConverterConfig
 
@@ -10,8 +10,14 @@ __all__ = ["RepresentationConverter"]
 
 
 class RepresentationConverter(Converter):
-    def __init__(self, result_property: ResultProperty, output_format: str, **kwargs: Any) -> None:
-        super().__init__(result_property, output_format, **kwargs)
+    def __init__(
+        self,
+        module_config: Module,
+        result_property: ResultProperty,
+        output_format: str,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(module_config, result_property, output_format, **kwargs)
 
         representation = result_property.representation or "smiles"
         if representation == "inchi":

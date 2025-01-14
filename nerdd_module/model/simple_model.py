@@ -64,9 +64,7 @@ class SimpleModel(Model):
         output_format = output_format or "pandas"
         return [
             EnforceSchemaStep(self._get_config(), output_format),
-            ConvertRepresentationsStep(
-                self.get_config().result_properties, output_format, **kwargs
-            ),
+            ConvertRepresentationsStep(self.get_config(), output_format, **kwargs),
             WriteOutputStep(output_format, **kwargs),
         ]
 

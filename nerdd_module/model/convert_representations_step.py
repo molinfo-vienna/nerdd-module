@@ -1,6 +1,6 @@
-from typing import Any, List
+from typing import Any
 
-from ..config import ResultProperty
+from ..config import Module
 from ..converters import Converter
 from ..steps import MapStep
 
@@ -8,21 +8,19 @@ __all__ = ["ConvertRepresentationsStep"]
 
 
 class ConvertRepresentationsStep(MapStep):
-    def __init__(
-        self, result_properties: List[ResultProperty], output_format: str, **kwargs: Any
-    ) -> None:
+    def __init__(self, config: Module, output_format: str, **kwargs: Any) -> None:
         super().__init__()
-        self._result_properties = result_properties
-        self._converter_map = {
-            p.name: Converter.get_converter(p, output_format, **kwargs) for p in result_properties
-        }
+        self._converters = [
+            (p.name, Converter.get_converter(config, p, output_format, **kwargs))
+            for p in config.result_properties
+        ]
 
     def _process(self, record: dict) -> dict:
+        # convert all properties in record
         result = {
-            k.name: self._converter_map[k.name].convert(
-                input=record.get(k.name, None), context=record
-            )
-            for k in self._result_properties
+            name: converter.convert(input=record.get(name, None), context=record)
+            for (name, converter) in self._converters
         }
 
+        # hide all properties that are marked as hidden
         return {k: v for k, v in result.items() if v is not Converter.HIDE}
