@@ -1,11 +1,13 @@
 from nerdd_module import Problem
-from nerdd_module.config import ResultProperty
+from nerdd_module.config import Module, ResultProperty
 from nerdd_module.converters import (BasicTypeConverter, Converter,
                                      ProblemListConverter,
                                      ProblemListIdentityConverter,
                                      SourceListConverter,
                                      SourceListIdentityConverter,
                                      VoidConverter)
+
+config = Module(name="test")
 
 primitive_data_types = [
     "int",
@@ -21,7 +23,7 @@ def test_basic_data_types():
     for primitive_data_type in primitive_data_types:
         for output_format in output_formats:
             result_property = ResultProperty(name="test", type=primitive_data_type)
-            converter = Converter.get_converter(result_property, output_format)
+            converter = Converter.get_converter(config, result_property, output_format)
             assert converter is not None
             assert isinstance(converter, BasicTypeConverter)
 
@@ -29,7 +31,7 @@ def test_basic_data_types():
 def test_non_existing_data_type():
     result_property = ResultProperty(name="test", type="non_existing_data_type")
     for output_format in output_formats:
-        converter = Converter.get_converter(result_property, output_format)
+        converter = Converter.get_converter(config, result_property, output_format)
         assert isinstance(converter, VoidConverter)
 
 
@@ -37,7 +39,7 @@ def test_problem_list_converter():
     result_property = ResultProperty(name="test", type="problem_list")
     problem_list = [Problem("problem_type", "problem_description")]
     for output_format in output_formats:
-        converter = Converter.get_converter(result_property, output_format)
+        converter = Converter.get_converter(config, result_property, output_format)
         converted_value = converter.convert(problem_list, {})
         if output_format in ["pandas", "record_list", "iterator"]:
             assert isinstance(converter, ProblemListIdentityConverter)
@@ -57,7 +59,7 @@ def test_source_list_converter():
     result_property = ResultProperty(name="test", type="source_list")
     source_list = ('source1', 'source2')
     for output_format in output_formats:
-        converter = Converter.get_converter(result_property, output_format)
+        converter = Converter.get_converter(config, result_property, output_format)
         converted_value = converter.convert(source_list, {})
         if output_format in ["pandas", "record_list", "iterator"]:
             assert isinstance(converter, SourceListIdentityConverter)
