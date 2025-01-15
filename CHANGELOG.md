@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.24 (2025-01-15)
+
+### Fixes
+
+* fix: Provide module config to converter ([`e58d793`](https://github.com/molinfo-vienna/nerdd-module/commit/e58d7932435b6f781038282ca2c2e8cbe3a20e7c))
+
+### Unknown
+
+* Merge pull request #59 from shirte/main
+
+Provide module config to converter ([`376ec33`](https://github.com/molinfo-vienna/nerdd-module/commit/376ec335019d3a764909458f1f975519d51ff2ea))
+
+* Adapt tests ([`38a1566`](https://github.com/molinfo-vienna/nerdd-module/commit/38a156657cd2e0e46210f4f759dc2869c5057f73))
+
+
 ## v0.3.23 (2025-01-13)
 
 ### Fixes
