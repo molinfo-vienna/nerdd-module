@@ -13,8 +13,9 @@ class ReadInputStep(Step):
         self._input = input
 
     def _run(self, source: Iterator[dict]) -> Iterator[dict]:
-        for entry in self._explorer.explore(self._input):
+        for mol_id, entry in enumerate(self._explorer.explore(self._input)):
             record = dict(
+                mol_id=mol_id,
                 input_text=entry.raw_input,
                 source=entry.source,
                 input_type=entry.input_type,

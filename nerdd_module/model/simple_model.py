@@ -18,7 +18,6 @@ from ..preprocessing import PreprocessingStep
 from ..problem import Problem
 from ..steps import Step
 from ..util import get_file_path_to_instance
-from .assign_mol_id_step import AssignMolIdStep
 from .assign_name_step import AssignNameStep
 from .convert_representations_step import ConvertRepresentationsStep
 from .enforce_schema_step import EnforceSchemaStep
@@ -52,11 +51,10 @@ class SimpleModel(Model):
         self, input: Any, input_format: Optional[str], **kwargs: Any
     ) -> List[Step]:
         return [
-            AssignMolIdStep(),
             AssignNameStep(),
             *self._preprocessing_steps,
             # the following step ensures that the column preprocessed_mol is created
-            # (even is self._preprocessing_steps is empty)
+            # (even if self._preprocessing_steps is empty)
             CustomPreprocessingStep(self),
         ]
 
@@ -214,4 +212,7 @@ class CustomPreprocessingStep(PreprocessingStep):
         self.model = model
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
-        return self.model._preprocess(mol)
+        try:
+            return self.model._preprocess(mol)
+        except Exception as e:
+            return None, [Problem(type="preprocessing_error", message=str(e))]
