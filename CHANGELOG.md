@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.25 (2025-01-17)
+
+### Fixes
+
+* fix: Assign mol ids in ReadInputStep ([`43b6b7e`](https://github.com/molinfo-vienna/nerdd-module/commit/43b6b7e09e8a8450b694806c48b621ac4456fb7f))
+
+### Unknown
+
+* Merge pull request #60 from shirte/main
+
+fix: Assign mol ids in ReadInputStep ([`a624b1c`](https://github.com/molinfo-vienna/nerdd-module/commit/a624b1cc6dc7e659ae9e7327994461d262f0da85))
+
+
 ## v0.3.24 (2025-01-15)
 
 ### Fixes
