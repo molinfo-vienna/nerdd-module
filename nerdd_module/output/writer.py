@@ -3,7 +3,7 @@ from __future__ import annotations
 import codecs
 from abc import ABC, abstractmethod
 from functools import partial
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List
 
 from typing_extensions import Protocol
 
@@ -27,11 +27,16 @@ class Writer(ABC):
     @classmethod
     def __init_subclass__(
         cls,
-        output_format: Optional[str] = None,
-        is_abstract: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init_subclass__(**kwargs)
+
+        assert hasattr(
+            cls, "config"
+        ), "All subclasses of Writer need to have a config attribute of type WriterConfig"
+        output_format = cls.config["output_format"]
+        is_abstract = cls.config.get("is_abstract", False)
+
         if not is_abstract:
             assert output_format is not None, "output_format must not be None"
             _factories[output_format] = partial(call_with_mappings, cls)

@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Union
 
 from ..polyfills import Literal, TypedDict
 
@@ -10,6 +10,7 @@ ALL_TYPE = Literal["ALL"]
 ALL: ALL_TYPE = "ALL"
 
 
-class ConverterConfig(TypedDict):
-    data_types: Optional[Union[str, List[str], ALL_TYPE]]
-    output_formats: Optional[Union[str, List[str], ALL_TYPE]]
+class ConverterConfig(TypedDict, total=False):
+    data_types: Union[str, List[str], ALL_TYPE]
+    output_formats: Union[str, List[str], ALL_TYPE]
+    is_abstract: bool

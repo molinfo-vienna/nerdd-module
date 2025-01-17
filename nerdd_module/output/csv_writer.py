@@ -3,11 +3,12 @@ from itertools import chain
 from typing import IO, Any, Dict, Iterable
 
 from .file_writer import FileLike, FileWriter
+from .writer_config import WriterConfig
 
 __all__ = ["CsvWriter"]
 
 
-class CsvWriter(FileWriter, output_format="csv"):
+class CsvWriter(FileWriter):
     def __init__(self, output_file: FileLike) -> None:
         super().__init__(output_file, writes_bytes=False)
 
@@ -22,3 +23,5 @@ class CsvWriter(FileWriter, output_format="csv"):
         writer.writeheader()
         for entry in chain([first_entry], entry_iter):
             writer.writerow(entry)
+
+    config = WriterConfig(output_format="csv")
