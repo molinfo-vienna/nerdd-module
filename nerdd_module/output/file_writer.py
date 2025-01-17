@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import IO, Any, BinaryIO, Iterable, TextIO, Union
 
 from .writer import Writer
+from .writer_config import WriterConfig
 
 StreamWriter = codecs.getwriter("utf-8")
 
@@ -13,7 +14,7 @@ __all__ = ["FileWriter", "FileLike"]
 FileLike = Union[str, Path, TextIO, BinaryIO]
 
 
-class FileWriter(Writer, is_abstract=True):
+class FileWriter(Writer):
     """Abstract class for writers."""
 
     def __init__(self, output_file: FileLike, writes_bytes: bool = False) -> None:
@@ -39,3 +40,5 @@ class FileWriter(Writer, is_abstract=True):
     def writes_bytes(self) -> bool:
         """Whether the writer writes bytes."""
         return self._writes_bytes
+
+    config = WriterConfig(is_abstract=True, output_format="file")
