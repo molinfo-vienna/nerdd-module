@@ -38,17 +38,17 @@ class Converter(ABC):
     @classmethod
     def __init_subclass__(
         cls,
-        is_abstract: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init_subclass__(**kwargs)
 
-        if hasattr(cls, "config"):
-            data_types = cls.config["data_types"]
-            output_formats = cls.config["output_formats"]
-        else:
-            data_types = None
-            output_formats = None
+        assert hasattr(
+            cls, "config"
+        ), "All subclasses of Converter need to have a config attribute of type ConverterConfig"
+
+        data_types = cls.config["data_types"]
+        output_formats = cls.config["output_formats"]
+        is_abstract = cls.config.get("is_abstract", False)
 
         if not is_abstract:
             if isinstance(data_types, str) or data_types is ALL:
