@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.26 (2025-01-17)
+
+### Fixes
+
+* fix: Use config dict to configure writers ([`b12ccc7`](https://github.com/molinfo-vienna/nerdd-module/commit/b12ccc78a036b57e7a8c32d91e4d2202265f1090))
+
+* fix: Put is_abstract to ConverterConfig ([`66e42ae`](https://github.com/molinfo-vienna/nerdd-module/commit/66e42ae6923cba9ebe644183319b97fabe624a36))
+
+### Unknown
+
+* Merge pull request #61 from shirte/main
+
+Use config dicts instead of class attributes in converter and writer classes ([`367d955`](https://github.com/molinfo-vienna/nerdd-module/commit/367d95502b380aadae55cc08462678a900c9ac16))
+
+
 ## v0.3.25 (2025-01-17)
 
 ### Fixes
