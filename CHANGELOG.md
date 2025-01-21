@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.27 (2025-01-21)
+
+### Fixes
+
+* fix: Add rdkit to main dependencies ([`3c8d429`](https://github.com/molinfo-vienna/nerdd-module/commit/3c8d429031cc93761e916299caec14dbe20ad8f4))
+
+### Unknown
+
+* Merge pull request #62 from shirte/main
+
+fix: Add rdkit to main dependencies ([`38eff59`](https://github.com/molinfo-vienna/nerdd-module/commit/38eff59bae9f92ab85c348007b145ca5185c9792))
+
+
 ## v0.3.26 (2025-01-17)
 
 ### Fixes
