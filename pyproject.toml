@@ -11,6 +11,7 @@ license = { file = "LICENSE" }
 authors = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
 maintainers = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
 dependencies = [
+    "rdkit>=2020.09.1",
     "pandas>=1.2.1",
     "pyyaml>=6.0",
     "filetype~=1.2.0",
@@ -58,12 +59,6 @@ dev = [
     "types-decorator",
     "types-setuptools",
     "pre-commit>=2",
-]
-rdkit = [
-    # Some old RDKit versions are not recognized by setuptools. For that reason,
-    # let the user install rdkit explicitly using an extra dependency.
-    # Note: rdkit 2022.3.3 is the oldest (working) version of rdkit on pypi.
-    "rdkit>=2022.3.3",
 ]
 csp = [
     # Note 1: Version 1.0.0 of chembl_structure_pipeline is not available on
