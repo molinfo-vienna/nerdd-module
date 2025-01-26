@@ -25,7 +25,7 @@ def UnknownProblem() -> Problem:
 def InvalidWeightProblem(weight: float, min_weight: float, max_weight: float) -> Problem:
     return Problem(
         type="invalid_weight",
-        message=(f"Molecular weight {weight:.2f} out of range " f"[{min_weight}, {max_weight}]"),
+        message=(f"Molecular weight {weight:.2f} out of range [{min_weight}, {max_weight}]"),
     )
 
 
