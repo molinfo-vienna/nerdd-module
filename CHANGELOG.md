@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.28 (2025-01-26)
+
+### Fixes
+
+* fix: Avoid duplicate error messages ([`b0e650f`](https://github.com/molinfo-vienna/nerdd-module/commit/b0e650ff1e85492b16b377159e2c14cef0a7edf8))
+
+### Unknown
+
+* Merge pull request #63 from shirte/main
+
+fix: Avoid duplicate error messages ([`831acb6`](https://github.com/molinfo-vienna/nerdd-module/commit/831acb628d2f4bb027f4f06cf8d38d5bc4fcfa51))
+
+
 ## v0.3.27 (2025-01-21)
 
 ### Fixes
