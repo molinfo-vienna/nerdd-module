@@ -164,7 +164,7 @@ class PredictionStep(Step):
                 isinstance(record, dict) for record in predictions
             ), "The predictions must be a list of dictionaries."
         except Exception as e:
-            logger.error(e, exc_info=True)
+            logger.exception("An error occurred during prediction.", exc_info=e)
 
             # if an error occurs, we want to catch it and yield the error message
             predictions = [
@@ -214,13 +214,15 @@ class PredictionStep(Step):
             mol_id_to_record[record["mol_id"]].append(record)
 
         # add all records that are missing in the predictions
-        for mol_id, record in zip(temporary_mol_ids, batch):
+        for mol_id in temporary_mol_ids:
             if mol_id not in mol_id_to_record:
-                # notify the user that the molecule could not be predicted
-                record["problems"].append(IncompletePredictionProblem())
-
-                # add the record to the mapping
-                mol_id_to_record[mol_id].append(record)
+                # add a dummy record to the mapping
+                mol_id_to_record[mol_id].append(
+                    {
+                        # notify the user that the molecule could not be predicted
+                        "problems": [IncompletePredictionProblem()],
+                    }
+                )
 
         # If the result has multiple entries per mol_id, check that atom_id or
         # derivative_id is present in multi-entry results.
