@@ -67,8 +67,8 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
 
     # compose footer with examples
     examples = []
-    if hasattr(model, "get_config"):
-        example_smiles = model.get_config().example_smiles
+    if hasattr(model, "config"):
+        example_smiles = model.config.example_smiles
         if example_smiles is not None:
             examples.append(example_smiles)
 
