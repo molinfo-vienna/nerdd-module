@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.29 (2025-01-31)
+
+### Fixes
+
+* fix: Make model.config a cached property ([`d9680f8`](https://github.com/molinfo-vienna/nerdd-module/commit/d9680f8c7db78d165d60d9a6cf8d55623751c618))
+
+### Unknown
+
+* Merge pull request #64 from shirte/main
+
+Make model.config a cached property ([`bf56f2a`](https://github.com/molinfo-vienna/nerdd-module/commit/bf56f2a1ade0180ee7d9da4c72edd72874b04e9c))
+
+
 ## v0.3.28 (2025-01-26)
 
 ### Fixes
