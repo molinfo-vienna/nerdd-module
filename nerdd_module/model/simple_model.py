@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from functools import cached_property
 from typing import Any, Iterable, List, Optional, Tuple, Union
 
 from rdkit.Chem import Mol
@@ -61,8 +62,8 @@ class SimpleModel(Model):
     def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
         output_format = output_format or "pandas"
         return [
-            EnforceSchemaStep(self._get_config(), output_format),
-            ConvertRepresentationsStep(self.get_config(), output_format, **kwargs),
+            EnforceSchemaStep(self.config, output_format),
+            ConvertRepresentationsStep(self.config, output_format, **kwargs),
             WriteOutputStep(output_format, **kwargs),
         ]
 
@@ -187,23 +188,24 @@ class SimpleModel(Model):
 
         return MergedConfiguration(*configs)
 
-    def get_config(self) -> Module:
+    @cached_property
+    def config(self) -> Module:
         return self._get_config().get_dict()
 
     def _get_batch_size(self) -> int:
         default = super()._get_batch_size()
-        return self.get_config().batch_size or default
+        return self.config.batch_size or default
 
     def _get_name(self) -> str:
         default = super()._get_name()
-        return self.get_config().name or default
+        return self.config.name or default
 
     def _get_description(self) -> str:
         default = super()._get_description()
-        return self.get_config().description or default
+        return self.config.description or default
 
     def _get_job_parameters(self) -> List[JobParameter]:
-        return super()._get_job_parameters() + self.get_config().job_parameters
+        return super()._get_job_parameters() + self.config.job_parameters
 
 
 class CustomPreprocessingStep(PreprocessingStep):

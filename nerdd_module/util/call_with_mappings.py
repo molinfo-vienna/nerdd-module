@@ -23,7 +23,7 @@ def call_with_mappings(
     # copy config
     config = config.copy()
 
-    # we check what arguments the constructor of the writer class can take
+    # check what arguments the class or function can take
     spec = inspect.getfullargspec(class_or_function)
     parameter_names = [a for a in spec.args if a != "self"]
     accept_any_args = spec.varargs is not None
