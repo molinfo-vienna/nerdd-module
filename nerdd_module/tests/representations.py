@@ -54,52 +54,53 @@ def representations_from_molecules(molecules, input_type):
     ),
     target_fixture="molecules",
 )
-def molecules(num, conditions):
+def molecules(num, conditions, random_seed=0):
     num = int(num)
-
-    def filter_weight(min_weight, max_weight):
-        min_weight = float(min_weight)
-        max_weight = float(max_weight)
-        return lambda mol: (min_weight <= CalcExactMolWt(mol) <= max_weight)
-
-    def map_to_none(num_none):
-        num_none = int(num_none)
-
-        # draw indices of molecules that should be set to None
-        indices = np.random.choice(num, num_none, replace=False)
-
-        return lambda ms: [m if i not in indices else None for i, m in enumerate(ms)]
-
-    expressions = [
-        # filters are functions that return True if the molecule should be kept
-        ("filter", "each mol has a weight between (?P<min_weight>\d+) and (?P<max_weight>\d+)", filter_weight),
-        # maps are functions that modify the molecule
-        ("map", "(?P<num_none>\d+) entries are None", map_to_none)
-    ]
-
-    conditions_list = [c for c in conditions.split("\n") if c.strip() != ""]
 
     filters = []
     maps = []
 
-    for condition in conditions_list:
-        for kind, expression, f in expressions:
-            # conditions might be a markdown list (starting with a star character)
-            expression = "(\s*\*\s*)?" + expression + "\s*"
+    if conditions is not None:
+        def filter_weight(min_weight, max_weight):
+            min_weight = float(min_weight)
+            max_weight = float(max_weight)
+            return lambda mol: (min_weight <= CalcExactMolWt(mol) <= max_weight)
 
-            match = re.match(expression, condition)
-            if match:
-                params = match.groupdict()
-                break
-        
-        assert match is not None, f"Could not parse condition: {condition}"
+        def map_to_none(num_none):
+            num_none = int(num_none)
 
-        if kind == "filter":
-            filters.append(f(**params))
-        elif kind == "map":
-            maps.append(f(**params))
-        else:
-            raise ValueError(f"Unknown kind: {kind}")
+            # draw indices of molecules that should be set to None
+            indices = np.random.choice(num, num_none, replace=False)
+
+            return lambda ms: [m if i not in indices else None for i, m in enumerate(ms)]
+
+        expressions = [
+            # filters are functions that return True if the molecule should be kept
+            ("filter", r"each mol has a weight between (?P<min_weight>\d+) and (?P<max_weight>\d+)", filter_weight),
+            # maps are functions that modify the molecule
+            ("map", r"(?P<num_none>\d+) entries are None", map_to_none)
+        ]
+
+        conditions_list = [c for c in conditions.split("\n") if c.strip() != ""]
+
+        for condition in conditions_list:
+            for kind, expression, f in expressions:
+                # conditions might be a markdown list (starting with a star character)
+                expression = r"\s*(\*\s*)?" + expression + r"\s*"
+
+                match = re.match(expression, condition)
+                if match:
+                    params = match.groupdict()
+                    break
+            
+            assert match is not None, f"Could not parse condition: {condition}"
+
+            if kind == "filter":
+                filters.append(f(**params))
+            elif kind == "map":
+                maps.append(f(**params))
+            else:
+                raise ValueError(f"Unknown kind: {kind}")
 
     filter_func = lambda mol: all(f(mol) for f in filters)
     map_func = lambda ms: reduce(lambda ms, f: f(ms), maps, ms)
