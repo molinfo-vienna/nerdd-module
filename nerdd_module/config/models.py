@@ -41,8 +41,8 @@ class Publication(BaseModel):
 class ColorPalette(BaseModel):
     type: Optional[str] = None
     name: Optional[str] = None
-    domain: List[str]
-    range: List[str]
+    domain: Optional[List[str]] = None
+    range: Union[str, List[str]] = []
     unknown: Optional[str] = None
 
 
