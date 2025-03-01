@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.30 (2025-03-01)
+
+### Fixes
+
+* fix: Handle the case where no conditions are given to molecule generation ([`950af6e`](https://github.com/molinfo-vienna/nerdd-module/commit/950af6e68059c8c0c1beb14d685a50df20999733))
+
+* fix: Make molecule generation in tests more flexible ([`636df3c`](https://github.com/molinfo-vienna/nerdd-module/commit/636df3cb44a864c2f7217a68fcd3835e80d14ceb))
+
+### Unknown
+
+* Merge pull request #65 from shirte/main
+
+fix: Make molecule generation in tests more flexible ([`4f32f3f`](https://github.com/molinfo-vienna/nerdd-module/commit/4f32f3f4824fd07146398b2a170b0b96e826b746))
+
+
 ## v0.3.29 (2025-01-31)
 
 ### Fixes
