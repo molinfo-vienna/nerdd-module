@@ -2,11 +2,13 @@ import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import seed, settings
 from hypothesis import strategies as st
-# TODO: remove "type: ignore" later
-from hypothesis_rdkit import mols  # type: ignore
+from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
 from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
 from ..polyfills import BlockLogs
+from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
+import re
+from functools import reduce
 
 
 @given(parsers.parse("a random seed set to {seed:d}"), target_fixture="random_seed")
@@ -48,18 +50,66 @@ def representations_from_molecules(molecules, input_type):
 
 @given(
     parsers.re(
-        r"a list of (?P<num>\d+) random molecules(?:, where (?P<num_none>\d+) entries are None)?"
+        r"a list of (?P<num>\d+) random molecules(?:, where(?P<conditions>[\s\S]*))?"
     ),
     target_fixture="molecules",
 )
-def molecules_with_none(num, num_none=None, random_seed=0):
+def molecules(num, conditions, random_seed=0):
     num = int(num)
-    num_none = int(num_none) if num_none is not None else 0
+
+    filters = []
+    maps = []
+
+    if conditions is not None:
+        def filter_weight(min_weight, max_weight):
+            min_weight = float(min_weight)
+            max_weight = float(max_weight)
+            return lambda mol: (min_weight <= CalcExactMolWt(mol) <= max_weight)
+
+        def map_to_none(num_none):
+            num_none = int(num_none)
+
+            # draw indices of molecules that should be set to None
+            indices = np.random.choice(num, num_none, replace=False)
+
+            return lambda ms: [m if i not in indices else None for i, m in enumerate(ms)]
+
+        expressions = [
+            # filters are functions that return True if the molecule should be kept
+            ("filter", r"each mol has a weight between (?P<min_weight>\d+) and (?P<max_weight>\d+)", filter_weight),
+            # maps are functions that modify the molecule
+            ("map", r"(?P<num_none>\d+) entries are None", map_to_none)
+        ]
+
+        conditions_list = [c for c in conditions.split("\n") if c.strip() != ""]
+
+        for condition in conditions_list:
+            for kind, expression, f in expressions:
+                # conditions might be a markdown list (starting with a star character)
+                expression = r"\s*(\*\s*)?" + expression + r"\s*"
+
+                match = re.match(expression, condition)
+                if match:
+                    params = match.groupdict()
+                    break
+            
+            assert match is not None, f"Could not parse condition: {condition}"
+
+            if kind == "filter":
+                filters.append(f(**params))
+            elif kind == "map":
+                maps.append(f(**params))
+            else:
+                raise ValueError(f"Unknown kind: {kind}")
+
+    filter_func = lambda mol: all(f(mol) for f in filters)
+    map_func = lambda ms: reduce(lambda ms, f: f(ms), maps, ms)
+
     result = None
 
     # pytest-bdd and hypothesis don't play well together (yet)
     # --> use this workaround to generate random molecules
-    @hgiven(st.lists(mols(), min_size=num, max_size=num, unique_by=MolToSmiles))
+    @hgiven(st.lists(mols().filter(filter_func), min_size=num, max_size=num, unique_by=MolToSmiles))
     @settings(max_examples=1, deadline=None)
     @seed(random_seed)
     def generate(ms):
@@ -68,14 +118,12 @@ def molecules_with_none(num, num_none=None, random_seed=0):
 
     generate()
 
+    # apply maps
+    result = map_func(result)
+
     for m in result:
         if m is None:
             continue
         m.SetProp("_Name", "mol")
-
-    # replace random entries with None
-    indices = np.random.choice(num, num_none, replace=False)
-    for i in indices:
-        result[i] = None
 
     return result
