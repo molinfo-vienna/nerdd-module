@@ -27,7 +27,7 @@ Note that input formats shouldn't be mixed.
 
 def infer_click_type(param: JobParameter) -> click.ParamType:
     if param.choices is not None:
-        choices = [c.value for c in param.choices]
+        choices = [str(c.value) for c in param.choices]
         return click.Choice(choices)
 
     type_map = {

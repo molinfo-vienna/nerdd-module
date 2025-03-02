@@ -47,7 +47,7 @@ class ColorPalette(BaseModel):
 
 
 class Choice(BaseModel):
-    value: str
+    value: Union[str, int, float, bool]
     label: Optional[str] = None
 
 
