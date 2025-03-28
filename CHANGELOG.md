@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.31 (2025-03-28)
+
+### Fixes
+
+* fix: Add color specification to result properties ([`851d2ef`](https://github.com/molinfo-vienna/nerdd-module/commit/851d2ef653eb1bc6442898264e9758bc636f438d))
+
+### Unknown
+
+* Merge pull request #66 from shirte/main
+
+fix: Add color specification to result properties ([`ec239af`](https://github.com/molinfo-vienna/nerdd-module/commit/ec239afe7efff8dddb57d7adde1a8527c0892256))
+
+
 ## v0.3.30 (2025-03-01)
 
 ### Fixes
