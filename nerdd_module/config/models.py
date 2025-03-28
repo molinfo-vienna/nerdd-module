@@ -38,6 +38,14 @@ class Publication(BaseModel):
     doi: Optional[str]
 
 
+class ColorPalette(BaseModel):
+    type: Optional[str] = None
+    name: Optional[str] = None
+    domain: List[str]
+    range: List[str]
+    unknown: Optional[str] = None
+
+
 class JobParameterChoice(BaseModel):
     value: str
     label: Optional[str] = None
@@ -82,6 +90,7 @@ class ResultProperty(BaseModel):
     from_property: Optional[str] = None
     image_width: Optional[int] = None
     image_height: Optional[int] = None
+    color_palette: Optional[ColorPalette] = None
 
     def is_visible(self, output_format: str) -> bool:
         formats = self.formats
