@@ -46,8 +46,8 @@ class ColorPalette(BaseModel):
     unknown: Optional[str] = None
 
 
-class JobParameterChoice(BaseModel):
-    value: str
+class Choice(BaseModel):
+    value: Union[str, int, float, bool]
     label: Optional[str] = None
 
 
@@ -58,7 +58,7 @@ class JobParameter(BaseModel):
     help_text: Optional[str] = None
     default: Any = None
     required: bool = False
-    choices: Optional[List[JobParameterChoice]] = None
+    choices: Optional[List[Choice]] = None
 
 
 Task = Literal[
@@ -85,6 +85,7 @@ class ResultProperty(BaseModel):
     sortable: bool = False
     group: Optional[str] = None
     level: Level = "molecule"
+    choices: Optional[List[Choice]] = None
     formats: Union[FormatSpec, IncludeExcludeFormatSpec, None] = None
     representation: Optional[str] = None
     from_property: Optional[str] = None
