@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.32 (2025-03-29)
+
+### Fixes
+
+* fix: Make domain of color palettes optional ([`fd555a9`](https://github.com/molinfo-vienna/nerdd-module/commit/fd555a97af339398aa2c20719c0fb6fab7a6529e))
+
+### Unknown
+
+* Merge pull request #67 from shirte/main
+
+fix: Make domain of color palettes optional ([`2594358`](https://github.com/molinfo-vienna/nerdd-module/commit/2594358012da2d626a7ae631e99a5b61fe2fc7f6))
+
+
 ## v0.3.31 (2025-03-28)
 
 ### Fixes
