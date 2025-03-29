@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.33 (2025-03-29)
+
+### Fixes
+
+* fix: Allow more types for color palette domains ([`2f27646`](https://github.com/molinfo-vienna/nerdd-module/commit/2f2764684088d265e37fdf138132096a354c3020))
+
+### Unknown
+
+* Merge pull request #68 from shirte/main
+
+fix: Allow more types for color palette domains ([`372863d`](https://github.com/molinfo-vienna/nerdd-module/commit/372863ddebee51ac58b6b7f3bc6183f6735cb389))
+
+
 ## v0.3.32 (2025-03-29)
 
 ### Fixes
