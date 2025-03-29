@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.34 (2025-03-29)
+
+### Fixes
+
+* fix: Allow other data types for choice values ([`c5b3dde`](https://github.com/molinfo-vienna/nerdd-module/commit/c5b3dde43a26f1c127230418b449fe4695f929be))
+
+* fix: Add choices field to ResultProperty model ([`5b813dd`](https://github.com/molinfo-vienna/nerdd-module/commit/5b813ddf2414860d8c9f429a0efa9c5df8072480))
+
+### Unknown
+
+* Merge pull request #69 from shirte/main
+
+Add choices field to ResultProperty model ([`5575c4b`](https://github.com/molinfo-vienna/nerdd-module/commit/5575c4b476f45c75ed1991240923cef308009316))
+
+
 ## v0.3.33 (2025-03-29)
 
 ### Fixes
