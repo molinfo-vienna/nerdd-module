@@ -1,6 +1,6 @@
 from typing import IO, Any, Dict, Iterable
 
-from rdkit.Chem import Mol, SDWriter
+from rdkit.Chem import Mol, SanitizeMol, SDWriter
 
 from .file_writer import FileLike, FileWriter
 from .writer_config import WriterConfig
@@ -18,6 +18,12 @@ class SdfWriter(FileWriter):
             for entry in entries:
                 # assume that there is a mol object
                 mol = entry["input_mol"]
+
+                # sanitize molecule to avoid basic writing errors (e.g. AtomKekulizeException)
+                try:
+                    SanitizeMol(mol)
+                except:  # noqa: E722
+                    mol = None
 
                 # if the molecule is erroneous, use an empty molecule
                 if mol is None:
@@ -38,7 +44,16 @@ class SdfWriter(FileWriter):
                     mol.SetProp(key, value_as_str)
 
                 # write molecule
-                writer.write(mol)
+                try:
+                    writer.write(mol)
+                except:  # noqa: E722
+                    # if the molecule can't be written, try to use an empty molecule
+                    empty_mol = Mol()
+                    # copy all properties from the original molecule
+                    for key, value in mol.GetPropsAsDict().items():
+                        empty_mol.SetProp(key, value)
+                    # write the empty molecule
+                    writer.write(mol)
         finally:
             writer.close()
 
