@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.35 (2025-04-13)
+
+### Fixes
+
+* fix: Sanitize molecules before writing them ([`0339a54`](https://github.com/molinfo-vienna/nerdd-module/commit/0339a5409dab796d7a9bfb3e9a0e8b43d40d437c))
+
+### Unknown
+
+* Merge pull request #70 from shirte/main
+
+fix: Sanitize molecules before writing them ([`74478e9`](https://github.com/molinfo-vienna/nerdd-module/commit/74478e9c231c8aeb685512c11aa888d6c2654051))
+
+
 ## v0.3.34 (2025-03-29)
 
 ### Fixes
