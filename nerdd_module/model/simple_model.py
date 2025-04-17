@@ -64,7 +64,7 @@ class SimpleModel(Model):
         return [
             EnforceSchemaStep(self.config, output_format),
             ConvertRepresentationsStep(self.config, output_format, **kwargs),
-            WriteOutputStep(output_format, **kwargs),
+            WriteOutputStep(output_format, config=self.config, **kwargs),
         ]
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
