@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.36 (2025-04-17)
+
+### Fixes
+
+* fix: Pass config to WriteOutputStep ([`c501418`](https://github.com/molinfo-vienna/nerdd-module/commit/c5014187eb9c8b7f51f8ee79c0e78cc6e0e00313))
+
+* fix: Require config parameter in WriteOutputStep ([`2cebca6`](https://github.com/molinfo-vienna/nerdd-module/commit/2cebca608fa5eb048d8e5605f20f2839cd12ae2d))
+
+### Unknown
+
+* Merge pull request #71 from shirte/main
+
+Pass config to WriteOutputStep ([`0a979b0`](https://github.com/molinfo-vienna/nerdd-module/commit/0a979b091ba3cea2381d1e64e58d6cd4fd87d423))
+
+
 ## v0.3.35 (2025-04-13)
 
 ### Fixes
