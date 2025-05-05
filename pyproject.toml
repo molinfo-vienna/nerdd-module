@@ -7,7 +7,8 @@ name = "nerdd-module"
 version = "0.3.36"
 description = "Base package to create NERDD modules"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 authors = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
 maintainers = [{ name = "Steffen Hirte", email = "steffen.hirte@univie.ac.at" }]
 dependencies = [
@@ -29,8 +30,6 @@ classifiers = [
     # audience
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
-    # license
-    "License :: OSI Approved :: BSD License",
     # programming language
     "Programming Language :: Python",
     # topics
