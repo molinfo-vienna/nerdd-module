@@ -1,8 +1,9 @@
 from collections import defaultdict
 from typing import Iterable
 
-from nerdd_module import Problem
 from pytest_bdd import parsers, then
+
+from nerdd_module import Problem
 
 
 @then("the result should contain the same number of entries as the input")
@@ -76,8 +77,8 @@ def check_problem_not_in_list(subset, problem):
         ], f"Problem list contains problem {problem} in record {record}"
 
 
-@then(parsers.parse("the model should have attribute '{name}' with value {value}"))
+@then(parsers.parse("the model config should have attribute '{name}' with value {value}"))
 def check_model_name(model, name, value):
     value = eval(value)
-    assert hasattr(model, name)
-    assert getattr(model, name) == value
+    assert hasattr(model.config, name)
+    assert getattr(model.config, name) == value
