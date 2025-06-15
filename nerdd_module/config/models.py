@@ -123,7 +123,7 @@ class Module(BaseModel):
         return spinalcase(self.name)
 
     task: Optional[Task] = None
-    rank: Optional[int] = None
+    rank: Optional[float] = None
     name: str
     batch_size: int = 100
     version: Optional[str] = None
