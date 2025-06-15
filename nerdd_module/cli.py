@@ -56,7 +56,7 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     input_format_list = "\n".join([f"* {fmt}" for fmt in ["smiles", "sdf", "inchi"]])
 
     help_text = input_description.format(
-        description=model.description, input_format_list=input_format_list
+        description=model.config.description, input_format_list=input_format_list
     )
 
     output_format_list = [
@@ -117,7 +117,7 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
     #
     # Add job parameters
     #
-    for param in model.job_parameters:
+    for param in model.config.job_parameters:
         # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
         param_name = spinalcase(param.name)
         main = click.option(

@@ -3,5 +3,4 @@ from .convert_representations_step import *
 from .model import *
 from .prediction_step import *
 from .read_input_step import *
-from .simple_model import *
 from .write_output_step import *
