@@ -1,4 +1,4 @@
-from nerdd_module import SimpleModel
+from nerdd_module import Model
 from nerdd_module.preprocessing import Sanitize
 
 __all__ = ["AtomicMassModel"]
@@ -7,7 +7,7 @@ __all__ = ["AtomicMassModel"]
 allowed_versions = ["mol_ids", "mols", "iterator", "error"]
 
 
-class AtomicMassModel(SimpleModel):
+class AtomicMassModel(Model):
     def __init__(self, preprocessing_steps=[Sanitize()], version="mol_ids", **kwargs):
         assert (
             version in allowed_versions
