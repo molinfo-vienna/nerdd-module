@@ -2,6 +2,8 @@ from typing import Iterable, NamedTuple
 
 __all__ = [
     "Problem",
+    "UnknownPredictionProblem",
+    "IncompletePredictionProblem",
     "InvalidSmiles",
     "UnknownProblem",
     "InvalidWeightProblem",
@@ -12,6 +14,18 @@ __all__ = [
 class Problem(NamedTuple):
     type: str
     message: str
+
+
+# an unknown prediction problem indicates that the model raised an exception during
+# prediction
+def UnknownPredictionProblem() -> Problem:
+    return Problem("unknown_prediction_error", "An unknown error occured during prediction.")
+
+
+# an incomplete prediction problem indicates that the model successfully returns
+# predictions, but part of the input molecules are missing in the results
+def IncompletePredictionProblem() -> Problem:
+    return Problem("incomplete_prediction_error", "The model couldn't process the molecule.")
 
 
 def InvalidSmiles() -> Problem:
