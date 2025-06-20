@@ -90,10 +90,18 @@ class Model(ABC):
 
         assert isinstance(output_step, OutputStep), "The last step must be an OutputStep."
 
+        # make mypy happy by restricting the type of self.config.task
+        assert self.config.task is not None
+
         steps = [
             *input_steps,
             *preprocessing_steps,
-            PredictionStep(self._predict_mols, batch_size=self.config.batch_size, **kwargs),
+            PredictionStep(
+                self._predict_mols,
+                task=self.config.task,
+                batch_size=self.config.batch_size,
+                **kwargs,
+            ),
             *postprocessing_steps,
         ]
 
@@ -140,6 +148,9 @@ class Model(ABC):
         base_config = self._get_base_config()
         if isinstance(base_config, dict):
             base_config = DictConfiguration(base_config)
+
+        # ensure that mandatory properties are present
+        base_config = MergedConfiguration(DefaultConfiguration(self), base_config)
 
         # add default properties mol_id, raw_input, etc.
         task = base_config.get_dict().task
@@ -214,7 +225,6 @@ class Model(ABC):
         ]
 
         configs = [
-            DefaultConfiguration(self),
             DictConfiguration({"result_properties": default_properties_start}),
             base_config,
             DictConfiguration({"result_properties": default_properties_end}),
