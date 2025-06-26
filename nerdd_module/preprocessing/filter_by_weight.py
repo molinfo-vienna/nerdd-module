@@ -6,6 +6,8 @@ from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 from ..problem import InvalidWeightProblem, Problem
 from .preprocessing_step import PreprocessingStep
 
+__all__ = ["FilterByWeight"]
+
 
 class FilterByWeight(PreprocessingStep):
     def __init__(
