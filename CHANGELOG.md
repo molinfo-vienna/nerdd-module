@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.37 (2025-06-29)
+
+### Fixes
+
+* fix: Deprecate Python 3.8 ([`93d159c`](https://github.com/molinfo-vienna/nerdd-module/commit/93d159cb1e3fe23274f5f1c8535caa3d2de7a1bd))
+
+* fix: Use SPDX license expression ([`d60785e`](https://github.com/molinfo-vienna/nerdd-module/commit/d60785ef8721bc318e0cd2aba64e437b25f265d3))
+
+### Unknown
+
+* Merge pull request #73 from shirte/main
+
+fix: Use SPDX license expression ([`93da2c4`](https://github.com/molinfo-vienna/nerdd-module/commit/93da2c4120c6df143880043f6ded52deb8f2e28f))
+
+
 ## v0.3.36 (2025-04-17)
 
 ### Fixes
