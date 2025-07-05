@@ -1,14 +1,13 @@
+from pytest_bdd import given, parsers, when
+from rdkit.Chem import MolToSmiles
+
 from nerdd_module.input import DepthFirstExplorer
 from nerdd_module.model import ReadInputStep
-from nerdd_module.preprocessing import (
-    FilterByElement,
-    FilterByWeight,
-    GetParentMolWithCsp,
-    Sanitize,
-    StandardizeWithCsp,
-)
+from nerdd_module.preprocessing import (FilterByElement, FilterByWeight,
+                                        GetParentMolWithCsp,
+                                        RemoveSmallFragments, Sanitize,
+                                        StandardizeWithCsp)
 from nerdd_module.tests.preprocessing import DummyPreprocessingStep
-from pytest_bdd import given, parsers, when
 
 
 #
@@ -108,3 +107,26 @@ def preprocessed_molecules_get_parent_mol_with_csp(representations):
     sanitize = Sanitize()
     get_parent_mol = GetParentMolWithCsp()
     return list(get_parent_mol(sanitize(input_step())))
+
+
+#
+# FILTER SMALL FRAGMENTS
+#
+@when(
+    parsers.parse("small fragments are removed from the molecules"),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_filter_small_fragments(representations):
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    filter_small_fragments = RemoveSmallFragments()
+
+    results = [
+        {
+            **record,
+            "preprocessed_smiles": MolToSmiles(record["preprocessed_mol"]),
+        }
+        for record in filter_small_fragments(input_step())
+    ]
+
+    return results

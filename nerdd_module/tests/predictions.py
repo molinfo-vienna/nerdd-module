@@ -48,6 +48,12 @@ def predictions_atomic_mass_model(representations, version, multiplier):
         output_format="record_list",
     )
 
+@when(
+    "all results are considered",
+    target_fixture="subset",
+)
+def subset_without_none(predictions):
+    return predictions
 
 @when(
     "the subset of the result where the input was not None is considered",
