@@ -51,14 +51,49 @@ class Choice(BaseModel):
     label: Optional[str] = None
 
 
+JobType = Literal["int", "integer", "float", "bool", "boolean", "str", "string"]
+
+
 class JobParameter(BaseModel):
     name: str
-    type: str
+    type: JobType
     visible_name: Optional[str] = None
     help_text: Optional[str] = None
     default: Any = None
     required: bool = False
     choices: Optional[List[Choice]] = None
+
+    def validate_value(self, value: Any) -> None:
+        if self.type == ["int", "integer"]:
+            if not isinstance(value, int):
+                raise ValueError(
+                    f"Parameter {self.name} must be an integer, got {type(value).__name__}."
+                )
+        elif self.type == "float":
+            if not isinstance(value, (int, float)):
+                raise ValueError(
+                    f"Parameter {self.name} must be a float, got {type(value).__name__}."
+                )
+        elif self.type in ["bool", "boolean"]:
+            if not isinstance(value, bool):
+                raise ValueError(
+                    f"Parameter {self.name} must be a boolean, got {type(value).__name__}."
+                )
+        elif self.type in ["str", "string"]:
+            if not isinstance(value, str):
+                raise ValueError(
+                    f"Parameter {self.name} must be a string, got {type(value).__name__}."
+                )
+        else:
+            raise ValueError(f"Unknown type for parameter {self.name}: {self.type}")
+
+        if self.choices:
+            choice_values = [choice.value for choice in self.choices]
+            if value not in choice_values:
+                raise ValueError(
+                    f"Invalid value for parameter {self.name}: {value}. "
+                    f"Expected one of {choice_values}."
+                )
 
 
 Task = Literal[
@@ -207,3 +242,25 @@ class Module(BaseModel):
                 )
 
         return values
+
+    def validate_job_parameters(self, params: dict) -> None:
+        """
+        Validate the job parameters against the module's job parameters.
+        Raises an error if a parameter is missing or has an invalid type.
+        """
+        # make sure that all job parameters are present
+        for param in self.job_parameters:
+            if param.name not in params and param.required:
+                raise ValueError(f"Missing required job parameter: {param.name}")
+
+        # check that there are no additional parameters
+        param_names = {param.name for param in self.job_parameters}
+        for key in params.keys():
+            if key not in param_names:
+                raise ValueError(f"Unknown job parameter: {key}")
+
+        # validate all parameters
+        for param in self.job_parameters:
+            if param.name in params:
+                value = params[param.name]
+                param.validate_value(value)
