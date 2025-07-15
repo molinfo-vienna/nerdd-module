@@ -52,13 +52,21 @@ def predictions_atomic_mass_model(representations, version, multiplier):
     "all results are considered",
     target_fixture="subset",
 )
-def subset_without_none(predictions):
+def all_results(predictions):
     return predictions
 
 @when(
     "the subset of the result where the input was not None is considered",
     target_fixture="subset",
 )
-def subset_without_none(predictions):
+def subset_without_input_none(predictions):
     # remove None entries
     return [p for p in predictions if p["input_mol"] is not None]
+
+@when(
+    "the subset of the result where the preprocessed mol was not None is considered",
+    target_fixture="subset",
+)
+def subset_without_preprocessed_none(predictions):
+    # remove None entries
+    return [p for p in predictions if p["preprocessed_mol"] is not None]
