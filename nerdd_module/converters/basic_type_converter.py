@@ -7,9 +7,12 @@ from .converter_config import ALL, ConverterConfig
 __all__ = ["BasicTypeConverter", "basic_data_types"]
 
 basic_data_types = [
+    "integer",
     "int",
     "float",
     "string",
+    "str",
+    "boolean",
     "bool",
 ]
 
@@ -26,13 +29,13 @@ class BasicTypeConverter(Converter):
         self.type = self.result_property.type
 
         self._f: Callable[[Any], Any]
-        if self.type == "int":
+        if self.type == "integer" or self.type == "int":
             self._f = int
         elif self.type == "float":
             self._f = float
-        elif self.type == "string":
+        elif self.type == "string" or self.type == "str":
             self._f = str
-        elif self.type == "bool":
+        elif self.type == "boolean" or self.type == "bool":
             self._f = bool
         else:
             self._f = lambda v: v
