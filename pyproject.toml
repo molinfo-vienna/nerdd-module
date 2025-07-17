@@ -20,6 +20,7 @@ dependencies = [
     "stringcase>=1.2.0",
     "decorator>=5.1.1",
     "pydantic>=2",
+    "chardet>=5",
     # install importlib-resources and importlib-metadata for old Python versions
     "importlib-resources>=5; python_version<'3.9'",
     "importlib-metadata>=4.6; python_version<'3.10'",
@@ -57,6 +58,7 @@ dev = [
     "types-PyYAML",
     "types-decorator",
     "types-setuptools",
+    "types-chardet",
     "pre-commit>=2",
 ]
 csp = [
@@ -78,7 +80,7 @@ test = [
     "hypothesis",
     "hypothesis-rdkit",
 ]
-docs = ["mkdocs", "mkdocs-material", "mkdocstrings"]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
 
 [project.urls]
 Repository = "https://github.com/molinfo-vienna/nerdd-module"
