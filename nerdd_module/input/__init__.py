@@ -8,6 +8,7 @@ from .mol_reader import *
 from .reader import *
 from .sdf_reader import *
 from .smiles_reader import *
+from .stream_reader import *
 from .string_reader import *
 from .tar_reader import *
 from .zip_reader import *
