@@ -30,6 +30,13 @@ class Reader(ABC):
     def __init__(self) -> None:
         super().__init__()
 
+    @abstractmethod
+    def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
+        pass
+
+    #
+    # Register and manage subclasses
+    #
     @classmethod
     def __init_subclass__(
         cls,
@@ -38,10 +45,6 @@ class Reader(ABC):
         super().__init_subclass__(**kwargs)
         if not inspect.isabstract(cls):
             _factories.append(cls)
-
-    @abstractmethod
-    def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
-        pass
 
     @classmethod
     def get_reader_mapping(cls: Type[Reader]) -> List[Type["Reader"]]:
