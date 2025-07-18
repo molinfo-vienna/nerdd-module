@@ -1,30 +1,21 @@
-from codecs import getreader
 from typing import Any, Iterator
 
 from rdkit.Chem import MolFromMolBlock
 
 from ..polyfills import BlockLogs
 from ..problem import Problem
-from .reader import ExploreCallable, MoleculeEntry, Reader
+from .reader import ExploreCallable, MoleculeEntry
+from .stream_reader import StreamReader
 
 __all__ = ["SdfReader"]
 
-StreamReader = getreader("utf-8")
 
-
-class SdfReader(Reader):
+class SdfReader(StreamReader):
     def __init__(self, max_num_lines_mol_block: int = 10000) -> None:
         super().__init__()
         self.max_num_lines_mol_block = max_num_lines_mol_block
 
-    def read(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
-        if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
-            raise TypeError("input must be a stream-like object")
-
-        input_stream.seek(0)
-
-        reader = StreamReader(input_stream)
-
+    def _read_stream(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         # suppress RDKit warnings
         with BlockLogs():
             # We do not use SDMolSupplier, because it does not accept a stream-like
@@ -34,7 +25,12 @@ class SdfReader(Reader):
                 # collect lines to parse as a mol block
                 mol_block = ""
                 num_lines = 0
-                line = reader.readline()
+
+                try:
+                    line = input_stream.readline()
+                except UnicodeDecodeError:
+                    line = "<invalid_encoding>\n"
+
                 while line:
                     mol_block += line
                     if line.strip() == "$$$$":
@@ -45,7 +41,10 @@ class SdfReader(Reader):
                         break
 
                     # read next line
-                    line = reader.readline()
+                    try:
+                        line = input_stream.readline()
+                    except UnicodeDecodeError:
+                        line = "<invalid_encoding>\n"
 
                 if mol_block.strip() != "":
                     try:
