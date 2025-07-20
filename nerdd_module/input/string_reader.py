@@ -11,9 +11,12 @@ class StringReader(Reader):
         super().__init__()
 
     def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
-        assert isinstance(input, str)
+        assert isinstance(input, (str, bytes))
 
-        with BytesIO(input.encode("utf-8")) as f:
+        if isinstance(input, str):
+            input = input.encode("utf-8")
+
+        with BytesIO(input) as f:
             yield from explore(f)
 
     def __repr__(self) -> str:
