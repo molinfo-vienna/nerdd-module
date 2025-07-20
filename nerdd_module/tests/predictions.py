@@ -21,7 +21,8 @@ def mol_weight_model(version):
 
 @when(
     parsers.parse(
-        "the mol weight model (version '{version}') generates predictions for the molecule representations"
+        "the mol weight model (version '{version}') generates predictions for the molecule "
+        "representations"
     ),
     target_fixture="predictions",
 )
@@ -36,7 +37,8 @@ def predictions_mol_weight_model(representations, version, multiplier):
 
 @when(
     parsers.parse(
-        "the atomic mass model (version '{version}') generates predictions for the molecule representations"
+        "the atomic mass model (version '{version}') generates predictions for the molecule "
+        "representations"
     ),
     target_fixture="predictions",
 )
@@ -48,12 +50,14 @@ def predictions_atomic_mass_model(representations, version, multiplier):
         output_format="record_list",
     )
 
+
 @when(
     "all results are considered",
     target_fixture="subset",
 )
 def all_results(predictions):
     return predictions
+
 
 @when(
     "the subset of the result where the input was not None is considered",
@@ -62,6 +66,7 @@ def all_results(predictions):
 def subset_without_input_none(predictions):
     # remove None entries
     return [p for p in predictions if p["input_mol"] is not None]
+
 
 @when(
     "the subset of the result where the preprocessed mol was not None is considered",

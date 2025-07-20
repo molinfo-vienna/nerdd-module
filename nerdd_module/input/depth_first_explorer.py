@@ -85,11 +85,9 @@ class DepthFirstExplorer(Explorer):
 
                 if (
                     score > best_score
-                    # if the score is the same, prefer the reader with higher ratio
-                    # of valid entries
+                    # if the score is the same, prefer the reader with higher ratio of valid entries
                     or (score == best_score and ratio > best_ratio)
-                    # if the ratio is the same, prefer the reader with less invalid
-                    # results
+                    # if the ratio is the same, prefer the reader with less invalid results
                     or (
                         score == best_score
                         and ratio == best_ratio

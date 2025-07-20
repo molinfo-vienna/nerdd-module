@@ -1,5 +1,6 @@
-from nerdd_module.input import DepthFirstExplorer
 from pytest_bdd import parsers, then, when
+
+from nerdd_module.input import DepthFirstExplorer
 
 
 @when(

@@ -1,11 +1,14 @@
 from nerdd_module import Problem
 from nerdd_module.config import Module, ResultProperty
-from nerdd_module.converters import (BasicTypeConverter, Converter,
-                                     ProblemListConverter,
-                                     ProblemListIdentityConverter,
-                                     SourceListConverter,
-                                     SourceListIdentityConverter,
-                                     VoidConverter)
+from nerdd_module.converters import (
+    BasicTypeConverter,
+    Converter,
+    ProblemListConverter,
+    ProblemListIdentityConverter,
+    SourceListConverter,
+    SourceListIdentityConverter,
+    VoidConverter,
+)
 
 config = Module(name="test")
 
@@ -57,7 +60,7 @@ def test_problem_list_converter():
 
 def test_source_list_converter():
     result_property = ResultProperty(name="test", type="source_list")
-    source_list = ('source1', 'source2')
+    source_list = ("source1", "source2")
     for output_format in output_formats:
         converter = Converter.get_converter(config, result_property, output_format)
         converted_value = converter.convert(source_list, {})

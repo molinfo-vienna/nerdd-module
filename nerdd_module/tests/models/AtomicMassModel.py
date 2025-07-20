@@ -8,7 +8,9 @@ allowed_versions = ["mol_ids", "mols", "iterator", "error"]
 
 
 class AtomicMassModel(Model):
-    def __init__(self, preprocessing_steps=[Sanitize()], version="mol_ids", **kwargs):
+    def __init__(self, preprocessing_steps=None, version="mol_ids", **kwargs):
+        if preprocessing_steps is None:
+            preprocessing_steps = [Sanitize()]
         assert (
             version in allowed_versions
         ), f"version must be one of {allowed_versions}, got {version}"
@@ -64,5 +66,3 @@ class AtomicMassModel(Model):
                 {"name": "mass", "type": "float", "level": "atom"},
             ],
         }
-
-
