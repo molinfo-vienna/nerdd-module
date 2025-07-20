@@ -105,7 +105,6 @@ patterns = ["*.py", "*.feature", "pyproject.toml"]
 
 [tool.ruff]
 line-length = 100
-extend-exclude = ["tests", "nerdd_module/tests"]
 
 [tool.ruff.lint]
 select = [
