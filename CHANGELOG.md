@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.3.38 (2025-07-23)
+
+### Fixes
+
+* fix: Make module rank a float ([`f5ba5f0`](https://github.com/molinfo-vienna/nerdd-module/commit/f5ba5f0b24b9a1234e6f194d27f8d76aaec8018c))
+
+* fix: Let example models derive from Model class ([`15037df`](https://github.com/molinfo-vienna/nerdd-module/commit/15037dfad24a7f81cd88bc018e437678ec269943))
+
+* fix: Adapt tests to merging classes ([`4dc5c9a`](https://github.com/molinfo-vienna/nerdd-module/commit/4dc5c9acb0fcc423ce638d7eed5c3005eb39d2d4))
+
+* fix: Merge Model and SimpleModel class ([`eb99211`](https://github.com/molinfo-vienna/nerdd-module/commit/eb992117bb7686d798a5b51d5c39c224cf67b3d7))
+
+* fix: Move PredictionStep into separate file ([`1283551`](https://github.com/molinfo-vienna/nerdd-module/commit/1283551fd33bd5a6874c2f4d050283d36f8df372))
+
+### Unknown
+
+* Merge pull request #74 from shirte/main
+
+Merge Model and SimpleModel class ([`082e822`](https://github.com/molinfo-vienna/nerdd-module/commit/082e822750a3f05a34302995960bc91d14e9f87a))
+
+
 ## v0.3.37 (2025-06-29)
 
 ### Fixes
