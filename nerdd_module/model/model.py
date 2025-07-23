@@ -1,54 +1,80 @@
 import logging
 from abc import ABC, abstractmethod
-from collections import defaultdict
-from typing import Any, Iterable, Iterator, List, Optional, Tuple
+from functools import cached_property
+from typing import Any, Iterable, List, Optional, Tuple, Union
 
 from rdkit.Chem import Mol
-from stringcase import snakecase  # type: ignore
 
-from ..config import JobParameter
+from ..config import (
+    Configuration,
+    DefaultConfiguration,
+    DictConfiguration,
+    MergedConfiguration,
+    Module,
+    PackageConfiguration,
+    SearchYamlConfiguration,
+)
+from ..input import DepthFirstExplorer
+from ..preprocessing import PreprocessingStep
 from ..problem import Problem
 from ..steps import OutputStep, Step
-from ..util import call_with_mappings
+from ..util import get_file_path_to_instance
+from .assign_name_step import AssignNameStep
+from .convert_representations_step import ConvertRepresentationsStep
+from .enforce_schema_step import EnforceSchemaStep
+from .prediction_step import PredictionStep
+from .read_input_step import ReadInputStep
+from .write_output_step import WriteOutputStep
 
 logger = logging.getLogger(__name__)
 
 
-# an unknown prediction problem indicates that the model raised an exception during
-# prediction
-def UnknownPredictionProblem() -> Problem:
-    return Problem("unknown_prediction_error", "An unknown error occured during prediction.")
-
-
-# an incomplete prediction problem indicates that the model successfully returns
-# predictions, but part of the input molecules are missing in the results
-def IncompletePredictionProblem() -> Problem:
-    return Problem("incomplete_prediction_error", "The model couldn't process the molecule.")
-
-
 class Model(ABC):
-    def __init__(self) -> None:
+    def __init__(self, preprocessing_steps: Iterable[Step] = []) -> None:
         super().__init__()
+
+        assert isinstance(
+            preprocessing_steps, Iterable
+        ), f"Expected Iterable for argument preprocessing_steps, got {type(preprocessing_steps)}"
+        assert all(isinstance(step, Step) for step in preprocessing_steps), (
+            f"Expected all elements of preprocessing_steps to be of type Step, "
+            f"got {[type(step) for step in preprocessing_steps if not isinstance(step, Step)]}"
+        )
+
+        self._preprocessing_steps = preprocessing_steps
+
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        return mol, []
+
+    def _get_input_steps(
+        self, input: Any, input_format: Optional[str], **kwargs: Any
+    ) -> List[Step]:
+        return [
+            ReadInputStep(DepthFirstExplorer(**kwargs), input),
+        ]
+
+    def _get_preprocessing_steps(
+        self, input: Any, input_format: Optional[str], **kwargs: Any
+    ) -> List[Step]:
+        return [
+            AssignNameStep(),
+            *self._preprocessing_steps,
+            # the following step ensures that the column preprocessed_mol is created
+            # (even if self._preprocessing_steps is empty)
+            CustomPreprocessingStep(self),
+        ]
 
     @abstractmethod
     def _predict_mols(self, mols: List[Mol], **kwargs: Any) -> Iterable[dict]:
         pass
 
-    @abstractmethod
-    def _get_input_steps(
-        self, input: Any, input_format: Optional[str], **kwargs: Any
-    ) -> List[Step]:
-        pass
-
-    @abstractmethod
-    def _get_preprocessing_steps(
-        self, input: Any, input_format: Optional[str], **kwargs: Any
-    ) -> List[Step]:
-        pass
-
-    @abstractmethod
     def _get_postprocessing_steps(self, output_format: Optional[str], **kwargs: Any) -> List[Step]:
-        pass
+        output_format = output_format or "pandas"
+        return [
+            EnforceSchemaStep(self.config, output_format),
+            ConvertRepresentationsStep(self.config, output_format, **kwargs),
+            WriteOutputStep(output_format, config=self.config, **kwargs),
+        ]
 
     def predict(
         self,
@@ -67,7 +93,7 @@ class Model(ABC):
         steps = [
             *input_steps,
             *preprocessing_steps,
-            PredictionStep(self, batch_size=self.batch_size, **kwargs),
+            PredictionStep(self._predict_mols, batch_size=self.config.batch_size, **kwargs),
             *postprocessing_steps,
         ]
 
@@ -80,181 +106,134 @@ class Model(ABC):
         return output_step.get_result()
 
     #
-    # Properties
+    # Configuration
     #
-    def _get_batch_size(self) -> int:
-        return 1
+    def _get_base_config(self) -> Union[Configuration, dict]:
+        # get the class of the nerdd module, e.g. <CypstrateModel>
+        nerdd_module_class = self.__class__
 
-    batch_size = property(fget=lambda self: self._get_batch_size())
+        # get the module name of the nerdd module class
+        # e.g. "cypstrate.cypstrate_model"
+        python_module = nerdd_module_class.__module__
 
-    def _get_name(self) -> str:
-        return snakecase(self.__class__.__name__)
+        # get the root module name, e.g. "cypstrate"
+        root_module = python_module.split(".")[0]
 
-    name = property(fget=lambda self: self._get_name())
+        configs: List[Configuration] = []
 
-    def _get_description(self) -> str:
-        return ""
-
-    description = property(fget=lambda self: self._get_description())
-
-    def _get_job_parameters(self) -> List[JobParameter]:
-        return []
-
-    job_parameters = property(fget=lambda self: self._get_job_parameters())
-
-
-class PredictionStep(Step):
-    def __init__(self, model: Model, batch_size: int, **kwargs: Any) -> None:
-        super().__init__()
-        self.model = model
-        self.batch_size = batch_size
-        self.kwargs = kwargs
-
-    def _run(self, source: Iterator[dict]) -> Iterator[dict]:
-        # We need to process the molecules in batches, because most ML models perform
-        # better when predicting multiple molecules at once. Additionally, we want to
-        # filter out molecules that could not be preprocessed.
-        def _batch_and_filter(
-            source: Iterator[dict], n: int
-        ) -> Iterator[Tuple[List[dict], List[dict]]]:
-            batch = []
-            none_batch = []
-            for record in source:
-                if record["preprocessed_mol"] is None:
-                    none_batch.append(record)
-                else:
-                    batch.append(record)
-                    if len(batch) == n:
-                        yield batch, none_batch
-                        batch = []
-                        none_batch = []
-            if len(batch) > 0 or len(none_batch) > 0:
-                yield batch, none_batch
-
-        for batch, none_batch in _batch_and_filter(source, self.batch_size):
-            # return the records where mols are None
-            yield from none_batch
-
-            # process the batch
-            yield from self._process_batch(batch)
-
-    def _process_batch(self, batch: List[dict]) -> Iterator[dict]:
-        # each molecule gets a unique id (0, 1, ..., n) as its temporary id
-        mol_ids = [record["mol_id"] for record in batch]
-        mols = [record["preprocessed_mol"] for record in batch]
-        temporary_mol_ids = range(len(batch))
-        for id, mol in zip(temporary_mol_ids, mols):
-            mol.SetProp("_TempId", str(id))
-
-        # do the actual prediction
         try:
-            if len(batch) > 0:
-                predictions = list(
-                    call_with_mappings(
-                        self.model._predict_mols,
-                        {**self.kwargs, "mols": mols},
-                    )
-                )
-            else:
-                predictions = []
+            configs.append(  # TODO: remove "."
+                SearchYamlConfiguration(get_file_path_to_instance(self) or ".")
+            )
+        except Exception:
+            pass
 
-            # check that the predictions are a list
-            assert isinstance(predictions, list), "The predictions must be an iterable."
-            assert all(
-                isinstance(record, dict) for record in predictions
-            ), "The predictions must be a list of dictionaries."
-        except Exception as e:
-            logger.exception("An error occurred during prediction.", exc_info=e)
+        try:
+            configs.append(PackageConfiguration(f"{root_module}.data", filename="nerdd.yml"))
+        except Exception:
+            pass
 
-            # if an error occurs, we want to catch it and yield the error message
-            predictions = [
-                {
-                    "mol_id": i,
-                    "problems": [UnknownPredictionProblem()],
-                }
-                for i, _ in enumerate(batch)
+        return MergedConfiguration(*configs)
+
+    def _get_config(self) -> Configuration:
+        # get base configuration specified in this class
+        base_config = self._get_base_config()
+        if isinstance(base_config, dict):
+            base_config = DictConfiguration(base_config)
+
+        # add default properties mol_id, raw_input, etc.
+        task = base_config.get_dict().task
+
+        # check whether we need to add to add a property "atom_id" or "derivative_id"
+        task_based_property = []
+        if task == "atom_property_prediction":
+            task_based_property = [
+                {"name": "atom_id", "type": "int", "visible": False},
+            ]
+        elif task == "derivative_property_prediction":
+            task_based_property = [
+                {"name": "derivative_id", "type": "int", "visible": False},
             ]
 
-        # During prediction, molecules might have been removed / reordered.
-        # There are three ways to connect the predictions to the original molecules:
-        # 1. predictions have a key "mol_id" that contains the molecule ids
-        # 2. predictions have a key "mol" that contains the molecules that were passed
-        #    to the _predict_mols method (they have a secret _TempId property that we
-        #    can use for the matching)
-        # 3. the list of predictions has as many records as the batch (and we assume
-        #    that the order of the molecules stayed the same)
-        if all("mol_id" in record for record in predictions):
-            pass
-        elif all("mol" in record for record in predictions):
-            # check that molecule names contain only valid ids
-            for record in predictions:
-                mol_id_from_mol = int(record["mol"].GetProp("_TempId"))
-                record["mol_id"] = mol_id_from_mol
+        default_properties_start = [
+            {"name": "mol_id", "type": "int", "visible": False},
+            *task_based_property,
+            {
+                "name": "input_text",
+                "visible_name": "Input text",
+                "type": "string",
+                "visible": False,
+            },
+            {
+                "name": "input_type",
+                "visible_name": "Input type",
+                "type": "string",
+                "visible": False,
+            },
+            {
+                "name": "source",
+                "visible_name": "Source",
+                "type": "source_list",
+                "visible": False,
+            },
+            {"name": "name", "visible_name": "Name", "type": "string"},
+            {
+                "name": "input_mol",
+                "visible_name": "Input Structure",
+                "type": "mol",
+                "visible": False,
+            },
+            {
+                "name": "input_smiles",
+                "visible_name": "Input SMILES",
+                "type": "representation",
+                "from_property": "input_mol",
+                "visible": False,
+            },
+            {
+                "name": "preprocessed_mol",
+                "visible_name": "Preprocessed Structure",
+                "type": "mol",
+            },
+            {
+                "name": "preprocessed_smiles",
+                "visible_name": "Preprocessed SMILES",
+                "type": "representation",
+                "from_property": "preprocessed_mol",
+                "visible": False,
+            },
+        ]
 
-                # we don't need the molecule anymore (we have it in the batch)
-                del record["mol"]
-        else:
-            assert len(predictions) == len(batch), (
-                "The number of predicted molecules must be equal to the number of "
-                "valid input molecules."
-            )
-            for i, record in enumerate(predictions):
-                record["mol_id"] = i
+        default_properties_end = [
+            {
+                "name": "problems",
+                "visible_name": "Problems",
+                "type": "problem_list",
+                "visible": False,
+            },
+        ]
 
-        # check that mol_id contains only valid ids
-        mol_id_set = set(temporary_mol_ids)
-        for record in predictions:
-            assert (
-                record["mol_id"] in mol_id_set
-            ), f"The mol_id {record['mol_id']} is not in the batch."
+        configs = [
+            DefaultConfiguration(self),
+            DictConfiguration({"result_properties": default_properties_start}),
+            base_config,
+            DictConfiguration({"result_properties": default_properties_end}),
+        ]
 
-        # create a mapping from mol_id to record (for quick access)
-        mol_id_to_record = defaultdict(list)
-        for record in predictions:
-            mol_id_to_record[record["mol_id"]].append(record)
+        return MergedConfiguration(*configs)
 
-        # add all records that are missing in the predictions
-        for mol_id in temporary_mol_ids:
-            if mol_id not in mol_id_to_record:
-                # add a dummy record to the mapping
-                mol_id_to_record[mol_id].append(
-                    {
-                        # notify the user that the molecule could not be predicted
-                        "problems": [IncompletePredictionProblem()],
-                    }
-                )
+    @cached_property
+    def config(self) -> Module:
+        return self._get_config().get_dict()
 
-        # If the result has multiple entries per mol_id, check that atom_id or
-        # derivative_id is present in multi-entry results.
-        if len(predictions) > len(batch):
-            for _, records in mol_id_to_record.items():
-                if len(records) > 1:
-                    has_atom_id = all("atom_id" in record for record in records)
-                    has_derivative_id = all("derivative_id" in record for record in records)
-                    assert has_atom_id or has_derivative_id, (
-                        "The result contains multiple entries per molecule, but does "
-                        "not contain atom_id or derivative_id."
-                    )
 
-        # TODO: check range and completeness of atom ids and derivative ids
+class CustomPreprocessingStep(PreprocessingStep):
+    def __init__(self, model: Model):
+        super().__init__()
+        self.model = model
 
-        for key, records in mol_id_to_record.items():
-            for record in records:
-                # merge the prediction with the original record
-                result = {
-                    **batch[key],
-                    **record,
-                }
-
-                # remove the temporary id
-                result["preprocessed_mol"].ClearProp("_TempId")
-
-                # add the original mol id
-                result["mol_id"] = mol_ids[key]
-
-                # merge problems from preprocessing and prediction
-                preprocessing_problems = batch[key].get("problems", [])
-                prediction_problems = record.get("problems", [])
-                result["problems"] = preprocessing_problems + prediction_problems
-
-                yield result
+    def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        try:
+            return self.model._preprocess(mol)
+        except Exception as e:
+            return None, [Problem(type="preprocessing_error", message=str(e))]

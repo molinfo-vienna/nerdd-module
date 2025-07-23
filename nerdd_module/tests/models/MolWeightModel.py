@@ -1,6 +1,6 @@
 from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 
-from nerdd_module import SimpleModel
+from nerdd_module import Model
 from nerdd_module.preprocessing import Sanitize
 
 __all__ = ["MolWeightModel"]
@@ -8,7 +8,7 @@ __all__ = ["MolWeightModel"]
 allowed_versions = ["order_based", "mol_ids", "mols", "iterator", "error"]
 
 
-class MolWeightModel(SimpleModel):
+class MolWeightModel(Model):
     def __init__(self, preprocessing_steps=[Sanitize()], version="order_based", **kwargs):
         assert (
             version in allowed_versions
