@@ -1,7 +1,8 @@
 import logging
 from collections import defaultdict
-from typing import Any, Callable, Iterator, List, Tuple
+from typing import Any, Callable, DefaultDict, Iterator, List, Set, Tuple
 
+from ..config import Task
 from ..problem import IncompletePredictionProblem, UnknownPredictionProblem
 from ..steps import Step
 from ..util import call_with_mappings
@@ -12,9 +13,10 @@ __all__ = ["PredictionStep"]
 
 
 class PredictionStep(Step):
-    def __init__(self, predict_fn: Callable, batch_size: int, **kwargs: Any) -> None:
+    def __init__(self, predict_fn: Callable, task: Task, batch_size: int, **kwargs: Any) -> None:
         super().__init__()
         self._predict_fn = predict_fn
+        self._task = task
         self._batch_size = batch_size
         self._kwargs = kwargs
 
@@ -116,10 +118,25 @@ class PredictionStep(Step):
                 record["mol_id"] in mol_id_set
             ), f"The mol_id {record['mol_id']} is not in the batch."
 
+        # depending on the task, we need to check atom_id or derivative_id
+        if self._task == "atom_property_prediction":
+            sub_id_property = "atom_id"
+        elif self._task == "derivative_property_prediction":
+            sub_id_property = "derivative_id"
+        else:
+            sub_id_property = None
+
         # create a mapping from mol_id to record (for quick access)
-        mol_id_to_record = defaultdict(list)
+        mol_id_to_record: DefaultDict[int, List[dict]] = defaultdict(list)
         for record in predictions:
-            mol_id_to_record[record["mol_id"]].append(record)
+            current_record_list = mol_id_to_record[record["mol_id"]]
+            current_record_list.append(record)
+            if len(current_record_list) > 1 and sub_id_property is None:
+                raise ValueError(
+                    f"There are duplicate records for mol_id={record['mol_id']}, but the "
+                    f"prediction task {self._task} requires unique mol_id values. The duplicates "
+                    f"are: {current_record_list}."
+                )
 
         # add all records that are missing in the predictions
         for mol_id in temporary_mol_ids:
@@ -132,19 +149,63 @@ class PredictionStep(Step):
                     }
                 )
 
-        # If the result has multiple entries per mol_id, check that atom_id or
-        # derivative_id is present in multi-entry results.
-        if len(predictions) > len(batch):
-            for _, records in mol_id_to_record.items():
-                if len(records) > 1:
-                    has_atom_id = all("atom_id" in record for record in records)
-                    has_derivative_id = all("derivative_id" in record for record in records)
-                    assert has_atom_id or has_derivative_id, (
-                        "The result contains multiple entries per molecule, but does "
-                        "not contain atom_id or derivative_id."
-                    )
+        if sub_id_property is not None:
+            # task must be either atom_property_prediction or derivative_property_prediction
+            # -> check consistency of sub_id_property
+            for mol_id, records in mol_id_to_record.items():
+                sub_ids: Set[int] = set()
 
-        # TODO: check range and completeness of atom ids and derivative ids
+                for record in records:
+                    sub_id = record.get(sub_id_property)
+                    if sub_id is not None:
+                        # check that sub_id is an integer
+                        if not isinstance(sub_id, int):
+                            raise ValueError(
+                                f"The {sub_id_property} must be an integer, but got {sub_id}. "
+                                f"Record: {record}"
+                            )
+
+                        sub_ids.add(sub_id)
+
+                if (
+                    len(records) == 1
+                    and "problems" in records[0]
+                    and len(records[0]["problems"]) > 0
+                ):
+                    # this record was not predicted, so we skip it
+                    continue
+                elif len(sub_ids) == 0:
+                    # no record has a sub id, we assign them (sequentially)
+                    for i, record in enumerate(records):
+                        record[sub_id_property] = i
+                    continue
+                elif len(sub_ids) < len(records):
+                    # None is not in sub_ids, but the number of unique sub ids is less than
+                    # the number of records.
+                    # -> there must be duplicates
+                    sub_id_list = [record.get(sub_id_property) for record in records]
+                    raise ValueError(
+                        f"The result with mol_id={mol_id} contains multiple entries per "
+                        f"molecule, but the sequence of {sub_id_property} is not unique. "
+                        f"Found: {sub_id_list}."
+                    )
+                else:
+                    min_sub_id = min(sub_ids)
+                    max_sub_id = max(sub_ids)
+
+                    if min_sub_id != 0:
+                        raise ValueError(
+                            f"The sequence of {sub_id_property} does not start at 0 for "
+                            f"mol_id={mol_id}. Instead, the minimum {sub_id_property} was "
+                            f"{min_sub_id}."
+                        )
+                    elif max_sub_id - min_sub_id + 1 != len(sub_ids):
+                        # there are gaps in the sequence of sub ids
+                        raise ValueError(
+                            f"The result with mol_id={mol_id} contains multiple entries per "
+                            f"molecule, but the sequence of {sub_id_property} has gaps. "
+                            f"Found: {sub_ids}."
+                        )
 
         for key, records in mol_id_to_record.items():
             for record in records:

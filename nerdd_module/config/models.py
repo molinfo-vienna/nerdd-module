@@ -203,7 +203,7 @@ class Module(BaseModel):
             for i, j in zip(indices[:-1], indices[1:]):
                 assert i + 1 == j, (
                     f"Properties with the same group should appear next to each other, "
-                    f"but group {group} appears at incides {i} and {j}."
+                    f"but group {group} appears at indices {i} and {j}."
                 )
 
         return values
