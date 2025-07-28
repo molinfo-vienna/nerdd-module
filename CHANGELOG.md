@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.3.39 (2025-07-28)
+
+### Code Style
+
+* style: Fix typo ([`f2c920a`](https://github.com/molinfo-vienna/nerdd-module/commit/f2c920abde0258e6bd5b2edf57f93fed22c4a048))
+
+### Fixes
+
+* fix: Check consistency of atom_ids and derivative_ids ([`06f6530`](https://github.com/molinfo-vienna/nerdd-module/commit/06f653082c6e26b1b1945b0464f418082626d3dd))
+
+### Testing
+
+* test: Add tests for consistency checks ([`d97c75c`](https://github.com/molinfo-vienna/nerdd-module/commit/d97c75ca3bc3cee819f07dbe60e2cfb3856b7da4))
+
+### Unknown
+
+* Merge pull request #75 from shirte/main
+
+Check consistency of atom_ids and derivative_ids ([`407bf33`](https://github.com/molinfo-vienna/nerdd-module/commit/407bf330db4593bf4d36111e0e411b61b06af6be))
+
+
 ## v0.3.38 (2025-07-23)
 
 ### Fixes
