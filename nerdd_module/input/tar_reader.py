@@ -1,5 +1,5 @@
 import tarfile
-from typing import Any, Iterator
+from typing import Any, Iterator, Tuple
 
 from .reader import ExploreCallable, MoleculeEntry, Reader
 
@@ -21,7 +21,14 @@ class TarReader(Reader):
                 if not member.isfile():
                     continue
                 for entry in explore(tar.extractfile(member)):
-                    yield entry._replace(source=(member.name, *entry.source))
+                    # the underlying reader only sees the file content as a stream
+                    # -> it might believe that the source is "raw_input"
+                    # -> we need to correct that here
+                    if len(entry.source) == 1 and entry.source[0] == "raw_input":
+                        source: Tuple[str, ...] = tuple()
+                    else:
+                        source = entry.source
+                    yield entry._replace(source=(member.name, *source))
 
     def __repr__(self) -> str:
         return "TarReader()"
