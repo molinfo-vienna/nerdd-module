@@ -6,12 +6,14 @@ from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
 from ..problem import InvalidWeightProblem, Problem
 from .preprocessing_step import PreprocessingStep
 
+__all__ = ["FilterByWeight"]
+
 
 class FilterByWeight(PreprocessingStep):
     def __init__(
         self,
-        min_weight: float,
-        max_weight: float,
+        min_weight: float = 0,
+        max_weight: float = float("inf"),
         remove_invalid_molecules: bool = False,
     ) -> None:
         super().__init__()

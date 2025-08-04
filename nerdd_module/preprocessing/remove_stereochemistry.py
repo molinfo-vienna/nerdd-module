@@ -6,6 +6,8 @@ from rdkit.Chem import RemoveStereochemistry as remove_stereochemistry
 from ..problem import Problem
 from .preprocessing_step import PreprocessingStep
 
+__all__ = ["RemoveStereochemistry"]
+
 
 class RemoveStereochemistry(PreprocessingStep):
     def __init__(self) -> None:
