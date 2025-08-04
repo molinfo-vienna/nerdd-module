@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## v0.3.40 (2025-08-04)
+
+### Fixes
+
+* fix: Provide default arguments in FilterByWeight ([`92c8af2`](https://github.com/molinfo-vienna/nerdd-module/commit/92c8af2d1399cf3028b33f4c8b71dd59ea825194))
+
+* fix: Handle all errors in Sanitize step ([`e3845a8`](https://github.com/molinfo-vienna/nerdd-module/commit/e3845a8ee3577ffb99835dcd6ea5ab77cece6bb8))
+
+* fix: Export RemoveSmallFragments ([`d313825`](https://github.com/molinfo-vienna/nerdd-module/commit/d313825bfedb94422f7d46ecf68aee788cc587f3))
+
+* fix: Add export statements in preprocessing classes ([`ed10031`](https://github.com/molinfo-vienna/nerdd-module/commit/ed100312df6381b75c19eff90670c1c4086da013))
+
+* fix: Implement RemoveSmallFragments ([`dc5fd1e`](https://github.com/molinfo-vienna/nerdd-module/commit/dc5fd1e6a8a75d89fafe262160ed616d3331c115))
+
+### Testing
+
+* test: Add tests for RemoveSmallFragments ([`6cc60ef`](https://github.com/molinfo-vienna/nerdd-module/commit/6cc60ef0529ef6a1319af914055ea47ba42f5669))
+
+### Unknown
+
+* Merge pull request #76 from shirte/main
+
+Implement RemoveSmallFragments ([`c874438`](https://github.com/molinfo-vienna/nerdd-module/commit/c8744383aa3b64451b76c951c0c123acdbdf6f5f))
+
+
 ## v0.3.39 (2025-07-28)
 
 ### Code Style
