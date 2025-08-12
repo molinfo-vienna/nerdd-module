@@ -8,16 +8,17 @@ __all__ = ["DepthFirstExplorer"]
 
 
 class InvalidInputReader(Reader):
-    def __init__(self) -> None:
+    def __init__(self, message: str = "Invalid input") -> None:
         super().__init__()
+        self.message = message
 
     def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         yield MoleculeEntry(
             raw_input=input,
             input_type="unknown",
-            source=("input",),
+            source=("raw_input",),
             mol=None,
-            errors=[Problem("invalid_input", "Invalid input")],
+            errors=[Problem("invalid_input", self.message)],
         )
 
     def __repr__(self) -> str:
@@ -120,6 +121,8 @@ class DepthFirstExplorer(Explorer):
             if best_mode == "builtin":
                 parent["first_guess"].append(best_reader)
 
+        # In order to get more fine-grained error messages, we do not handle exceptions here and
+        # rely on the readers to do so.
         yield from sample
         yield from generator
 
