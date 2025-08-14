@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.41 (2025-08-14)
+
+### Fixes
+
+* fix: Implement job parameter validation ([`553837c`](https://github.com/molinfo-vienna/nerdd-module/commit/553837cdf556b2038b7b89ddd294217d10f59dfc))
+
+### Unknown
+
+* Merge pull request #77 from shirte/main
+
+fix: Implement job parameter validation ([`0d0e567`](https://github.com/molinfo-vienna/nerdd-module/commit/0d0e567cd0f2fabad9ddbf7c9cb195074ea684fa))
+
+
 ## v0.3.40 (2025-08-04)
 
 ### Fixes
