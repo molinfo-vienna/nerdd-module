@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## v0.3.42 (2025-08-20)
+
+### Fixes
+
+* fix: Explicitly convert basic data types ([`7b4c8cd`](https://github.com/molinfo-vienna/nerdd-module/commit/7b4c8cd69c197ba673043323136213d7b07569d2))
+
+### Testing
+
+* test: Add fixture for successfully preprocessed rows ([`8f85946`](https://github.com/molinfo-vienna/nerdd-module/commit/8f859469e91ec20f88464342524a260e0376782d))
+
+* test: Check that basic data types are json convertible ([`7e95dcb`](https://github.com/molinfo-vienna/nerdd-module/commit/7e95dcba19fdf8c5bc0098f0ecb654278bb67b5c))
+
+### Unknown
+
+* Merge pull request #78 from shirte/main
+
+Explicitly convert basic data types ([`1b874ac`](https://github.com/molinfo-vienna/nerdd-module/commit/1b874ac7f0430f2975a3a6bf9e0287963e602a89))
+
+
 ## v0.3.41 (2025-08-14)
 
 ### Fixes
