@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.43 (2025-08-23)
+
+### Fixes
+
+* fix: Test synonyms of basic data types ([`0a4ce81`](https://github.com/molinfo-vienna/nerdd-module/commit/0a4ce81f6feee31f386a816d386a090ac22c96d7))
+
+* fix: Make BasicTypeConverter aware of type synonyms ([`5c8eb31`](https://github.com/molinfo-vienna/nerdd-module/commit/5c8eb31743ac6b67b95e596f2c384a2aa7228bf0))
+
+### Unknown
+
+* Merge pull request #79 from shirte/main
+
+Make BasicTypeConverter aware of type synonyms ([`44e065f`](https://github.com/molinfo-vienna/nerdd-module/commit/44e065f401e171d146b1012c9460398768881110))
+
+
 ## v0.3.42 (2025-08-20)
 
 ### Fixes
