@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.45 (2025-08-27)
+
+### Fixes
+
+* fix: Distinguish between BinaryIO and TextIO when writing files ([`d38f8b9`](https://github.com/molinfo-vienna/nerdd-module/commit/d38f8b92cbcfa71fb0df2858f841a5623ff71fc0))
+
+### Unknown
+
+* Merge pull request #81 from shirte/main
+
+fix: Distinguish between BinaryIO and TextIO when writing files ([`c815d94`](https://github.com/molinfo-vienna/nerdd-module/commit/c815d9499e5750d2fdc3efa550138d3c59515eb2))
+
+
 ## v0.3.44 (2025-08-27)
 
 ### Code Style
