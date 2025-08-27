@@ -1,5 +1,6 @@
 import codecs
 from abc import abstractmethod
+from io import BufferedIOBase, TextIOBase, TextIOWrapper
 from pathlib import Path
 from typing import IO, Any, BinaryIO, Iterable, TextIO, Union
 
@@ -12,6 +13,13 @@ __all__ = ["FileWriter", "FileLike"]
 
 
 FileLike = Union[str, Path, TextIO, BinaryIO]
+
+
+def is_bytes_stream(stream: Union[TextIO, BinaryIO]) -> bool:
+    if hasattr(stream, "buffer"):
+        return False
+    else:
+        return True
 
 
 class FileWriter(Writer):
@@ -28,8 +36,21 @@ class FileWriter(Writer):
             with open(self._output_file, mode) as f:
                 self._write(f, entries)
         else:
-            self._write(self._output_file, entries)
-            self._output_file.flush()
+            if self._writes_bytes == is_bytes_stream(self._output_file):
+                stream = self._output_file
+            elif self._writes_bytes:
+                # underlying writer expects str (but the writer wants to write bytes)
+                assert isinstance(self._output_file, TextIOBase) and hasattr(
+                    self._output_file, "buffer"
+                )
+                stream = self._output_file.buffer
+            elif not self._writes_bytes:
+                # underlying writer expects bytes (but the writer wants to write str)
+                assert isinstance(self._output_file, BufferedIOBase)
+                stream = TextIOWrapper(self._output_file, encoding="utf-8")
+
+            self._write(stream, entries)
+            stream.flush()
 
     @abstractmethod
     def _write(self, output: IO[Any], entries: Iterable[dict]) -> None:
