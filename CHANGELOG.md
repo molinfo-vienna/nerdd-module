@@ -1,6 +1,37 @@
 # CHANGELOG
 
 
+## v0.3.44 (2025-08-27)
+
+### Code Style
+
+* style: Rearrange code in Reader class ([`3420f21`](https://github.com/molinfo-vienna/nerdd-module/commit/3420f214a019645d742c99870595c99a90ee1d00))
+
+### Fixes
+
+* fix: Derive all chem format readers from StreamReader ([`0b6bd4d`](https://github.com/molinfo-vienna/nerdd-module/commit/0b6bd4d95a5037ae81d47b52d6f7435a114446c5))
+
+* fix: Add base class StreamReader to detect stream encoding ([`99db36d`](https://github.com/molinfo-vienna/nerdd-module/commit/99db36d5297ddc01e988fd42420f5b13b71c6c69))
+
+* fix: Ignore types for deprecated pkg_resources ([`13a9946`](https://github.com/molinfo-vienna/nerdd-module/commit/13a9946aefc208cf29a751f0fd071d9a8155202d))
+
+* fix: Install chardet for determining file encodings ([`29bb63b`](https://github.com/molinfo-vienna/nerdd-module/commit/29bb63b0a3c9e048b9e0bb48eec01af7a480499f))
+
+### Testing
+
+* test: Add test to read smiles from string ([`0cf014b`](https://github.com/molinfo-vienna/nerdd-module/commit/0cf014bd2c270731a8fa247944a8a02f0fb9dc9a))
+
+* test: Add test for reading smiles files ([`f2aca97`](https://github.com/molinfo-vienna/nerdd-module/commit/f2aca9771eba7de4d4abb09e443c75f02fe5879f))
+
+* test: Add test for reading inchi files ([`fc9b4db`](https://github.com/molinfo-vienna/nerdd-module/commit/fc9b4db6af0518e91d63f624784dad3577c3b4e7))
+
+### Unknown
+
+* Merge pull request #80 from shirte/main
+
+Determine file encoding from input stream ([`0f693fd`](https://github.com/molinfo-vienna/nerdd-module/commit/0f693fd8f74e68414f7c56cbaefe3a91b5299251))
+
+
 ## v0.3.43 (2025-08-23)
 
 ### Fixes
