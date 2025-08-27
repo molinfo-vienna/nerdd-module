@@ -21,7 +21,7 @@ try:
         return entry_points(group=group)
 
 except ImportError:
-    import pkg_resources
+    import pkg_resources  # type: ignore
 
     def get_entry_points(group: str) -> Iterable[EntryPoint]:
         return pkg_resources.iter_entry_points(group)

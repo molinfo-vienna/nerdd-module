@@ -1,33 +1,24 @@
-from codecs import getreader
 from typing import Any, Iterator
 
 from rdkit.Chem import MolFromInchi
 
 from ..polyfills import BlockLogs
 from ..problem import Problem
-from .reader import ExploreCallable, MoleculeEntry, Reader
+from .reader import ExploreCallable, MoleculeEntry
 from .reader_config import ReaderConfig
+from .stream_reader import StreamReader
 
 __all__ = ["InchiReader"]
 
-StreamReader = getreader("utf-8")
 
-
-class InchiReader(Reader):
+class InchiReader(StreamReader):
     def __init__(self) -> None:
         super().__init__()
 
-    def read(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
-        if not hasattr(input_stream, "read") or not hasattr(input_stream, "seek"):
-            raise TypeError("input must be a stream-like object")
-
-        input_stream.seek(0)
-
-        reader = StreamReader(input_stream)
-
+    def _read_stream(self, input_stream: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         # suppress RDKit warnings
         with BlockLogs():
-            for line in reader:
+            for line in input_stream:
                 # skip empty lines
                 if line.strip() == "":
                     continue

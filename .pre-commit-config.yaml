@@ -15,6 +15,7 @@ repos:
           - types-decorator
           - types-setuptools
           - types-PyYAML
+          - types-chardet
           - pandas-stubs
           - rdkit-stubs
           - importlib-metadata
