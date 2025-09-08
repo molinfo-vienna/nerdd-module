@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v0.3.47 (2025-09-08)
+
+### Code Style
+
+* style: Make ruff happy on test folders ([`ccbce58`](https://github.com/molinfo-vienna/nerdd-module/commit/ccbce586ec7b49be020a4ed4f8dda2dd390adaf5))
+
+* style: Apply ruff to test folders ([`d1cae94`](https://github.com/molinfo-vienna/nerdd-module/commit/d1cae94b499b8509a48a8345c4b20d114794a697))
+
+### Fixes
+
+* fix: Restrict line length in parsers ([`e3c3665`](https://github.com/molinfo-vienna/nerdd-module/commit/e3c36655b1022d17174ed549e4dd905e49e22c41))
+
+### Testing
+
+* test: Check that long inputs are ignored ([`fb3c4d7`](https://github.com/molinfo-vienna/nerdd-module/commit/fb3c4d75a7416854afeb528734dee9df237c0fba))
+
+### Unknown
+
+* Merge pull request #84 from shirte/main
+
+Restrict line length in parsers ([`0af86f2`](https://github.com/molinfo-vienna/nerdd-module/commit/0af86f293afe3b150825bad040d2c3e2787f638d))
+
+* Merge pull request #83 from shirte/main
+
+Apply ruff to test folders ([`6ed8b7c`](https://github.com/molinfo-vienna/nerdd-module/commit/6ed8b7c13da0e5839b4121c9f6abce47a0091657))
+
+
 ## v0.3.46 (2025-09-08)
 
 ### Fixes

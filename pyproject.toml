@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nerdd-module"
-version = "0.3.46"
+version = "0.3.47"
 description = "Base package to create NERDD modules"
 readme = "README.md"
 license = "BSD-3-Clause"
