@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## v0.3.46 (2025-09-08)
+
+### Fixes
+
+* fix: Let ListReader skip streams ([`1621ba2`](https://github.com/molinfo-vienna/nerdd-module/commit/1621ba24374cb359566efdf39ea27fb0fba28030))
+
+* fix: Recognize bytes as input ([`84ab982`](https://github.com/molinfo-vienna/nerdd-module/commit/84ab982af71a17d14c463be26e4ad511f8dcd5da))
+
+### Testing
+
+* test: Check if byte strings are accepted ([`63cc08a`](https://github.com/molinfo-vienna/nerdd-module/commit/63cc08a53b5b52c89f17189d697b98621e1eebd8))
+
+### Unknown
+
+* Merge pull request #82 from shirte/main
+
+Recognize bytes as input ([`aba3d6f`](https://github.com/molinfo-vienna/nerdd-module/commit/aba3d6ff7a17acfed6fb84ef60047661b65f2413))
+
+
 ## v0.3.45 (2025-08-27)
 
 ### Fixes
