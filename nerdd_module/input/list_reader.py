@@ -1,5 +1,5 @@
-from io import BytesIO, StringIO
-from typing import Any, BinaryIO, Iterable, Iterator
+from io import IOBase
+from typing import Any, Iterable, Iterator
 
 from .reader import ExploreCallable, MoleculeEntry, Reader
 
@@ -12,7 +12,7 @@ class ListReader(Reader):
 
     def read(self, input_iterable: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
         assert isinstance(input_iterable, Iterable) and not isinstance(
-            input_iterable, (str, bytes, BytesIO, StringIO, BinaryIO)
+            input_iterable, (str, bytes, IOBase)
         ), f"input must be an iterable, but is {type(input_iterable)}"
 
         for entry in input_iterable:
