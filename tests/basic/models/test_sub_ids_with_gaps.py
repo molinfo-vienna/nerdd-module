@@ -7,17 +7,20 @@ example_molecules = [
     MolFromSmiles("CCO"),
 ]
 
-class SubIdsWithGapsModel(Model):
 
-    def __init__(self, task : Task):
+class SubIdsWithGapsModel(Model):
+    def __init__(self, task: Task):
         super().__init__()
-        assert task in ["atom_property_prediction", "derivative_property_prediction"], "Invalid task"
+        assert task in [
+            "atom_property_prediction",
+            "derivative_property_prediction",
+        ], "Invalid task"
         self._task = task
 
     def _predict_mols(self, mols):
         sub_id = "atom_id" if self._task == "atom_property_prediction" else "derivative_id"
-        return [{ "mol_id": 0, sub_id: 0, "p": 1 }, { "mol_id": 0, sub_id: 2, "p": 1 }]
-    
+        return [{"mol_id": 0, sub_id: 0, "p": 1}, {"mol_id": 0, sub_id: 2, "p": 1}]
+
     def _get_base_config(self):
         if self._task == "atom_property_prediction":
             level = "atom"
@@ -28,13 +31,15 @@ class SubIdsWithGapsModel(Model):
 
         return {
             "task": self._task,
-            "result_properties": [{
-                "name": "p", 
-                "type": "int",
-                "level": level,
-            }]
+            "result_properties": [
+                {
+                    "name": "p",
+                    "type": "int",
+                    "level": level,
+                }
+            ],
         }
-    
+
 
 def test_sub_ids_with_gaps_atom_property_prediction():
     model = SubIdsWithGapsModel("atom_property_prediction")
@@ -43,7 +48,8 @@ def test_sub_ids_with_gaps_atom_property_prediction():
     except ValueError:
         assert True, "Expected ValueError due to gaps in atom_id sequence"
         return
-    assert False, "Expected ValueError due to gaps in atom_id sequence not raised"
+    raise AssertionError("Expected ValueError due to gaps in atom_id sequence not raised")
+
 
 def test_sub_ids_with_gaps_derivative_property_prediction():
     model = SubIdsWithGapsModel("derivative_property_prediction")
@@ -52,4 +58,4 @@ def test_sub_ids_with_gaps_derivative_property_prediction():
     except ValueError:
         assert True, "Expected ValueError due to gaps in derivative_id sequence"
         return
-    assert False, "Expected ValueError due to gaps in derivative_id sequence not raised"
+    raise AssertionError("Expected ValueError due to gaps in derivative_id sequence not raised")

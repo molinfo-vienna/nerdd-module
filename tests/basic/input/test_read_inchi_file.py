@@ -15,4 +15,4 @@ def test_read_inchi_file():
 
     for i, r in enumerate(results):
         # only the first 3 rows are valid
-        assert len(r.errors) == (0 if i not in [3,4] else 1)
+        assert len(r.errors) == (0 if i not in [3, 4] else 1)

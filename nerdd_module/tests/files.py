@@ -39,9 +39,7 @@ def representation_files(molecules, input_type, num_files):
     # choose num_files-1 numbers to split the representations into num_files parts
     # the while loop makes sure that each part contains at least one valid molecule
     while True:
-        split_indices = np.random.choice(
-            len(representations), size=num_files - 1, replace=False
-        )
+        split_indices = np.random.choice(len(representations), size=num_files - 1, replace=False)
         split_indices = np.sort(split_indices)
 
         # split the representations
@@ -57,13 +55,16 @@ def representation_files(molecules, input_type, num_files):
     # write the representations to files
     representations_files = []
 
-    for _, split_representation in enumerate(split_representations):
+    for split_representation in split_representations:
         with NamedTemporaryFile("w", delete=False) as f:
             for representation in split_representation:
+                # write representation
                 if representation is None:
                     f.write("None")
                 else:
                     f.write(representation)
+
+                # write separator
                 if input_type in ["smiles", "inchi"]:
                     f.write("\n")
                 elif input_type == "mol_block":

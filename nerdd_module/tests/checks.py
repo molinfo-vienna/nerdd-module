@@ -46,7 +46,7 @@ def check_column_value_equality(subset, column_name, expected_value):
     # try to convert to float if possible
     try:
         expected_value = literal_eval(expected_value)
-    except:
+    except:  # noqa: E722
         pass
 
     if expected_value is None:
@@ -72,7 +72,7 @@ def check_column_value_inequality(subset, column_name, forbidden_value):
     # try to convert to float if possible
     try:
         forbidden_value = literal_eval(forbidden_value)
-    except:
+    except:  # noqa: E722
         pass
 
     if forbidden_value is None:
@@ -156,13 +156,13 @@ def check_conditional_column_value(
     # try to convert to float if possible
     try:
         expected_value = literal_eval(expected_value)
-    except:
+    except:  # noqa: E722
         pass
 
     # same for condition value
     try:
         condition_value = literal_eval(condition_value)
-    except:
+    except:  # noqa: E722
         pass
 
     # condition value can be (none) to indicate None

@@ -1,3 +1,6 @@
+import re
+from functools import reduce
+
 import numpy as np
 from hypothesis import given as hgiven
 from hypothesis import seed, settings
@@ -5,10 +8,9 @@ from hypothesis import strategies as st
 from hypothesis_rdkit import mols
 from pytest_bdd import given, parsers
 from rdkit.Chem import MolToInchi, MolToMolBlock, MolToSmiles
-from ..polyfills import BlockLogs
 from rdkit.Chem.rdMolDescriptors import CalcExactMolWt
-import re
-from functools import reduce
+
+from ..polyfills import BlockLogs
 
 
 @given(parsers.parse("a random seed set to {seed:d}"), target_fixture="random_seed")
@@ -38,7 +40,9 @@ def representations_from_molecules(molecules, input_type):
     elif input_type == "inchi":
         converter = MolToInchi
     elif input_type == "rdkit_mol":
-        converter = lambda mol: mol
+
+        def converter(mol):
+            return mol
     else:
         raise ValueError(f"Unknown input_type: {input_type}")
 
@@ -49,9 +53,7 @@ def representations_from_molecules(molecules, input_type):
 
 
 @given(
-    parsers.re(
-        r"a list of (?P<num>\d+) random molecules(?:, where(?P<conditions>[\s\S]*))?"
-    ),
+    parsers.re(r"a list of (?P<num>\d+) random molecules(?:, where(?P<conditions>[\s\S]*))?"),
     target_fixture="molecules",
 )
 def molecules(num, conditions, random_seed=0):
@@ -61,6 +63,7 @@ def molecules(num, conditions, random_seed=0):
     maps = []
 
     if conditions is not None:
+
         def filter_weight(min_weight, max_weight):
             min_weight = float(min_weight)
             max_weight = float(max_weight)
@@ -76,15 +79,19 @@ def molecules(num, conditions, random_seed=0):
 
         expressions = [
             # filters are functions that return True if the molecule should be kept
-            ("filter", r"each mol has a weight between (?P<min_weight>\d+) and (?P<max_weight>\d+)", filter_weight),
+            (
+                "filter",
+                r"each mol has a weight between (?P<min_weight>\d+) and (?P<max_weight>\d+)",
+                filter_weight,
+            ),
             # maps are functions that modify the molecule
-            ("map", r"(?P<num_none>\d+) entries are None", map_to_none)
+            ("map", r"(?P<num_none>\d+) entries are None", map_to_none),
         ]
 
         conditions_list = [c for c in conditions.split("\n") if c.strip() != ""]
 
         for condition in conditions_list:
-            for kind, expression, f in expressions:
+            for kind, expression, f in expressions:  # noqa: B007
                 # conditions might be a markdown list (starting with a star character)
                 expression = r"\s*(\*\s*)?" + expression + r"\s*"
 
@@ -92,7 +99,7 @@ def molecules(num, conditions, random_seed=0):
                 if match:
                     params = match.groupdict()
                     break
-            
+
             assert match is not None, f"Could not parse condition: {condition}"
 
             if kind == "filter":
@@ -102,8 +109,11 @@ def molecules(num, conditions, random_seed=0):
             else:
                 raise ValueError(f"Unknown kind: {kind}")
 
-    filter_func = lambda mol: all(f(mol) for f in filters)
-    map_func = lambda ms: reduce(lambda ms, f: f(ms), maps, ms)
+    def filter_func(mol):
+        return all(f(mol) for f in filters)
+
+    def map_func(ms):
+        return reduce(lambda ms, f: f(ms), maps, ms)
 
     result = None
 

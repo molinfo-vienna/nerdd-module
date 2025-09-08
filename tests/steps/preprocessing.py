@@ -3,10 +3,14 @@ from rdkit.Chem import MolToSmiles
 
 from nerdd_module.input import DepthFirstExplorer
 from nerdd_module.model import ReadInputStep
-from nerdd_module.preprocessing import (FilterByElement, FilterByWeight,
-                                        GetParentMolWithCsp,
-                                        RemoveSmallFragments, Sanitize,
-                                        StandardizeWithCsp)
+from nerdd_module.preprocessing import (
+    FilterByElement,
+    FilterByWeight,
+    GetParentMolWithCsp,
+    RemoveSmallFragments,
+    Sanitize,
+    StandardizeWithCsp,
+)
 from nerdd_module.tests.preprocessing import DummyPreprocessingStep
 
 
@@ -14,9 +18,7 @@ from nerdd_module.tests.preprocessing import DummyPreprocessingStep
 # DUMMY PREPROCESSING STEP
 #
 @when(
-    parsers.parse(
-        "the molecules are preprocessed by a dummy preprocessing step in mode '{mode}'"
-    ),
+    parsers.parse("the molecules are preprocessed by a dummy preprocessing step in mode '{mode}'"),
     target_fixture="predictions",
 )
 def preprocessed_molecules_dummy_preprocessing_step(representations, mode):
@@ -30,11 +32,11 @@ def preprocessed_molecules_dummy_preprocessing_step(representations, mode):
 # FILTER BY ELEMENT
 #
 @given(
-    parsers.parse("the list of allowed elements is {l}"),
+    parsers.parse("the list of allowed elements is {elements}"),
     target_fixture="allowed_elements",
 )
-def allowed_elements(l):
-    return eval(l)
+def allowed_elements(elements):
+    return eval(elements)
 
 
 @given(
@@ -62,7 +64,8 @@ def preprocessed_molecules_filter_by_element(
 
 @when(
     parsers.parse(
-        "the molecules are filtered by weight (range=[{min_weight:d}, {max_weight:d}], remove_invalid_molecules={remove_invalid_molecules})"
+        "the molecules are filtered by weight (range=[{min_weight:d}, {max_weight:d}], "
+        "remove_invalid_molecules={remove_invalid_molecules})"
     ),
     target_fixture="predictions",
 )
@@ -126,7 +129,7 @@ def preprocessed_molecules_filter_small_fragments(representations):
             **record,
             "preprocessed_smiles": MolToSmiles(record["preprocessed_mol"]),
         }
-        for record in filter_small_fragments(input_step())
+        for record in filter_small_fragments(sanitize(input_step()))
     ]
 
     return results

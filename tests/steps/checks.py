@@ -15,31 +15,25 @@ def check_result_length(molecules, predictions):
         assert len(predictions) == len(molecules)
 
 
-@then(
-    "the number of unique atom ids should be the same as the number of atoms in the "
-    "input"
-)
+@then("the number of unique atom ids should be the same as the number of atoms in the " "input")
 def check_atom_ids(subset):
     records_per_mol_id = defaultdict(list)
 
     for record in subset:
         records_per_mol_id[record["mol_id"]].append(record)
 
-    for mol_id, records in records_per_mol_id.items():
+    for _, records in records_per_mol_id.items():
         mol = records[0]["preprocessed_mol"]
-        num_atom_ids = len(set([r["atom_id"] for r in records]))
+        num_atom_ids = len({r["atom_id"] for r in records})
         num_atoms = mol.GetNumAtoms()
         assert num_atom_ids == num_atoms, (
-            f"Number of atom ids ({num_atom_ids}) does not match number of atoms "
-            f"({num_atoms})"
+            f"Number of atom ids ({num_atom_ids}) does not match number of atoms " f"({num_atoms})"
         )
 
 
 @then("the result should contain as many rows as atoms in the input molecules")
 def check_result_length_atom(molecules, predictions):
-    num_expected_predictions = sum(
-        m.GetNumAtoms() if m is not None else 1 for m in molecules
-    )
+    num_expected_predictions = sum(m.GetNumAtoms() if m is not None else 1 for m in molecules)
 
     if num_expected_predictions == 0:
         # expect one entry saying that nothing could be read from this source
@@ -54,9 +48,7 @@ def check_problem_column(predictions):
         problems_list = record["problems"]
         assert isinstance(problems_list, Iterable)
         for e in problems_list:
-            assert isinstance(
-                e, Problem
-            ), f"Expected Problem, got {e} of type {type(e)}"
+            assert isinstance(e, Problem), f"Expected Problem, got {e} of type {type(e)}"
 
 
 @then(parsers.parse("the subset should contain the problem '{problem}'"))

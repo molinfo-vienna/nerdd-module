@@ -9,7 +9,9 @@ allowed_versions = ["order_based", "mol_ids", "mols", "iterator", "error"]
 
 
 class MolWeightModel(Model):
-    def __init__(self, preprocessing_steps=[Sanitize()], version="order_based", **kwargs):
+    def __init__(self, preprocessing_steps=None, version="order_based", **kwargs):
+        if preprocessing_steps is None:
+            preprocessing_steps = [Sanitize()]
         assert (
             version in allowed_versions
         ), f"version must be one of {allowed_versions}, got {version}"
