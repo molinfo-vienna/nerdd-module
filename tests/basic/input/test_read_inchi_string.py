@@ -1,4 +1,4 @@
-from rdkit.Chem import Mol
+from rdkit.Chem import Mol, MolFromSmiles, MolToInchi
 
 from nerdd_module.input import DepthFirstExplorer
 
@@ -39,3 +39,24 @@ def test_read_inchi_bytes():
     assert result.raw_input == inp.decode("utf-8")
     assert result.input_type == "inchi"
     assert isinstance(result.mol, Mol)
+
+
+def test_read_long_inchi_string():
+    explorer = DepthFirstExplorer()
+
+    # generate a long InChI string
+    long_smiles = "C" * 5000
+    long_inchi = MolToInchi(MolFromSmiles(long_smiles), options="-LargeMolecules")
+    assert len(long_inchi) > 20000
+
+    results = list(explorer.explore(long_inchi))
+
+    assert len(results) == 1
+
+    result = results[0]
+
+    # InchiReader will return an invalid molecule
+    # -> DepthFirstExplorer will use InvalidInputReader as fallback
+    # -> we will get a record with input_type "unknown"
+    assert result.input_type == "unknown"
+    assert result.mol is None
