@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.3.48 (2025-09-11)
+
+### Fixes
+
+* fix: Remove newline when parsing smiles ([`9dc9e64`](https://github.com/molinfo-vienna/nerdd-module/commit/9dc9e64c7f6438f8429b098e26b0db75eec52a32))
+
+### Testing
+
+* test: Check if newline characters were removed ([`45d69d6`](https://github.com/molinfo-vienna/nerdd-module/commit/45d69d68b6e1e12e992b3f0a1e38ad21c944b8c9))
+
+### Unknown
+
+* Merge pull request #85 from shirte/main
+
+Remove newline when parsing smiles ([`5f35d0c`](https://github.com/molinfo-vienna/nerdd-module/commit/5f35d0c93f098411d5b3595f16ac7b08ee7ccb8d))
+
+
 ## v0.3.47 (2025-09-08)
 
 ### Code Style
