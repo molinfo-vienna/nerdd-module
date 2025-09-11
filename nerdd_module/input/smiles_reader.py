@@ -28,6 +28,8 @@ class SmilesReader(StreamReader):
                 if line.strip().startswith("#"):
                     continue
 
+                line = line.strip("\n")
+
                 # avoid long smiles strings, because they might take veeeeery long to parse
                 if len(line) > self._max_length_smiles:
                     errors = [
@@ -37,7 +39,7 @@ class SmilesReader(StreamReader):
                         )
                     ]
                     yield MoleculeEntry(
-                        raw_input=line.strip("\n")[: self._max_length_smiles - 3] + "...",
+                        raw_input=line[: self._max_length_smiles - 3] + "...",
                         input_type="smiles",
                         source=("raw_input",),
                         mol=None,
@@ -66,7 +68,7 @@ class SmilesReader(StreamReader):
                     errors = []
 
                 yield MoleculeEntry(
-                    raw_input=line.strip("\n"),
+                    raw_input=line,
                     input_type="smiles",
                     source=("raw_input",),
                     mol=mol,
