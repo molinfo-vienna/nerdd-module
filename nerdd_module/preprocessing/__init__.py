@@ -3,6 +3,7 @@ from .chembl_structure_pipeline import *
 from .filter_by_element import *
 from .filter_by_weight import *
 from .preprocessing_step import *
+from .remove_hydrogens import *
 from .remove_small_fragments import *
 from .remove_stereochemistry import *
 from .sanitize import *
