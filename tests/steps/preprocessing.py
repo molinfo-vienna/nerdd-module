@@ -7,6 +7,7 @@ from nerdd_module.preprocessing import (
     FilterByElement,
     FilterByWeight,
     GetParentMolWithCsp,
+    RemoveHydrogens,
     RemoveSmallFragments,
     Sanitize,
     StandardizeWithCsp,
@@ -130,6 +131,29 @@ def preprocessed_molecules_filter_small_fragments(representations):
             "preprocessed_smiles": MolToSmiles(record["preprocessed_mol"]),
         }
         for record in filter_small_fragments(sanitize(input_step()))
+    ]
+
+    return results
+
+
+#
+# REMOVE HYDROGENS
+#
+@when(
+    parsers.parse("hydrogens are removed"),
+    target_fixture="predictions",
+)
+def preprocessed_molecules_remove_hydrogens(representations, remove_invalid_molecules=False):
+    input_step = ReadInputStep(DepthFirstExplorer(), representations)
+    sanitize = Sanitize()
+    remove_hydrogens = RemoveHydrogens(remove_invalid_molecules=remove_invalid_molecules)
+
+    results = [
+        {
+            **record,
+            "preprocessed_smiles": MolToSmiles(record["preprocessed_mol"]),
+        }
+        for record in remove_hydrogens(sanitize(input_step()))
     ]
 
     return results
