@@ -38,8 +38,7 @@ class PreprocessingStep(MapStep):
             # run the actual preprocessing step
             mol, problems = self._preprocess(mol)
         except Exception as e:
-            # if an exception occurs, log it and return an unknown error
-            logger.error(e, exc_info=True)
+            logger.exception("Unknown exception occured during preprocessing", exc_info=e)
 
             mol = None
             problems = [UnknownPreprocessingProblem()]

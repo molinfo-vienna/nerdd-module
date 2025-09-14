@@ -1,3 +1,4 @@
+import logging
 from typing import List, Tuple
 
 from rdkit.Chem import Mol
@@ -7,6 +8,8 @@ from ..problem import Problem
 from .preprocessing_step import PreprocessingStep
 
 __all__ = ["RemoveStereochemistry"]
+
+logger = logging.getLogger(__name__)
 
 
 class RemoveStereochemistry(PreprocessingStep):
@@ -18,9 +21,10 @@ class RemoveStereochemistry(PreprocessingStep):
 
         try:
             remove_stereochemistry(mol)
-        except Exception:
+        except Exception as e:
+            logger.exception("Cannot remove stereochemistry", exc_info=e)
             problems.append(
-                Problem("remove_stereochemistry_failed", "Cannot remove stereochemistry")
+                Problem("remove_stereochemistry_failed", "Could not remove stereochemistry.")
             )
 
         return mol, problems
