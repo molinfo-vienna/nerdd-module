@@ -1,6 +1,35 @@
 # CHANGELOG
 
 
+## v0.3.49 (2025-09-14)
+
+### Fixes
+
+* fix: Avoid source 'raw_input' in TarReader ([`07923c5`](https://github.com/molinfo-vienna/nerdd-module/commit/07923c5ba526dd78334ff577609f6d690bff45e1))
+
+* fix: Avoid source 'raw_input' in ZipReader ([`61b4db8`](https://github.com/molinfo-vienna/nerdd-module/commit/61b4db80581699f449f797565d3a6bd2578b6603))
+
+* fix: Replace invalid characters in input streams ([`e876f06`](https://github.com/molinfo-vienna/nerdd-module/commit/e876f0634b0b8d9634db2b139f384bc9cb1f5a7e))
+
+### Testing
+
+* test: Check source when reading smiles file ([`6e6923f`](https://github.com/molinfo-vienna/nerdd-module/commit/6e6923f2ee2a6e19595f2fce70d098675422458b))
+
+* test: Test reading gzip files ([`849896a`](https://github.com/molinfo-vienna/nerdd-module/commit/849896a4c29a15a4188182269c753cf0ede4d74f))
+
+* test: Test reading tar file ([`c69d2ae`](https://github.com/molinfo-vienna/nerdd-module/commit/c69d2aea5133f94e2410c0670891f9ec01a5272b))
+
+* test: Test reading zip files ([`7dd210d`](https://github.com/molinfo-vienna/nerdd-module/commit/7dd210dc526600919415f21c8a2e58d0b85bb5bd))
+
+* test: Test reading utf-8 file with an invalid sequence ([`f974646`](https://github.com/molinfo-vienna/nerdd-module/commit/f974646eae71069ab41555eae25af1cbbd7851af))
+
+### Unknown
+
+* Merge pull request #86 from shirte/main
+
+Test input readers ([`d88dda6`](https://github.com/molinfo-vienna/nerdd-module/commit/d88dda6e56881579c4eb618f06c0f2c6bf0ea788))
+
+
 ## v0.3.48 (2025-09-11)
 
 ### Fixes
