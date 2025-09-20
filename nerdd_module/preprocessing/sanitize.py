@@ -1,7 +1,13 @@
 import logging
 from typing import List, Optional, Tuple
 
-from rdkit.Chem import AtomKekulizeException, KekulizeException, Mol, SanitizeMol
+from rdkit.Chem import (
+    AtomKekulizeException,
+    AtomValenceException,
+    KekulizeException,
+    Mol,
+    SanitizeMol,
+)
 
 from ..problem import Problem
 from .preprocessing_step import PreprocessingStep
@@ -26,6 +32,8 @@ class Sanitize(PreprocessingStep):
             return None, [
                 Problem("atom_kekulization_error", "Failed kekulizing an atom in the molecule.")
             ]
+        except AtomValenceException as e:
+            return None, [Problem("valence_error", str(e))]
         except Exception as e:
             logger.exception(e)
             return None, [Problem("sanitization_error", "Failed sanitizing the molecule.")]

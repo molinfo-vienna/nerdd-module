@@ -11,7 +11,7 @@ __all__ = ["SdfReader"]
 
 
 class SdfReader(StreamReader):
-    def __init__(self, max_num_lines_mol_block: int = 10_000) -> None:
+    def __init__(self, max_num_lines_mol_block: int = 100_000) -> None:
         super().__init__()
         self.max_num_lines_mol_block = max_num_lines_mol_block
 
