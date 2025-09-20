@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## v0.3.50 (2025-09-20)
+
+### Fixes
+
+* fix: Add a comment on error handling in DepthFirstExplorer ([`b6aa52a`](https://github.com/molinfo-vienna/nerdd-module/commit/b6aa52aafc9575e6186def4e6b6fcf878d57ed5a))
+
+* fix: Increase number of allowed lines in SdfReader ([`68e4bf2`](https://github.com/molinfo-vienna/nerdd-module/commit/68e4bf2bd255746aaeb9bc5c14329a075d6f21d9))
+
+* fix: Handle exceptions in ListReader ([`4a9ffc2`](https://github.com/molinfo-vienna/nerdd-module/commit/4a9ffc29024242ebd81ea00f2c1a4bd789ec4182))
+
+* fix: Handle exceptions in TarReader ([`7636c41`](https://github.com/molinfo-vienna/nerdd-module/commit/7636c413d7610207f1eb8cc184f56ce75e03e5b0))
+
+* fix: Handle exceptions in GzipReader ([`1f68699`](https://github.com/molinfo-vienna/nerdd-module/commit/1f68699f13e93ec1945198897d11d51df524b179))
+
+* fix: Handle exceptions in ZipReader ([`d3a897c`](https://github.com/molinfo-vienna/nerdd-module/commit/d3a897c8cf00b1aacd0c792320c900cf4761413b))
+
+* fix: Handle AtomValenceException in Sanitize ([`45dc4af`](https://github.com/molinfo-vienna/nerdd-module/commit/45dc4afcc65d3b862ca650e9b8766f386fa5996a))
+
+### Unknown
+
+* Merge pull request #87 from shirte/main
+
+Improve exception handling in reader classes ([`b6c6207`](https://github.com/molinfo-vienna/nerdd-module/commit/b6c62072c99e12fa593faf69177e28106c35c55a))
+
+
 ## v0.3.49 (2025-09-14)
 
 ### Fixes
