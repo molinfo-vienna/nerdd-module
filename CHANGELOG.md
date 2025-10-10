@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.3.51 (2025-10-10)
+
+### Documentation
+
+* docs: Add documentation for preprocessing classes ([`e3b9f77`](https://github.com/molinfo-vienna/nerdd-module/commit/e3b9f7766c387e11601a8c237b0c8fae319fe472))
+
+### Fixes
+
+* fix: Add tests for RemoveHydrogen preprocessing step ([`fe76d95`](https://github.com/molinfo-vienna/nerdd-module/commit/fe76d959f90babbad9b69246c8588b443a5ef869))
+
+* fix: Use logger.exception instead of logger.error ([`e5f8e27`](https://github.com/molinfo-vienna/nerdd-module/commit/e5f8e27c79eb44578493aa3cfe95be7f3cb6cfd5))
+
+* fix: Add RemoveHydrogens proprocessing step ([`dd08b34`](https://github.com/molinfo-vienna/nerdd-module/commit/dd08b34a0308fc90c282297e3105ff57dc71f2ca))
+
+### Unknown
+
+* Merge pull request #88 from shirte/main
+
+Add RemoveHydrogens proprocessing step ([`23af787`](https://github.com/molinfo-vienna/nerdd-module/commit/23af787e8bd902965d4ea518f9c99f3a13047412))
+
+
 ## v0.3.50 (2025-09-20)
 
 ### Fixes
