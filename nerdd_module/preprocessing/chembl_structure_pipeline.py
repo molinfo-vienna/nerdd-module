@@ -1,3 +1,10 @@
+"""
+ChEMBL Structure Pipeline preprocessing steps for molecular data.
+
+This module provides preprocessing steps that utilize the ChEMBL Structure Pipeline library for
+molecule standardization and parent molecule extraction.
+"""
+
 import warnings
 from typing import List, Optional, Tuple
 
@@ -30,6 +37,36 @@ __all__ = ["GetParentMolWithCsp", "StandardizeWithCsp"]
 
 
 class StandardizeWithCsp(PreprocessingStep):
+    """
+    Preprocessing step that standardizes molecules using ChEMBL Structure Pipeline.
+
+    This class applies the ChEMBL Structure Pipeline standardization procedures to normalize
+    molecular representations. The standardization includes tautomer normalization, charge
+    neutralization, and other structural standardizations commonly used in pharmaceutical databases.
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    ImportError
+        If the chembl_structure_pipeline library is not installed.
+
+    Examples
+    --------
+    >>> # Create a standardization step (requires chembl_structure_pipeline)
+    >>> standardize_step = StandardizeWithCsp()
+
+    Notes
+    -----
+    * Requires the chembl_structure_pipeline library to be installed
+    * Automatically removes 3D conformers as the pipeline cannot handle them
+    * Uses ChEMBL's standardize_mol function which applies comprehensive molecular standardization
+      procedures
+    * If standardization fails, the original molecule is returned with a problem
+    """
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -37,6 +74,26 @@ class StandardizeWithCsp(PreprocessingStep):
             raise import_error
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        """
+        Standardize a molecule using ChEMBL Structure Pipeline.
+
+        Applies ChEMBL's standardization procedures to normalize the molecular representation. The
+        process removes 3D conformers before applying the standardize_mol function.
+
+        Parameters
+        ----------
+        mol : Mol
+            RDKit Mol object representing the molecule to be standardized.
+
+        Returns
+        -------
+        Tuple[Optional[Mol], List[Problem]]
+            A tuple containing:
+            * The standardized molecule if successful, or the original molecule if standardization
+              failed
+            * An empty list if standardization succeeded, or a list containing a Problem instance
+              with code "csp_error" if standardization failed
+        """
         problems: List[Problem] = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
@@ -54,6 +111,36 @@ class StandardizeWithCsp(PreprocessingStep):
 
 
 class GetParentMolWithCsp(PreprocessingStep):
+    """
+    Preprocessing step that extracts parent molecules using ChEMBL Structure Pipeline.
+
+    This class uses the ChEMBL Structure Pipeline to identify and extract the parent molecule from
+    complex molecular structures. This process removes salts, solvents, and other fragments while
+    applying ChEMBL's standardization rules.
+
+    Parameters
+    ----------
+    None
+
+    Raises
+    ------
+    ImportError
+        If the chembl_structure_pipeline library is not installed.
+
+    Examples
+    --------
+    >>> # Create a parent molecule extraction step
+    >>> get_parent_step = GetParentMolWithCsp()
+
+    Notes
+    -----
+    * Requires the chembl_structure_pipeline library to be installed
+    * Automatically removes 3D conformers as the pipeline cannot handle them
+    * Applies the get_parent_mol function from the chembl_structure_pipeline library
+    * If parent extraction fails or is flagged for exclusion, the original molecule is returned with
+      a Problem instance
+    """
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -61,6 +148,25 @@ class GetParentMolWithCsp(PreprocessingStep):
             raise import_error
 
     def _preprocess(self, mol: Mol) -> Tuple[Optional[Mol], List[Problem]]:
+        """
+        Extract the parent molecule using ChEMBL Structure Pipeline.
+
+        Identifies and returns the main molecular component. The process removes 3D conformers,
+        because chembl_structure_pipeline cannot handle them.
+
+        Parameters
+        ----------
+        mol : Mol
+            RDKit Mol object representing the molecule from which to extract the parent structure.
+
+        Returns
+        -------
+        Tuple[Optional[Mol], List[Problem]]
+            A tuple containing:
+            * The parent molecule if successful, or the original molecule if extraction failed
+            * An empty list if extraction succeeded, or a list containing a Problem instance with
+              code "csp_error" if extraction failed or was flagged for exclusion
+        """
         problems = []
 
         # chembl structure pipeline cannot handle molecules with 3D coordinates
