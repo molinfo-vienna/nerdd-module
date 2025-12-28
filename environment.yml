@@ -1,7 +1,6 @@
 name: nerdd_module
 channels:
-- conda-forge
-- defaults
+  - conda-forge
 dependencies:
-- python
-- rdkit
+  - python
+  - rdkit
