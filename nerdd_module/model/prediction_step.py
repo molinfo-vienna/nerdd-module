@@ -94,7 +94,9 @@ class PredictionStep(Step):
         # 3. the list of predictions has as many records as the batch (and we assume
         #    that the order of the molecules stayed the same)
         if all("mol_id" in record for record in predictions):
-            pass
+            # convert mol_id to int (or raise an error if it is not possible)
+            for record in predictions:
+                record["mol_id"] = int(record["mol_id"])
         elif all("mol" in record for record in predictions):
             # check that molecule names contain only valid ids
             for record in predictions:
