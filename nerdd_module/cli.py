@@ -30,7 +30,7 @@ def infer_click_type(param: JobParameter) -> click.ParamType:
         choices = [str(c.value) for c in param.choices]
         return click.Choice(choices)
 
-    type_map = {
+    type_map: dict[str, click.ParamType] = {
         "float": click.FLOAT,
         "integer": click.INT,
         "string": click.STRING,
