@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.3.52 (2026-01-23)
+
+### Fixes
+
+* fix: Make publication fields optional ([`7342970`](https://github.com/molinfo-vienna/nerdd-module/commit/7342970a5d3804f03fc308d1d15cd33b77d4e0f8))
+
+### Unknown
+
+* Merge pull request #90 from shirte/main
+
+Make publication fields optional ([`cc48f2b`](https://github.com/molinfo-vienna/nerdd-module/commit/cc48f2b110ec5847040c9ad4d3b05a082e770b68))
+
+
 ## v0.3.51 (2025-10-10)
 
 ### Documentation
