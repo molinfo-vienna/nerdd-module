@@ -1,3 +1,5 @@
+"""Pydantic models describing module metadata, schema, and parameters."""
+
 from typing import Any, List, Optional, Union
 
 from pydantic import BaseModel, computed_field, model_validator
@@ -7,6 +9,8 @@ from ..polyfills import Literal
 
 
 class Partner(BaseModel):
+    """Partner organization metadata for module marketing/attribution."""
+
     name: str
     logo: str
     url: Optional[str] = None
@@ -31,14 +35,18 @@ class Author(BaseModel):
 
 
 class Publication(BaseModel):
-    title: str
-    authors: List[Author] = []
-    journal: str
-    year: int
+    """Reference to a publication related to the module or model."""
+
+    title: Optional[str] = None
+    authors: Optional[List[Author]] = None
+    journal: Optional[str] = None
+    year: Optional[int] = None
     doi: Optional[str]
 
 
 class ColorPalette(BaseModel):
+    """Optional color mapping for visualizing categorical or numeric outputs."""
+
     type: Optional[str] = None
     name: Optional[str] = None
     domain: Optional[Union[List[str], List[float], List[int], List[bool]]] = None
@@ -47,6 +55,8 @@ class ColorPalette(BaseModel):
 
 
 class Choice(BaseModel):
+    """Select options for job parameters or categorical result properties."""
+
     value: Union[str, int, float, bool]
     label: Optional[str] = None
 
@@ -55,6 +65,8 @@ JobType = Literal["int", "integer", "float", "bool", "boolean", "str", "string"]
 
 
 class JobParameter(BaseModel):
+    """Definition of a user-configurable parameter for a job run."""
+
     name: str
     type: JobType
     visible_name: Optional[str] = None
@@ -64,6 +76,7 @@ class JobParameter(BaseModel):
     choices: Optional[List[Choice]] = None
 
     def validate_value(self, value: Any) -> None:
+        """Validate a provided value against type and choices."""
         if self.type == ["int", "integer"]:
             if not isinstance(value, int):
                 raise ValueError(
@@ -107,11 +120,15 @@ FormatSpec = Union[List[str], str]
 
 
 class IncludeExcludeFormatSpec(BaseModel):
+    """Visibility filter for result properties per output format."""
+
     include: Optional[FormatSpec]
     exclude: Optional[FormatSpec]
 
 
 class ResultProperty(BaseModel):
+    """Schema entry for a model output property."""
+
     name: str
     type: str
     visible_name: Optional[str] = None
@@ -129,6 +146,7 @@ class ResultProperty(BaseModel):
     color_palette: Optional[ColorPalette] = None
 
     def is_visible(self, output_format: str) -> bool:
+        """Return True if property should be shown for the given format."""
         formats = self.formats
 
         if formats is None:
@@ -144,6 +162,8 @@ class ResultProperty(BaseModel):
 
 
 class Module(BaseModel):
+    """Full module configuration: metadata, schema, parameters, and validation."""
+
     @computed_field  # type: ignore[prop-decorator]
     @property
     def id(self) -> str:
@@ -194,6 +214,7 @@ class Module(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def validate_model(cls, values: Any) -> Any:
+        """Enforce consistency between task type and declared result properties."""
         assert isinstance(values, Module)
 
         num_atom_properties = len(values.get_property_columns_of_type("atom"))
@@ -244,10 +265,7 @@ class Module(BaseModel):
         return values
 
     def validate_job_parameters(self, params: dict) -> None:
-        """
-        Validate the job parameters against the module's job parameters.
-        Raises an error if a parameter is missing or has an invalid type.
-        """
+        """Validate provided job parameters against the module declaration."""
         # make sure that all job parameters are present
         for param in self.job_parameters:
             if param.name not in params and param.required:
