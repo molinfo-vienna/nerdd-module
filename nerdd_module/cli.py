@@ -1,8 +1,9 @@
+"""Helpers for exposing a :class:`~nerdd_module.model.Model` as a CLI command."""
+
 import logging
-import os
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, List
 
 import rich_click as click
 from decorator import decorator
@@ -27,6 +28,23 @@ Note that input formats shouldn't be mixed.
 
 
 def infer_click_type(param: JobParameter) -> click.ParamType:
+    """Map a module job parameter to its Click parameter type.
+
+    Parameters
+    ----------
+    param : JobParameter
+        Declared module parameter.
+
+    Returns
+    -------
+    click.ParamType
+        Click type enforcing the parameter's declared type or choices.
+
+    Raises
+    ------
+    ValueError
+        If the parameter type is not supported by the generated CLI.
+    """
     if param.choices is not None:
         choices = [str(c.value) for c in param.choices]
         return click.Choice(choices)
@@ -45,28 +63,8 @@ def infer_click_type(param: JobParameter) -> click.ParamType:
     return type_map[t]
 
 
-@decorator
-def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
-    # infer the command name
-    command_name = os.path.basename(sys.argv[0])
-
-    # get the model
-    model = f()
-
-    # compose cli description
-    input_format_list = "\n".join([f"* {fmt}" for fmt in ["smiles", "sdf", "inchi"]])
-
-    help_text = input_description.format(
-        description=model.config.description, input_format_list=input_format_list
-    )
-
-    output_format_list = [
-        output_format
-        for output_format, writer in Writer.get_writers(output_file=None).items()
-        if isinstance(writer, FileWriter)
-    ]
-
-    # compose footer with examples
+def build_examples_footer(command_path: str, model: Model) -> str:
+    """Build the generated CLI help footer from model and reader examples."""
     examples = []
     example_smiles = model.config.example_smiles
     if example_smiles is not None:
@@ -80,34 +78,136 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
                 if len(example) < 120 and "\n" not in example:
                     examples.append(example)
 
-    if len(examples) > 0:
-        footer = "Examples:\n"
-        for example in examples:
-            footer += f'* {command_name} "{example}"\n'
-    else:
-        footer = ""
+    if not examples:
+        return ""
 
-    #
-    # Define the CLI entry point
-    #
-    def main(
+    lines = ["Examples:"]
+    lines.extend(f'* {command_path} "{example}"' for example in examples)
+    return "\n".join(lines) + "\n"
+
+
+class AutoCLICommand(click.RichCommand):
+    """Rich Click command generated from a model configuration."""
+
+    def __init__(self, model: Model) -> None:
+        self.model = model
+        self.output_format_list = [
+            output_format
+            for output_format, writer in Writer.get_writers(output_file=None).items()
+            if isinstance(writer, FileWriter)
+        ]
+
+        # compose CLI description
+        input_format_list = "\n".join(
+            [f"* {input_format}" for input_format in ["smiles", "sdf", "inchi"]]
+        )
+        help_text = input_description.format(
+            description=model.config.description,
+            input_format_list=input_format_list,
+        )
+
+        params: List[click.Parameter] = [
+            click.Option(
+                ["--log-level"],
+                default="warning",
+                type=click.Choice(
+                    ["debug", "info", "warning", "error", "critical"],
+                    case_sensitive=False,
+                ),
+                help="The logging level.",
+            ),
+            click.Option(
+                ["--format"],
+                default="csv",
+                type=click.Choice(self.output_format_list, case_sensitive=False),
+                help="The output format.",
+            ),
+            click.Option(
+                ["--output"],
+                default="stdout",
+                type=click.Path(),
+                help=(
+                    "The output file. If 'stdout' is specified, the output is written " "to stdout."
+                ),
+            ),
+        ]
+
+        # Add job parameters in reverse to preserve the previous decorator ordering.
+        for param in reversed(model.config.job_parameters):
+            # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
+            param_name = spinalcase(param.name)
+            params.append(
+                click.Option(
+                    [f"--{param_name}"],
+                    default=param.default,
+                    type=infer_click_type(param),
+                    help=param.help_text,
+                )
+            )
+
+        # Add required input parameter
+        params.append(click.Argument(["input"], type=click.Path(), nargs=-1, required=True))
+
+        # Show metavars below the help text instead of in a separate column.
+        help_config = click.RichHelpConfiguration(
+            text_markup="markdown",
+            options_table_column_types=["required", "opt_short", "opt_long", "help"],
+            options_table_help_sections=[
+                "help",
+                "deprecated",
+                "envvar",
+                "default",
+                "required",
+                "metavar",
+            ],
+        )
+        # show_default=True: default values are shown in the help text
+        super().__init__(
+            name="main",
+            callback=self._run,
+            params=params,
+            help=help_text,
+            context_settings={
+                "show_default": True,
+                "rich_help_config": help_config,
+            },
+        )
+
+    def format_help(
+        self,
+        ctx: click.Context,
+        formatter: click.HelpFormatter,
+    ) -> None:
+        """Render model and reader examples using the current command path."""
+        assert isinstance(ctx, click.RichContext)
+        assert isinstance(formatter, click.RichHelpFormatter)
+
+        formatter.config.footer_text = build_examples_footer(
+            ctx.command_path,
+            self.model,
+        )
+        super().format_help(ctx, formatter)
+
+    def _run(
+        self,
         input: Any,
         format: str,
         output: click.Path,
         log_level: str,
         **kwargs: Any,
     ) -> None:
+        """Run the model prediction for parsed command-line arguments."""
         logging.basicConfig(level=log_level.upper())
 
         # write results
-        assert format in output_format_list, f"Unknown output format: {format}"
+        assert format in self.output_format_list, f"Unknown output format: {format}"
 
         if str(output).lower() == "stdout":
             output_handle = sys.stdout
         else:
             output_handle = click.open_file(str(output), "wb")
 
-        model.predict(
+        self.model.predict(
             input,
             output_format=format,
             output_file=output_handle,
@@ -116,64 +216,20 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
             **kwargs,
         )
 
-    #
-    # Add required input parameter
-    #
-    main = click.argument("input", type=click.Path(), nargs=-1, required=True)(main)
 
-    #
-    # Add job parameters
-    #
-    for param in model.config.job_parameters:
-        # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
-        param_name = spinalcase(param.name)
-        main = click.option(
-            f"--{param_name}",
-            default=param.default,
-            type=infer_click_type(param),
-            help=param.help_text,
-        )(main)
+@decorator
+def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
+    """Turn a zero-argument model factory into an executable Rich Click command.
 
-    #
-    # Add other options
-    #
-    main = click.option(
-        "--output",
-        default="stdout",
-        type=click.Path(),
-        help="The output file. If 'stdout' is specified, the output is written to stdout.",
-    )(main)
-
-    main = click.option(
-        "--format",
-        default="csv",
-        type=click.Choice(output_format_list, case_sensitive=False),
-        help="The output format.",
-    )(main)
-
-    main = click.option(
-        "--log-level",
-        default="warning",
-        type=click.Choice(["debug", "info", "warning", "error", "critical"], case_sensitive=False),
-        help="The logging level.",
-    )(main)
-
-    #
-    # Create Rich command
-    #
-
-    # show_metavars_column=False: the column types are not in a separate column
-    # append_metavars_help=True: the column types are shown below the help text
-    main = click.rich_config(
-        help_config=click.RichHelpConfiguration(
-            use_markdown=True,
-            show_metavars_column=False,
-            append_metavars_help=True,
-            footer_text=footer,
-        )
-    )(main)
-
-    # show_default=True: default values are shown in the help text
-    main = click.command(context_settings={"show_default": True}, help=help_text)(main)
-
-    main()
+    Parameters
+    ----------
+    f : Callable[..., Model]
+        Factory that returns the model to expose. Its configuration determines
+        command options, help text, and supported file output formats.
+    *args : Any
+        Positional arguments supplied by :mod:`decorator`.
+    **kwargs : Any
+        Keyword arguments supplied by :mod:`decorator`.
+    """
+    model = f()
+    AutoCLICommand(model)()
