@@ -9,13 +9,20 @@ __all__ = ["FileReader"]
 
 
 class FileReader(Reader):
-    def __init__(self, data_dir: Union[str, PathLike, None] = None) -> None:
+    def __init__(
+        self,
+        data_dir: Union[str, PathLike, None] = Path("."),
+        allow_paths_outside_data_dir: bool = True,
+    ) -> None:
         super().__init__()
-        self.data_dir = data_dir
-        if self.data_dir is not None:
-            self.data_dir = Path(self.data_dir)
+        self.data_dir = Path(data_dir).resolve() if data_dir is not None else None
+        self.allow_paths_outside_data_dir = allow_paths_outside_data_dir
 
     def read(self, filename: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
+        data_dir = self.data_dir
+        if data_dir is None:
+            raise PermissionError("file system access is disabled")
+
         assert isinstance(filename, (str, bytes)), "input must be a string or bytes"
 
         if isinstance(filename, bytes):
@@ -29,17 +36,13 @@ class FileReader(Reader):
         except TypeError as e:
             raise ValueError("input must be a valid path") from e
 
-        # convert to absolute path
+        # Resolve relative paths against data_dir and canonicalize both relative and absolute paths.
         if not path.is_absolute():
-            if self.data_dir is not None:
-                path = self.data_dir / path
-            else:
-                path = Path(".") / path
+            path = data_dir / path
+        path = path.resolve()
 
-        # check that the file is within the data_dir
-        assert (
-            self.data_dir is None or self.data_dir in path.parents
-        ), "input must be a relative path"
+        if not self.allow_paths_outside_data_dir and not path.is_relative_to(data_dir):
+            raise PermissionError("input path must be within data_dir")
 
         # check that the file exists
         assert path.exists(), "input must be a valid file"
@@ -53,6 +56,9 @@ class FileReader(Reader):
                 yield entry._replace(source=(filename_str, *source))
 
     def __repr__(self) -> str:
-        return f"FileReader(data_dir={self.data_dir})"
+        return (
+            f"FileReader(data_dir={self.data_dir}, "
+            f"allow_paths_outside_data_dir={self.allow_paths_outside_data_dir})"
+        )
 
     config = ReaderConfig(examples=["compounds.smiles"])
