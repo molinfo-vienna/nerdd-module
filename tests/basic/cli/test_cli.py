@@ -1,5 +1,6 @@
 from typing import Any, Iterator
 
+import click
 import pytest
 from click.testing import CliRunner
 
@@ -7,7 +8,17 @@ from nerdd_module.cli import AutoCLICommand
 from nerdd_module.config import JobParameter
 from nerdd_module.input import ExploreCallable, MoleculeEntry, Reader
 from nerdd_module.input.reader_config import ReaderConfig
+from nerdd_module.model import Model
 from nerdd_module.tests.models import MolWeightModel
+
+
+def invoke_help(prog_name: str = "model") -> tuple[int, str]:
+    result = CliRunner().invoke(
+        AutoCLICommand(MolWeightModel()), ["--help"], prog_name=prog_name, color=False
+    )
+    # Rich Click forces ANSI styling in some CI environments, so compare plain text.
+    output = click.unstyle(result.output)
+    return result.exit_code, output
 
 
 @pytest.fixture
@@ -23,25 +34,38 @@ def reset_reader_registry():
 
 
 def test_help_uses_click_command_path_for_examples():
+    exit_code, output = invoke_help(prog_name="python -m example.model")
+
+    assert exit_code == 0
+    assert "Usage: python -m example.model [OPTIONS] INPUT..." in output
+    assert "• smiles" in output
+    assert "• sdf" in output
+    assert "• inchi" in output
+    assert 'python -m example.model "compounds.smiles"' in output
+
+
+def test_help_omits_missing_description():
+    class ModelWithoutDescription(Model):
+        def _predict_mols(self, mols):
+            return [{} for _ in mols]
+
     result = CliRunner().invoke(
-        AutoCLICommand(MolWeightModel()),
+        AutoCLICommand(ModelWithoutDescription()),
         ["--help"],
-        prog_name="python -m example.model",
+        prog_name="model",
         color=False,
     )
+    output = click.unstyle(result.output)
 
     assert result.exit_code == 0
-    assert "Usage: python -m example.model [OPTIONS] INPUT..." in result.output
-    assert 'python -m example.model "compounds.smiles"' in result.output
+    assert "None" not in output
 
 
 def test_examples_are_collected_when_help_is_rendered(reset_reader_registry):
-    command = AutoCLICommand(MolWeightModel())
-
     # we check if our example reader is not present yet
-    result = CliRunner().invoke(command, ["--help"], prog_name="model", color=False)
-    assert result.exit_code == 0
-    assert 'model "late-example"' not in result.output
+    exit_code, output = invoke_help()
+    assert exit_code == 0
+    assert 'model "late-example"' not in output
 
     class LateReader(Reader):
         config = ReaderConfig(examples=["late-example"])
@@ -50,9 +74,9 @@ def test_examples_are_collected_when_help_is_rendered(reset_reader_registry):
             return iter(())
 
     # now, it should be present
-    result = CliRunner().invoke(command, ["--help"], prog_name="model", color=False)
-    assert result.exit_code == 0
-    assert 'model "late-example"' in result.output
+    exit_code, output = invoke_help()
+    assert exit_code == 0
+    assert 'model "late-example"' in output
 
 
 def test_footer_filters_long_and_multiline_reader_examples(reset_reader_registry):
@@ -68,12 +92,11 @@ def test_footer_filters_long_and_multiline_reader_examples(reset_reader_registry
         def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
             return iter(())
 
-    command = AutoCLICommand(MolWeightModel())
-    result = CliRunner().invoke(command, ["--help"], prog_name="model", color=False)
-    assert result.exit_code == 0
-    assert '• model "short-example"' in result.output
-    assert '• model "first line\nsecond line"' not in result.output
-    assert f'• model "{"x" * 120}"' not in result.output
+    exit_code, output = invoke_help()
+    assert exit_code == 0
+    assert '• model "short-example"' in output
+    assert '• model "first line\nsecond line"' not in output
+    assert f'• model "{"x" * 120}"' not in output
 
 
 def test_generated_command_preserves_parameter_order():
