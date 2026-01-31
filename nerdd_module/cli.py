@@ -68,20 +68,34 @@ class AutoCLICommand(click.RichCommand):
 
     def __init__(self, model: Model) -> None:
         self.model = model
+
+        # collect input formats (and examples) from registered readers
+        input_format_lines = []
+        for ReaderClass in Reader.get_reader_mapping():
+            input_format = ReaderClass.config.get("input_format")
+            if input_format is None:
+                continue
+
+            examples = ReaderClass.config.get("examples", [])
+            example = examples[0] if examples else None
+
+            line = f"* {input_format}"
+            if example:
+                line += f' (example: "{example}")'
+            input_format_lines.append(line)
+
+        # compose CLI description
+        help_text = input_description.format(
+            description=self.model.config.description or "",
+            input_format_list="\n".join(input_format_lines),
+        )
+
+        # collect output formats from registered writers
         self.output_format_list = [
             output_format
             for output_format, writer in Writer.get_writers(output_file=None).items()
             if isinstance(writer, FileWriter)
         ]
-
-        # compose CLI description
-        input_format_list = "\n".join(
-            [f"* {input_format}" for input_format in ["smiles", "sdf", "inchi"]]
-        )
-        help_text = input_description.format(
-            description=model.config.description,
-            input_format_list=input_format_list,
-        )
 
         params: List[click.Parameter] = [
             click.Option(
@@ -138,6 +152,7 @@ class AutoCLICommand(click.RichCommand):
                 "metavar",
             ],
         )
+
         # show_default=True: default values are shown in the help text
         super().__init__(
             name="main",
