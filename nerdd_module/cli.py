@@ -132,8 +132,8 @@ class AutoCLICommand(click.RichCommand):
             ),
         ]
 
-        # Add job parameters in reverse to preserve the previous decorator ordering.
-        for param in reversed(model.config.job_parameters):
+        # Add job parameters in the order in which they are defined in the configuration.
+        for param in model.config.job_parameters:
             # convert parameter name to spinal case (e.g. "max_confs" -> "max-confs")
             param_name = spinalcase(param.name)
             params.append(
