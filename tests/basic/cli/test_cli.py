@@ -111,6 +111,23 @@ def test_footer_filters_long_and_multiline_reader_examples(reset_reader_registry
     assert f'• model "{"x" * 120}"' not in output
 
 
+def test_input_format_shows_first_configured_example(reset_reader_registry):
+    class ExampleReader(Reader):
+        config = ReaderConfig(
+            input_format="custom-format",
+            examples=["example-value", "another-value"],
+        )
+
+        def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
+            return iter(())
+
+    exit_code, output = invoke_help()
+
+    assert exit_code == 0
+    assert 'custom-format (example: "example-value")' in output
+    assert 'custom-format (example: "another-value")' not in output
+
+
 def test_generated_command_preserves_parameter_order():
     model = MolWeightModel()
     model.config.job_parameters.append(JobParameter(name="second_parameter", type="string"))
