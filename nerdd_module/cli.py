@@ -63,29 +63,6 @@ def infer_click_type(param: JobParameter) -> click.ParamType:
     return type_map[t]
 
 
-def build_examples_footer(command_path: str, model: Model) -> str:
-    """Build the generated CLI help footer from model and reader examples."""
-    examples = []
-    example_smiles = model.config.example_smiles
-    if example_smiles is not None:
-        examples.append(example_smiles)
-
-    for ReaderClass in Reader.get_reader_mapping():
-        if hasattr(ReaderClass, "config"):
-            reader_examples = ReaderClass.config.get("examples", [])
-            for example in reader_examples:
-                # check if example fits on one line
-                if len(example) < 120 and "\n" not in example:
-                    examples.append(example)
-
-    if not examples:
-        return ""
-
-    lines = ["Examples:"]
-    lines.extend(f'* {command_path} "{example}"' for example in examples)
-    return "\n".join(lines) + "\n"
-
-
 class AutoCLICommand(click.RichCommand):
     """Rich Click command generated from a model configuration."""
 
@@ -182,10 +159,31 @@ class AutoCLICommand(click.RichCommand):
         assert isinstance(ctx, click.RichContext)
         assert isinstance(formatter, click.RichHelpFormatter)
 
-        formatter.config.footer_text = build_examples_footer(
-            ctx.command_path,
-            self.model,
-        )
+        #
+        # Collect examples to show in footer
+        #
+        examples = []
+
+        # add example_smiles from model config if available
+        example_smiles = self.model.config.example_smiles
+        if example_smiles is not None:
+            examples.append(example_smiles)
+
+        # add examples from registered readers if available
+        for ReaderClass in Reader.get_reader_mapping():
+            reader_examples = ReaderClass.config.get("examples", [])
+            for example in reader_examples:
+                # check if example fits on one line
+                if len(example) < 120 and "\n" not in example:
+                    examples.append(example)
+
+        if len(examples) > 0:
+            lines = ["Examples:"]
+            lines.extend(f'* {ctx.command_path} "{example}"' for example in examples)
+            formatter.config.footer_text = "\n".join(lines) + "\n"
+        else:
+            formatter.config.footer_text = ""
+
         super().format_help(ctx, formatter)
 
     def _run(
