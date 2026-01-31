@@ -12,10 +12,11 @@ from nerdd_module.model import Model
 from nerdd_module.tests.models import MolWeightModel
 
 
-def invoke_help(prog_name: str = "model") -> tuple[int, str]:
-    result = CliRunner().invoke(
-        AutoCLICommand(MolWeightModel()), ["--help"], prog_name=prog_name, color=False
-    )
+def invoke_help(model=None, prog_name: str = "model") -> tuple[int, str]:
+    if model is None:
+        model = MolWeightModel()
+
+    result = CliRunner().invoke(AutoCLICommand(model), ["--help"], prog_name=prog_name, color=False)
     # Rich Click forces ANSI styling in some CI environments, so compare plain text.
     output = click.unstyle(result.output)
     return result.exit_code, output
@@ -49,16 +50,9 @@ def test_help_omits_missing_description():
         def _predict_mols(self, mols):
             return [{} for _ in mols]
 
-    result = CliRunner().invoke(
-        AutoCLICommand(ModelWithoutDescription()),
-        ["--help"],
-        prog_name="model",
-        color=False,
-    )
-    # Rich Click forces ANSI styling in some CI environments, so compare plain text.
-    output = click.unstyle(result.output)
+    exit_code, output = invoke_help(ModelWithoutDescription())
 
-    assert result.exit_code == 0
+    assert exit_code == 0
     assert "None" not in output
 
 
