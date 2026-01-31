@@ -55,28 +55,40 @@ def test_help_omits_missing_description():
         prog_name="model",
         color=False,
     )
+    # Rich Click forces ANSI styling in some CI environments, so compare plain text.
     output = click.unstyle(result.output)
 
     assert result.exit_code == 0
     assert "None" not in output
 
 
-def test_examples_are_collected_when_help_is_rendered(reset_reader_registry):
-    # we check if our example reader is not present yet
+def test_reader_without_config_gets_empty_config(reset_reader_registry):
+    class UnconfiguredReader(Reader):
+        def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
+            return iter(())
+
+    assert UnconfiguredReader.config == ReaderConfig()
+
+    exit_code, _ = invoke_help()
+    assert exit_code == 0
+
+
+def test_examples_from_registered_readers_are_shown(reset_reader_registry):
+    # we check if our example reader is not registered yet
     exit_code, output = invoke_help()
     assert exit_code == 0
-    assert 'model "late-example"' not in output
+    assert 'model "custom-example"' not in output
 
-    class LateReader(Reader):
-        config = ReaderConfig(examples=["late-example"])
+    class ExampleReader(Reader):
+        config = ReaderConfig(examples=["custom-example"])
 
         def read(self, input: Any, explore: ExploreCallable) -> Iterator[MoleculeEntry]:
             return iter(())
 
-    # now, it should be present
+    # now, the registered reader's example should be present
     exit_code, output = invoke_help()
     assert exit_code == 0
-    assert 'model "late-example"' in output
+    assert 'model "custom-example"' in output
 
 
 def test_footer_filters_long_and_multiline_reader_examples(reset_reader_registry):
