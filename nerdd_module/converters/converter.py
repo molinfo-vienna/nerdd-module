@@ -4,6 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Tuple, Union
 
+from .._plugins import ensure_plugins_loaded
 from ..config import Module, ResultProperty
 from ..util import call_with_mappings
 from .converter_config import ALL, ALL_TYPE
@@ -82,6 +83,7 @@ class Converter(ABC):
         return_default: bool = True,
         **kwargs: Any,
     ) -> Converter:
+        ensure_plugins_loaded()
         data_type = result_property.type
         if (data_type, output_format) not in _factories:
             ConverterFunc = None
