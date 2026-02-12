@@ -36,6 +36,8 @@ classifiers = [
     # topics
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
+    # typing
+    "Typing :: Typed",
     # operating systems
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
@@ -88,9 +90,6 @@ Repository = "https://github.com/molinfo-vienna/nerdd-module"
 #
 # TOOLS
 #
-
-
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["nerdd_module*"]
