@@ -6,5 +6,5 @@ from .polyfills import get_entry_points
 from .problem import *
 from .version import *
 
-for entry_point in get_entry_points("nerdd-module.plugins"):
+for entry_point in get_entry_points("nerdd_module.plugins"):
     entry_point.load()
