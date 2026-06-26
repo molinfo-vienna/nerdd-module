@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## v0.3.53 (2026-06-26)
+
+### Fixes
+
+* fix: Remove unnecessary if statement ([`58350b5`](https://github.com/molinfo-vienna/nerdd-module/commit/58350b519cb3a9a0bfc5d10ba8581a02215d9113))
+
+* fix: Specify type for type_map ([`47300a3`](https://github.com/molinfo-vienna/nerdd-module/commit/47300a3a37a9d1e689cf105ec4c68c08765c2e29))
+
+* fix: Filter None fields when merging configurations ([`a4d8294`](https://github.com/molinfo-vienna/nerdd-module/commit/a4d8294f2fc6cdfe5821bc7d31a49ccc1eed8830))
+
+* fix: Remove defaults channel from conda env ([`ff1de6d`](https://github.com/molinfo-vienna/nerdd-module/commit/ff1de6d98a7b6dc56caa75beccb73c93c4645e63))
+
+### Testing
+
+* test: Check if a broken configuration raises an exception ([`2a29cee`](https://github.com/molinfo-vienna/nerdd-module/commit/2a29cee18749b82ea77a54ff4ce2f06e4869506c))
+
+* test: Check merging configurations with None fields ([`e0ff798`](https://github.com/molinfo-vienna/nerdd-module/commit/e0ff79841fa162f22ea08cc163542604547f67a9))
+
+### Unknown
+
+* Merge pull request #91 from shirte/main
+
+Improve error messages when parsing invalid configurations ([`b4ed8e5`](https://github.com/molinfo-vienna/nerdd-module/commit/b4ed8e5a4a531808d9228cacc9cae95f1f575f17))
+
+
 ## v0.3.52 (2026-01-23)
 
 ### Fixes
