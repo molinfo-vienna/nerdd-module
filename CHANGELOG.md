@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.3.54 (2026-06-27)
+
+### Fixes
+
+* fix: Check if mol_ids are integers ([`39112fb`](https://github.com/molinfo-vienna/nerdd-module/commit/39112fb9f35065572c0a8db3e1987671dcb4d8dd))
+
+### Testing
+
+* test: Check models with invalid mol ids ([`ee291c9`](https://github.com/molinfo-vienna/nerdd-module/commit/ee291c97c0c603bdb6a9f6736a94be2d3323e52e))
+
+### Unknown
+
+* Merge pull request #92 from shirte/main
+
+Check that mol ids are integers ([`9759666`](https://github.com/molinfo-vienna/nerdd-module/commit/9759666ba2597afb092e513394cba8bfc7008e4d))
+
+
 ## v0.3.53 (2026-06-26)
 
 ### Fixes
