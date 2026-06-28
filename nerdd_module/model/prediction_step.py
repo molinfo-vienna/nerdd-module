@@ -160,14 +160,8 @@ class PredictionStep(Step):
                 for record in records:
                     sub_id = record.get(sub_id_property)
                     if sub_id is not None:
-                        # check that sub_id is an integer
-                        if not isinstance(sub_id, int):
-                            raise ValueError(
-                                f"The {sub_id_property} must be an integer, but got {sub_id}. "
-                                f"Record: {record}"
-                            )
-
-                        sub_ids.add(sub_id)
+                        # cast sub_id to int (or raise an error if it is not possible)
+                        sub_ids.add(int(sub_id))
 
                 if (
                     len(records) == 1
