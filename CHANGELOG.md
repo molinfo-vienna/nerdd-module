@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.3.55 (2026-06-28)
+
+### Fixes
+
+* fix: Allow atom_ids to be castable to int ([`46e378f`](https://github.com/molinfo-vienna/nerdd-module/commit/46e378f4eee414262b50b486dfdd249f4b7bb399))
+
+### Testing
+
+* test: Check handling of invalid and castable atom ids in model predictions ([`02abfcd`](https://github.com/molinfo-vienna/nerdd-module/commit/02abfcda0ca21c9e03d7b546ec48e4f5ad7c55b7))
+
+### Unknown
+
+* Merge pull request #93 from shirte/main
+
+Allow atom_id to be castable to int ([`a774669`](https://github.com/molinfo-vienna/nerdd-module/commit/a7746693c04daa3d5f389784cf0ddf8539462789))
+
+
 ## v0.3.54 (2026-06-27)
 
 ### Fixes
