@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from pathlib import Path
 from typing import Any, Callable
 
 import rich_click as click
@@ -106,7 +107,14 @@ def auto_cli(f: Callable[..., Model], *args: Any, **kwargs: Any) -> None:
         else:
             output_handle = click.open_file(str(output), "wb")
 
-        model.predict(input, output_format=format, output_file=output_handle, **kwargs)
+        model.predict(
+            input,
+            output_format=format,
+            output_file=output_handle,
+            data_dir=Path("."),
+            allow_paths_outside_data_dir=True,
+            **kwargs,
+        )
 
     #
     # Add required input parameter
