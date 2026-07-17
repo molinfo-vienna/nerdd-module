@@ -1,2 +1,2 @@
-from .AtomicMassModel import *
-from .MolWeightModel import *
+from .atomic_mass_model import *
+from .mol_weight_model import *

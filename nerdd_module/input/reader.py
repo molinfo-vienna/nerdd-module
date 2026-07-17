@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import inspect
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Iterator, List, NamedTuple, Optional, Tuple, Type
+from typing import Any, Callable, ClassVar, Iterator, List, NamedTuple, Optional, Tuple, Type
 
 from rdkit.Chem import Mol
 
 from ..problem import Problem
 from ..util import call_with_mappings
+from .reader_config import ReaderConfig
 
 __all__ = ["MoleculeEntry", "Reader", "ExploreCallable"]
 
@@ -43,6 +44,9 @@ class Reader(ABC):
         **kwargs: Any,
     ) -> None:
         super().__init_subclass__(**kwargs)
+        if not hasattr(cls, "config"):
+            cls.config = ReaderConfig()
+
         if not inspect.isabstract(cls):
             _factories.append(cls)
 
@@ -53,3 +57,5 @@ class Reader(ABC):
     @classmethod
     def get_readers(cls: Type[Reader], **kwargs: Any) -> List[Reader]:
         return [call_with_mappings(factory, kwargs) for factory in _factories]
+
+    config: ClassVar[ReaderConfig]

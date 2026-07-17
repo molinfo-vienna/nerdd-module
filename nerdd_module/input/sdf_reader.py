@@ -5,6 +5,7 @@ from rdkit.Chem import MolFromMolBlock
 from ..polyfills import BlockLogs
 from ..problem import Problem
 from .reader import ExploreCallable, MoleculeEntry
+from .reader_config import ReaderConfig
 from .stream_reader import StreamReader
 
 __all__ = ["SdfReader"]
@@ -75,3 +76,5 @@ class SdfReader(StreamReader):
 
     def __repr__(self) -> str:
         return f"SdfReader(max_num_lines_mol_block={self.max_num_lines_mol_block})"
+
+    config = ReaderConfig(input_format="sdf")

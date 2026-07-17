@@ -78,4 +78,7 @@ class SmilesReader(StreamReader):
     def __repr__(self) -> str:
         return f"SmilesReader(max_length={self._max_length_smiles})"
 
-    config = ReaderConfig(examples=["C1=NC2=C(N1COCCO)N=C(NC2=O)N"])
+    config = ReaderConfig(
+        input_format="smiles",
+        examples=["C1=NC2=C(N1COCCO)N=C(NC2=O)N"],
+    )

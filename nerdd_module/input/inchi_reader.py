@@ -67,9 +67,10 @@ class InchiReader(StreamReader):
         return f"InchiReader(max_length_inchi={self._max_length_inchi})"
 
     config = ReaderConfig(
+        input_format="inchi",
         examples=[
             # (this is one InChI string, split into two lines)
             "InChI=1S/C18H16O3/c1-2-13(12-8-4-3-5-9-12)16-17(19)14-10-6-7-11-15(14)21-18(16)20"
             "/h3-11,13,19H,2H2,1H3"
-        ]
+        ],
     )
