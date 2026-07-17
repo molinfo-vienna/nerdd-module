@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## v0.3.56 (2026-07-17)
+
+### Fixes
+
+* fix: Explicitly set data_dir and allow_paths_outside_data_dir in auto_cli ([`ee34a31`](https://github.com/molinfo-vienna/nerdd-module/commit/ee34a318067308280380c800f7b72907a247f24a))
+
+* fix: Add parameter in FileReader to permit paths outside of data_dir ([`c431273`](https://github.com/molinfo-vienna/nerdd-module/commit/c4312739420c93a6fc9d9e67b7a51e1f20de492e))
+
+### Testing
+
+* test: Check FileReader behavior dependent on data_dir and allow_paths_outside_data_dir ([`504e8db`](https://github.com/molinfo-vienna/nerdd-module/commit/504e8db97bfb49335351f8a188f9c811a8952b3a))
+
+### Unknown
+
+* Merge pull request #94 from shirte/main
+
+Add parameter in FileReader to permit paths outside of data_dir ([`37ccf07`](https://github.com/molinfo-vienna/nerdd-module/commit/37ccf077c0fc6257c685246050c7a39462c7c91c))
+
+
 ## v0.3.55 (2026-06-28)
 
 ### Fixes
