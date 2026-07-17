@@ -1,6 +1,51 @@
 # CHANGELOG
 
 
+## v0.3.57 (2026-07-17)
+
+### Fixes
+
+* fix: Add input_format to essential readers ([`df8b944`](https://github.com/molinfo-vienna/nerdd-module/commit/df8b944d97dd0236eb695a56ccacffcd3074bbf7))
+
+* fix: Generate possible input formats in AutoCLICommand from registered readers ([`53d75d1`](https://github.com/molinfo-vienna/nerdd-module/commit/53d75d1a51ee4051838e551cc01fd1946e0d041a))
+
+* fix: Assign default ReaderConfig to Reader classes if not present ([`16bbad6`](https://github.com/molinfo-vienna/nerdd-module/commit/16bbad61a58d08bab391587cf80b12b915865552))
+
+* fix: Add field input_format in ReaderConfig ([`c359cd9`](https://github.com/molinfo-vienna/nerdd-module/commit/c359cd9c9566e2d294d360b9f0ef6517ee8ad105))
+
+* fix: Use correct order of job parameters in CLI ([`4e20a36`](https://github.com/molinfo-vienna/nerdd-module/commit/4e20a3662fe476601f82b28ad1930fde20d33f53))
+
+* fix: Derive AutoCLICommand from RichCommand to use ctx.command_path ([`bf5ff55`](https://github.com/molinfo-vienna/nerdd-module/commit/bf5ff557191204b3a8c260b1d02fb639130e9121))
+
+* fix: Require more modern version of rich-click ([`0b8b059`](https://github.com/molinfo-vienna/nerdd-module/commit/0b8b059e317fef4689f09ead3ea521f29a7b749f))
+
+### Refactoring
+
+* refactor: Add model parameter in test_cli.invoke_help ([`3490339`](https://github.com/molinfo-vienna/nerdd-module/commit/3490339aade6813794516a1260730efd0b7a549a))
+
+* refactor: Inline build_examples_footer in AutoCLICommand ([`3a8b2f2`](https://github.com/molinfo-vienna/nerdd-module/commit/3a8b2f26d8ca3ca88331bbb6327749e2d2c3ece8))
+
+* refactor: Extract invoke_help command in test_cli ([`89c7e4c`](https://github.com/molinfo-vienna/nerdd-module/commit/89c7e4ca0512591185b05050637642c996ff41a7))
+
+### Testing
+
+* test: Check if CLI shows first configured example ([`7ba4148`](https://github.com/molinfo-vienna/nerdd-module/commit/7ba4148fddd03cdd924e463c7c15a645179fabea))
+
+* test: Check if readers get a default config ([`9632bb8`](https://github.com/molinfo-vienna/nerdd-module/commit/9632bb8cfb9ea948c392485304a2e8c46d163cc2))
+
+* test: Add tests for auto_cli ([`26c3ec1`](https://github.com/molinfo-vienna/nerdd-module/commit/26c3ec172b574aa18bf2a2354ddacbc86a1bf8d8))
+
+* test: Add CLI entrypoint functions for testing ([`dcd5fbc`](https://github.com/molinfo-vienna/nerdd-module/commit/dcd5fbcb070fd786bbd4137139825b129b4d4a08))
+
+* test: Use lowercase names for test files ([`1bd7959`](https://github.com/molinfo-vienna/nerdd-module/commit/1bd79594f4fb84bc18206595d5e92a9dc5b95a3f))
+
+### Unknown
+
+* Merge pull request #95 from shirte/main
+
+Derive AutoCLICommand from RichCommand to use ctx.command_path ([`541851b`](https://github.com/molinfo-vienna/nerdd-module/commit/541851befecd50d7576560c9ad15ed2da42a1630))
+
+
 ## v0.3.56 (2026-07-17)
 
 ### Fixes
