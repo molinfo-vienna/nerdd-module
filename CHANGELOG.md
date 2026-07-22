@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.3.58 (2026-07-22)
+
+### Fixes
+
+* fix: Handle and log exceptions when loading entry points ([`20fa84e`](https://github.com/molinfo-vienna/nerdd-module/commit/20fa84e1103da8a0433a3b9978127077e5455f5e))
+
+* fix: Choose a valid entrypoint name ([`985c21f`](https://github.com/molinfo-vienna/nerdd-module/commit/985c21f04a35baa9e16408b5294ff58db4b0ad90))
+
+### Unknown
+
+* Merge pull request #96 from shirte/main
+
+Improve package entry points ([`2dd4df8`](https://github.com/molinfo-vienna/nerdd-module/commit/2dd4df8a5d74ce6a75371a3b900288b2529714b8))
+
+
 ## v0.3.57 (2026-07-17)
 
 ### Fixes
