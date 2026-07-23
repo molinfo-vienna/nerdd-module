@@ -1,6 +1,29 @@
 # CHANGELOG
 
 
+## v0.3.59 (2026-07-23)
+
+### Chores
+
+* chore: Add typed classifier to pyproject ([`f90b9f7`](https://github.com/molinfo-vienna/nerdd-module/commit/f90b9f71a2e02cb538f5f41b9a7bd38f628ce39d))
+
+### Fixes
+
+* fix: Check behavior of ensure_plugins_loaded ([`df08170`](https://github.com/molinfo-vienna/nerdd-module/commit/df081700458802b5cb8c1da84559616bd15d41b6))
+
+* fix: Remove self-registering classes from package namespace ([`0f69df5`](https://github.com/molinfo-vienna/nerdd-module/commit/0f69df52c916d0eb58f03113ed10adc9460c30eb))
+
+* fix: Load plugins when needed ([`34af268`](https://github.com/molinfo-vienna/nerdd-module/commit/34af268a27f0d98e8186d3d43d1f580f9baeddc8))
+
+* fix: Move plugin loading into separate function ([`47363e7`](https://github.com/molinfo-vienna/nerdd-module/commit/47363e7d0a0836a09189ee89282c815b28d31378))
+
+### Unknown
+
+* Merge pull request #97 from shirte/main
+
+Load plugins lazily ([`e680f7d`](https://github.com/molinfo-vienna/nerdd-module/commit/e680f7d7c0ffe90bf35eed70901bab65cd1843cd))
+
+
 ## v0.3.58 (2026-07-22)
 
 ### Fixes
