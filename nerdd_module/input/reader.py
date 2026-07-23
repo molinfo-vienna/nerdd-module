@@ -6,6 +6,7 @@ from typing import Any, Callable, ClassVar, Iterator, List, NamedTuple, Optional
 
 from rdkit.Chem import Mol
 
+from .._plugins import ensure_plugins_loaded
 from ..problem import Problem
 from ..util import call_with_mappings
 from .reader_config import ReaderConfig
@@ -51,11 +52,13 @@ class Reader(ABC):
             _factories.append(cls)
 
     @classmethod
-    def get_reader_mapping(cls: Type[Reader]) -> List[Type["Reader"]]:
+    def get_reader_mapping(cls: Type[Reader]) -> List[Type[Reader]]:
+        ensure_plugins_loaded()
         return _factories
 
     @classmethod
     def get_readers(cls: Type[Reader], **kwargs: Any) -> List[Reader]:
+        ensure_plugins_loaded()
         return [call_with_mappings(factory, kwargs) for factory in _factories]
 
     config: ClassVar[ReaderConfig]

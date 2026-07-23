@@ -7,6 +7,7 @@ from typing import Any, Dict, Iterable, List
 
 from typing_extensions import Protocol
 
+from .._plugins import ensure_plugins_loaded
 from ..util import call_with_mappings
 
 StreamWriter = codecs.getwriter("utf-8")
@@ -47,12 +48,14 @@ class Writer(ABC):
 
     @classmethod
     def get_writer(cls, output_format: str, **kwargs: Any) -> Writer:
+        ensure_plugins_loaded()
         if output_format not in _factories:
             raise ValueError(f"Unknown output format: {output_format}")
         return _factories[output_format](kwargs)
 
     @classmethod
     def get_writers(cls, **kwargs: Any) -> Dict[str, Writer]:
+        ensure_plugins_loaded()
         return {
             output_format: cls.get_writer(output_format, **kwargs)
             for output_format in _factories.keys()
@@ -60,4 +63,5 @@ class Writer(ABC):
 
     @classmethod
     def get_output_formats(cls) -> List[str]:
+        ensure_plugins_loaded()
         return list(_factories.keys())
